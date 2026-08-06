@@ -1,93 +1,64 @@
 from typing import List
-from app.domain.schemas import TagResponse, TopicResponse, CardResponse, AnswerResponse
+from sqlalchemy.orm import Session, selectinload
 
-# Mock-данные тем для главной страницы
-MOCK_TOPICS = [
-    TopicResponse(
-        id=1,
-        name="HTTP-статусы",
-        tags=[
-            TagResponse(id=1, name="Сети"),
-            TagResponse(id=2, name="Web"),
-        ],
-        cards_count=2,
-    ),
-    TopicResponse(
-        id=2,
-        name="Основы Git",
-        tags=[
-            TagResponse(id=3, name="DevOps"),
-            TagResponse(id=4, name="Инструменты"),
-        ],
-        cards_count=1,
-    ),
-    TopicResponse(
-        id=3,
-        name="Базовый SQL",
-        tags=[
-            TagResponse(id=5, name="Базы данных"),
-        ],
-        cards_count=1,
-    ),
-]
-
-# Mock-данные карточек
-MOCK_CARDS = [
-    CardResponse(
-        id=1,
-        topic_id=1,
-        title="Чем HTTP 401 отличается от 403?",
-        description="401 Unauthorized — клиент не аутентифицирован. 403 Forbidden — клиент известен, но доступ запрещён.",
-        answers=[
-            AnswerResponse(id=1, title="401 — не аутентифицирован, 403 — доступ запрещён", is_correct=True),
-            AnswerResponse(id=2, title="401 — ошибка сервера, 403 — ресурс не найден", is_correct=False),
-            AnswerResponse(id=3, title="Это идентичные статусы", is_correct=False),
-        ]
-    ),
-    CardResponse(
-        id=2,
-        topic_id=1,
-        title="Что означает статус HTTP 500 Internal Server Error?",
-        description="Указывает на то, что на стороне сервера произошла непредвиденная ошибка.",
-        answers=[
-            AnswerResponse(id=4, title="Сервер временно недоступен", is_correct=False),
-            AnswerResponse(id=5, title="Внутренняя ошибка сервера", is_correct=True),
-            AnswerResponse(id=6, title="Запрос клиента содержал ошибку", is_correct=False),
-        ]
-    ),
-    CardResponse(
-        id=3,
-        topic_id=2,
-        title="В чём разница между git fetch и git pull?",
-        description="git fetch только скачивает изменения, git pull скачивает и сразу сливает (git merge) их.",
-        answers=[
-            AnswerResponse(id=7, title="git fetch сливает изменения, git pull только скачивает", is_correct=False),
-            AnswerResponse(id=8, title="git pull = git fetch + git merge", is_correct=True),
-            AnswerResponse(id=9, title="Между ними нет никакой разницы", is_correct=False),
-        ]
-    ),
-    CardResponse(
-        id=4,
-        topic_id=3,
-        title="Чем WHERE отличается от HAVING в SQL?",
-        description="WHERE фильтрует строки до GROUP BY, HAVING — после группировки.",
-        answers=[
-            AnswerResponse(id=10, title="WHERE фильтрует до GROUP BY, HAVING — после", is_correct=True),
-            AnswerResponse(id=11, title="HAVING применяется только в UPDATE", is_correct=False),
-            AnswerResponse(id=12, title="Это синонимы", is_correct=False),
-        ]
-    ),
-]
+from app.domain.models import Card, Topic
+from app.domain.schemas import (
+    AnswerResponse,
+    CardResponse,
+    TagResponse,
+    TopicResponse,
+)
 
 
-def get_all_topics() -> List[TopicResponse]:
-    """Возвращает список всех доступных тем с тегами и количеством карточек."""
-    return MOCK_TOPICS
+def get_all_topics(db: Session) -> List[TopicResponse]:
+    """
+    Возвращает список всех доступных тем из PostgreSQL
+    с подгруженными тегами и рассчитанным количеством карточек.
+    """
+    # Запрашиваем темы, оптимизированно подгружая связанные теги и карточки
+    topics = db.query(Topic).options(
+        selectinload(Topic.tags),
+        selectinload(Topic.cards)
+    ).all()
+
+    return [
+        TopicResponse(
+            id=topic.id,
+            name=topic.name,
+            tags=[TagResponse(id=tag.id, name=tag.name) for tag in topic.tags],
+            cards_count=len(topic.cards),
+        )
+        for topic in topics
+    ]
 
 
-def get_cards_by_topics(topic_ids: List[int]) -> List[CardResponse]:
-    """Фильтирует и возвращает список карточек по переданным ID тем."""
+def get_cards_by_topics(db: Session, topic_ids: List[int]) -> List[CardResponse]:
+    """
+    Фильтрует и возвращает список карточек с вариантами ответов
+    по переданным ID тем из PostgreSQL.
+    """
     if not topic_ids:
         return []
 
-    return [card for card in MOCK_CARDS if card.topic_id in topic_ids]
+    # Запрашиваем карточки, фильтруя по ID тем и подгружая варианты ответов
+    cards = db.query(Card).options(
+        selectinload(Card.answers)
+    ).filter(Card.topic_id.in_(topic_ids)).all()
+
+    return [
+        CardResponse(
+            id=card.id,
+            topic_id=card.topic_id,
+            title=card.title,
+            description=card.description,
+            answers=[
+                AnswerResponse(
+                    id=answer.id,
+                    title=answer.title,
+                    is_correct=answer.is_correct
+                )
+                for answer in card.answers
+            ],
+        )
+        for card in cards
+    ]
