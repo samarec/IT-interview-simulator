@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV@100..900,0&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Geologica", sans-serif;
+    font-weight: 300;
+    color: #162B3B;
+
+    min-height: 100vh;
+    background:
+            radial-gradient(circle at top left, #F56835, transparent 30%),
+            radial-gradient(circle at top right, #6B35F5, transparent 28%),
+            radial-gradient(circle at bottom left, #6B35F5, transparent 30%),
+            radial-gradient(circle at bottom right, #F56835, transparent 30%),
+            #ffffff;
+}
+
+h1 {
+    font-size: 48px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+h2 {
+    font-size: 32px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 22px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+h4 {
+    font-size: 18px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+.b1 {
+    font-size: 24px;
+    line-height: 120%;
+    opacity: 80%;
+}
+
+.b2 {
+    font-size: 18px;
+    line-height: 120%;
+    opacity: 80%;
+}
+
+.b3 {
+    font-size: 16px;
+    line-height: 120%;
+    opacity: 80%;
+}
