@@ -45,3 +45,12 @@ class CardResponse(BaseModel):
 # Схема входящего запроса для старта тренажёра по выбранным темам
 class StartTrainerRequest(BaseModel):
     topic_ids: List[int]
+
+
+class FAQResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+
+    class Config:
+        from_attributes = True
