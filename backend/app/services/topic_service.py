@@ -1,12 +1,13 @@
 from typing import List
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import Card, Topic
+from app.domain.models import FAQ, Card, Topic
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
     TagResponse,
     TopicResponse,
+    FAQResponse
 )
 
 
@@ -61,4 +62,13 @@ def get_cards_by_topics(db: Session, topic_ids: List[int]) -> List[CardResponse]
             ],
         )
         for card in cards
+    ]
+
+
+def get_all_faqs(db: Session) -> List[FAQResponse]:
+    """Возвращает список всех часто задаваемых вопросов из PostgreSQL."""
+    faqs = db.query(FAQ).all()
+    return [
+        FAQResponse(id=faq.id, title=faq.title, description=faq.description)
+        for faq in faqs
     ]
