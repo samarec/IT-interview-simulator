@@ -2,6 +2,9 @@ import './Card.css';
 
 import { MainButton } from '../Button/MainButton';
 
+import { AdvantageCard } from "./AdvantagCard/AdvantageCard";
+import { advantagesCard } from "./AdvantagCard/dataAdvantageCard";
+
 export function HelloCard() {
     return (
         <section id='hello-card'>
@@ -12,4 +15,14 @@ export function HelloCard() {
         </section>
 
     )
+}
+
+export function AdvantagesCard() {
+    return (
+        <section id='advantages-card'>
+            {advantagesCard.map((advantage) => (
+                <AdvantageCard id={advantage.id} title={advantage.title} description={advantage.description} />
+            ))}
+        </section>
+    );
 }
