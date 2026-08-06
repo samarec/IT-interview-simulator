@@ -1,0 +1,11 @@
+.menu-button {
+    color: #162B3B;
+    padding: 12px 24px;
+    border-radius: 100px;
+    border: none;
+}
+
+.menu-button:hover {
+    background: linear-gradient(#FFCEBC, #FF936B) white;
+    opacity: 72%;
+}

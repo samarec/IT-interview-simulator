@@ -1,0 +1,12 @@
+.main-button {
+    font-size: 18px;
+    color: white;
+    padding: 16px 32px;
+    background: linear-gradient(#ABD6FF, #0F89FF);
+    border: none;
+    border-radius: 100px;
+}
+
+.main-button:hover {
+    opacity: 80%;
+}
