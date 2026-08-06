@@ -5,6 +5,9 @@ import { MainButton } from '../Button/MainButton';
 import { AdvantageCard } from "./AdvantagCard/AdvantageCard";
 import { advantagesCard } from "./AdvantagCard/dataAdvantageCard";
 
+import { InfoSection } from "./InfoSection/InfoSection";
+import { infoItem } from "./InfoSection/dataInfoSection";
+
 export function HelloCard() {
     return (
         <section id='hello-card'>
@@ -41,6 +44,16 @@ export function TrialCard() {
                 <p className="b2">Сканируй QR-код камерой телефона, запускай тренажер и проверь свои силы в режиме реального времени.
                     Никаких долгих регистраций — сразу к делу!</p>
             </div>
+        </section>
+    )
+}
+
+export function InfoCard() {
+    return (
+        <section id='info-card'>
+            {infoItem.map((item) => (
+                <InfoSection title={item.title} description={item.description} textButton={item.textButton} />
+            ))}
         </section>
     )
 }
