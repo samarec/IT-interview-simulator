@@ -115,3 +115,14 @@ export function FormCard() {
         </section>
     )
 }
+
+export function WheelCard() {
+    return (
+        <section id='wheel-card'>
+            <h2>Крути колесо — узнай свою профессию!</h2>
+            <div className="wheel">
+                <img src="/assets/wheel.png" alt=")"/>
+            </div>
+        </section>
+    )
+}
