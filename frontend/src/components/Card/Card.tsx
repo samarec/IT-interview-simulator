@@ -15,7 +15,7 @@ export function HelloCard() {
             <h1>Твой личный тренажер IT-собеседований</h1>
             <p>Пошаговая подготовка к техническим интервью
                 в формате удобных билетов. Разбери свои слабые места до встречи с рекрутером.</p>
-            <MainButton text={"call to action"} />
+            <MainButton text="call to action" classes={["but1"]}/>
         </section>
 
     )
@@ -61,7 +61,7 @@ export function InfoCard() {
                             никаких бесконечных лонгридов, только суть,
                             наглядные примеры кода и правильная логика ответа.</p>
                     </div>
-                    <MainButton text="Попробовать"/>
+                    <MainButton text="Попробовать" classes={["but2"]}/>
                 </div>
                 <img src="/assets/PhoneLearn.png" className="info-img-phone" alt="тут должна быть картинка =(" />
             </div>
@@ -74,7 +74,7 @@ export function InfoCard() {
                             Проверь, насколько быстро ты соображаешь под давлением времени,
                             найди слабые места в знаниях и получи подробную аналитику своей готовности.</p>
                     </div>
-                    <MainButton text="Попробовать"/>
+                    <MainButton text="Попробовать" classes={["but2"]}/>
                 </div>
                 <img src="/assets/PhoneExam.png" className="info-img-phone" alt="тут должна быть картинка =(" />
             </div>
@@ -110,7 +110,7 @@ export function FormCard() {
                         </div>
                     </div>
                 </div>
-                <MainButton text="Подобрать профессию" />
+                <MainButton text="Подобрать профессию" classes={["but1"]}/>
             </div>
         </section>
     )
