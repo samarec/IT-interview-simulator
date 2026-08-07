@@ -1,12 +1,13 @@
 import './Card.css';
 
 import { MainButton } from '../Button/MainButton';
+import { FromButton } from "../Button/FormButton";
+import { Input } from "../Input/Input";
 
 import { AdvantageCard } from "./AdvantagCard/AdvantageCard";
 import { advantagesCard } from "./AdvantagCard/dataAdvantageCard";
 
-import { InfoSection } from "./InfoSection/InfoSection";
-import { infoItem } from "./InfoSection/dataInfoSection";
+
 
 export function HelloCard() {
     return (
@@ -76,6 +77,40 @@ export function InfoCard() {
                     <MainButton text="Попробовать"/>
                 </div>
                 <img src="/assets/PhoneExam.png" className="info-img-phone" alt="тут должна быть картинка =(" />
+            </div>
+        </section>
+    )
+}
+
+const formButtons = [
+    "Котики", "Зум", "led-подсветка", "Дошик", "Кофе", "Сникерс", "Энергетик", "Хабр",
+    "Чипсы", "Пицца", "Макбук", "Монитор", "Мышка", "Гугл", "Гит", "Аниме", "Стим",
+    "Дедлайн", "Гик", "Борода", "Очки", "Терминал"
+]
+
+export function FormCard() {
+    return (
+        <section id='form-card'>
+            <div>
+                <h1>Не знаешь, с чего начать?</h1>
+                <p className="b1">
+                    Заполни анкету, и мы подберем идеальное<br/> IT-направление под твой вайб.
+                </p>
+            </div>
+            <div className="form-container">
+                <div className="form">
+                    <h2>Анкета</h2>
+                    <Input text="Имя" />
+                    <div>
+                        <p className="b2">Выбери до 5 интересов:</p>
+                        <div className="form-buttons">
+                            {formButtons.map((button) => (
+                                <FromButton text={button} />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <MainButton text="Подобрать профессию" />
             </div>
         </section>
     )

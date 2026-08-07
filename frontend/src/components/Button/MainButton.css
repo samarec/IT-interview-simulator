@@ -6,7 +6,7 @@
     padding: 16px 32px;
     background: linear-gradient(#ABD6FF, #0F89FF);
     border: none;
-    border-radius: 100px;
+    border-radius: 32px;
 }
 
 .main-button:hover {

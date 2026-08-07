@@ -1,5 +1,5 @@
 import './HomePage.css'
-import { HelloCard, AdvantagesCard, TrialCard, InfoCard } from '../components/Card/Card';
+import { HelloCard, AdvantagesCard, TrialCard, InfoCard, FormCard } from '../components/Card/Card';
 
 export function HomePage() {
     return (
@@ -10,6 +10,7 @@ export function HomePage() {
             </div>
             <TrialCard />
             <InfoCard />
+            <FormCard />
         </div>
 
     )
