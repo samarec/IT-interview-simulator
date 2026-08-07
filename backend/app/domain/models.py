@@ -1,0 +1,61 @@
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
+from sqlalchemy.orm import relationship
+
+from app.db.session import Base
+
+topic_tags = Table(
+    "topic_tags",
+    Base.metadata,
+    Column("topic_id", Integer, ForeignKey("topics.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
+)
+
+
+class Topic(Base):
+    __tablename__ = "topics"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+
+    tags = relationship("Tag", secondary=topic_tags, back_populates="topics")
+    cards = relationship("Card", back_populates="topic", cascade="all, delete-orphan")
+
+
+class Tag(Base):
+    __tablename__ = "tags"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+
+    topics = relationship("Topic", secondary=topic_tags, back_populates="tags")
+
+
+class Card(Base):
+    __tablename__ = "cards"
+
+    id = Column(Integer, primary_key=True, index=True)
+    topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
+    title = Column(String, nullable=False)  # Текст вопроса
+    description = Column(Text, nullable=True)  # Развёрнутый кейс
+
+    topic = relationship("Topic", back_populates="cards")
+    answers = relationship("Answer", back_populates="card", cascade="all, delete-orphan")
+
+
+class Answer(Base):
+    __tablename__ = "answers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    card_id = Column(Integer, ForeignKey("cards.id"), nullable=False)
+    title = Column(String, nullable=False)
+    is_correct = Column(Boolean, nullable=False, default=False)
+
+    card = relationship("Card", back_populates="answers")
+
+
+class FAQ(Base):
+    __tablename__ = "faq"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
