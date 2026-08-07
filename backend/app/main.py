@@ -32,3 +32,5 @@ def read_root():
 
 app.include_router(topics.router, prefix="/api/v1")
 
+
+
