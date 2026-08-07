@@ -42,8 +42,8 @@ def upgrade() -> None:
         CREATE TABLE IF NOT EXISTS {schema}.topic_tags
         (
             topic_id BIGINT REFERENCES {schema}.topics(id) ON DELETE CASCADE,
-            tags_id BIGINT REFERENCES {schema}.tags(id) ON DELETE CASCADE,
-            PRIMARY KEY (topic_id, tags_id)
+            tag_id BIGINT REFERENCES {schema}.tags(id) ON DELETE CASCADE,
+            PRIMARY KEY (topic_id, tag_id)
         )
     """)
 
