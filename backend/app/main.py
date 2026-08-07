@@ -1,0 +1,36 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.routes import topics
+
+app = FastAPI(
+    title="Тренажёр IT-собеседований API",
+    version="1.0.0",
+)
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+def read_root():
+    return {
+        "status": "ok",
+        "message": "Тренажёр IT-собеседований API работает",
+        "docs": "/docs",
+    }
+
+
+app.include_router(topics.router, prefix="/api/v1")
+
+
+
