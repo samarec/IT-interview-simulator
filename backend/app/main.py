@@ -1,36 +1,25 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routes import topics
 
-app = FastAPI(
-    title="Тренажёр IT-собеседований API",
-    version="1.0.0",
-)
+app = FastAPI()
 
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
-
+# Настройка CORS для frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
 @app.get("/")
-def read_root():
-    return {
-        "status": "ok",
-        "message": "Тренажёр IT-собеседований API работает",
-        "docs": "/docs",
-    }
+async def root():
+    return {"message": "API is running"}
 
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000, reload=True)
 
-app.include_router(topics.router, prefix="/api/v1")
-
-
-
+#запуск backend
+# из backend/ производить запуск через 
+# uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
