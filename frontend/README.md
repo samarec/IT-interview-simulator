@@ -2,14 +2,14 @@
 
 Установите все зависимости
 
-```angular2html
+```
 npm -install
 ```
 ---
 
 Запустите приложение командой
 
-```angular2html
+```
 npm run dev
 ```
 
