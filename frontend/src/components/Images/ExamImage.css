@@ -1,0 +1,33 @@
+.exam-image {
+    position: relative;
+    width: 424px;
+    height: 389px;
+}
+
+.part {
+    position: absolute;
+}
+
+.rectangle {
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.thorus1 {
+    top: 59px;
+    left: 119px;
+    z-index: 1;
+}
+
+.phone {
+    top: 0;
+    left: 109px;
+    z-index: 3;
+}
+
+.vector7 {
+    top: 51px;
+    left: 82px;
+    z-index: 3;
+}

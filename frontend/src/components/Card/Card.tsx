@@ -3,6 +3,8 @@ import './Card.css';
 import { MainButton } from '../Button/MainButton';
 import { FromButton } from "../Button/FormButton";
 import { Input } from "../Input/Input";
+import { LearnImage } from "../Images/LearnImage";
+import { ExamImage } from "../Images/ExamImage";
 
 import { AdvantageCard } from "./AdvantagCard/AdvantageCard";
 import { advantagesCard } from "./AdvantagCard/dataAdvantageCard";
@@ -63,7 +65,9 @@ export function InfoCard() {
                     </div>
                     <MainButton text="Попробовать" classes={["but2"]}/>
                 </div>
-                <img src="/assets/PhoneLearn.png" className="info-img-phone" alt="тут должна быть картинка =(" />
+                <div>
+                    <LearnImage />
+                </div>
             </div>
             <div className="info-section-photo-left">
                 <div className="info-text">
@@ -76,7 +80,9 @@ export function InfoCard() {
                     </div>
                     <MainButton text="Попробовать" classes={["but2"]}/>
                 </div>
-                <img src="/assets/PhoneExam.png" className="info-img-phone" alt="тут должна быть картинка =(" />
+                <div>
+                    <ExamImage />
+                </div>
             </div>
         </section>
     )
