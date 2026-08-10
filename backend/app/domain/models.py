@@ -1,7 +1,17 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table, Text
-from sqlalchemy.orm import relationship
+from datetime import datetime
 
 from app.db.session import Base
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Table,
+    Text,
+)
+from sqlalchemy.orm import relationship
 
 topic_tags = Table(
     "topic_tags",
@@ -10,6 +20,12 @@ topic_tags = Table(
     Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
 )
 
+topic_tags = Table(
+    "topic_tags",
+    Base.metadata,
+    Column("topic_id", Integer, ForeignKey("topics.id"), primary_key = True),
+    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key = True),
+)
 
 class Topic(Base):
     __tablename__ = "topics"
@@ -59,3 +75,27 @@ class FAQ(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
+
+class Role(Base):
+    __tablename__ = "roles"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50), nullable=False, unique=True)
+    description = Column(Text, nullable=False)
+
+    users = relationship("User", back_populates="role")
+
+class User(Base):
+    __tablename__ = "roles"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(100), nullable=False, unique=True)
+    email = Column(String(255), nullable=False, unique=True)
+    password_hash = Column(String(255), nullable=False)
+    role_id = Column(Integer, ForeignKey("z1.roles.id"), nullable=True)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    role = relationship("Role", back_populates="users")
