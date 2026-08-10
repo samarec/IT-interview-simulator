@@ -1,0 +1,150 @@
+#hello-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+#hello-card > p {
+    color: rgba(22, 43, 59, 0.8);
+    text-align: center;
+    font-size: 24px;
+}
+
+#hello-card > h1 {
+    text-align: center;
+}
+
+
+#advantages-card {
+    width: 658px;
+    display: flex;
+    flex-direction: column;
+}
+
+#advantages-card > .rotate {
+    align-self: flex-end;
+}
+
+
+#trial-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+#trial-card > div {
+    width: 652px;
+    display: flex;
+}
+
+#trial-qr {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    background: linear-gradient(121deg,
+    rgba(238, 247, 255, 0.6) 15%,
+    rgba(224, 240, 255, 0.6) 80%,
+    rgba(238, 247, 255, 0.6) 100%);
+    border-radius: 32px;
+    transform: rotate(-4deg);
+}
+
+#trial-qr > div {
+    width: 252px;
+    height: 252px;
+    background: linear-gradient(#FFFFFF, #F5F9FF);
+    border-radius: 32px;
+}
+
+#info-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+
+.info-section-photo-right {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.info-section-photo-left {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    gap: 32px;
+}
+
+.info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.info-text > div {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#form-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+
+#form-card > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+#form-card > div > p {
+    text-align: center;
+}
+
+.form-container {
+    width: 650px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(121deg,
+    rgba(238, 247, 255, 0.6) 15%,
+    rgba(224, 240, 255, 0.6) 80%,
+    rgba(238, 247, 255, 0.6) 100%);
+    border-radius: 32px;
+    padding: 48px;
+    gap: 36px;
+}
+
+.form-container > .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+.form-container > .form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#wheel-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
