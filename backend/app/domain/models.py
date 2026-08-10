@@ -20,13 +20,6 @@ topic_tags = Table(
     Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
 )
 
-topic_tags = Table(
-    "topic_tags",
-    Base.metadata,
-    Column("topic_id", Integer, ForeignKey("topics.id"), primary_key = True),
-    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key = True),
-)
-
 class Topic(Base):
     __tablename__ = "topics"
 
