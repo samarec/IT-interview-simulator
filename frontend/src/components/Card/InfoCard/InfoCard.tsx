@@ -1,6 +1,6 @@
 import './InfoCard.css'
 
-import {MainButton} from "../../Buttons/MainButton";
+import {MainButton} from "../../Buttons/Button";
 import {LearnImage} from "../../Images/BackgroundImage/LearnImage";
 import {ExamImage} from "../../Images/BackgroundImage/ExamImage";
 

@@ -1,6 +1,6 @@
 import './HelloCard.css'
 
-import {MainButton} from "../../Buttons/MainButton";
+import {MainButton} from "../../Buttons/Button";
 
 export function HelloCard() {
     return (

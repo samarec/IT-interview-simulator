@@ -1,5 +1,5 @@
 import './Header.css';
-import {MenuButton} from "../Buttons/MenuButton";
+import {Button} from "../Buttons/Button";
 import {navItems} from "./headerData";
 
 export default function Header() {
@@ -12,7 +12,7 @@ export default function Header() {
 
             <nav className="nav">
                 {navItems.map((item) => (
-                    <MenuButton id={item.id} text={item.title} />
+                    <Button text={item.title} classes={['menu-button']}/>
                 ))}
             </nav>
         </header>

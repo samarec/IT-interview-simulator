@@ -1,8 +1,7 @@
 import './FormCard.css'
 
 import {Input} from "../../Input/Input";
-import {FromButton} from "../../Buttons/FormButton";
-import {MainButton} from "../../Buttons/MainButton";
+import {Button} from "../../Buttons/Button";
 
 const formButtons = [
     "Котики", "Зум", "led-подсветка", "Дошик", "Кофе", "Сникерс", "Энергетик", "Хабр",
@@ -28,12 +27,12 @@ export function FormCard() {
                             <p className="b2">Выбери до 5 интересов:</p>
                             <div className="form-buttons">
                                 {formButtons.map((button) => (
-                                    <FromButton text={button} />
+                                    <Button text={button} classes={['form-button']} />
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <MainButton text="Подобрать профессию" classes={["but1"]}/>
+                    <Button text="Подобрать профессию" classes={["but1", "main-button"]}/>
                 </div>
             </section>
             <img id='vector2-background-form' className='part' src='/assets/Vector2.svg' alt=''/>
