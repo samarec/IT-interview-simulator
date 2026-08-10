@@ -1,6 +1,6 @@
 import './InfoCard.css'
 
-import {MainButton} from "../../Buttons/Button";
+import {Button} from "../../Buttons/Button";
 import {LearnImage} from "../../Images/BackgroundImage/LearnImage";
 import {ExamImage} from "../../Images/BackgroundImage/ExamImage";
 
@@ -16,7 +16,7 @@ export function InfoCard() {
                             никаких бесконечных лонгридов, только суть,
                             наглядные примеры кода и правильная логика ответа.</p>
                     </div>
-                    <MainButton text="Попробовать" classes={["but2"]}/>
+                    <Button text="Попробовать" classes={["but2", "main-button"]}/>
                 </div>
                 <div>
                     <LearnImage />
@@ -31,7 +31,7 @@ export function InfoCard() {
                             Проверь, насколько быстро ты соображаешь под давлением времени,
                             найди слабые места в знаниях и получи подробную аналитику своей готовности.</p>
                     </div>
-                    <MainButton text="Попробовать" classes={["but2"]}/>
+                    <Button text="Попробовать" classes={["but2", "main-button"]}/>
                 </div>
                 <div>
                     <ExamImage />

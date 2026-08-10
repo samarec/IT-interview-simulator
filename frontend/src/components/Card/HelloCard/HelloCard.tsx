@@ -1,6 +1,6 @@
 import './HelloCard.css'
 
-import {MainButton} from "../../Buttons/Button";
+import {Button} from "../../Buttons/Button";
 
 export function HelloCard() {
     return (
@@ -8,7 +8,7 @@ export function HelloCard() {
             <h1>Твой личный тренажер IT-собеседований</h1>
             <p>Пошаговая подготовка к техническим интервью
                 в формате удобных билетов. Разбери свои слабые места до встречи с рекрутером.</p>
-            <MainButton text="call to action" classes={["but1"]}/>
+            <Button text="call to action" classes={["but1", "main-button"]}/>
         </section>
 
     )
