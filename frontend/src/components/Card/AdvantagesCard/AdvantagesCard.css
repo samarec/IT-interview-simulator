@@ -1,0 +1,44 @@
+#advantages-card {
+    position: relative;
+    z-index: 10;
+
+    width: 658px;
+    display: flex;
+    flex-direction: column;
+}
+
+#advantages-card > .rotate {
+    align-self: flex-end;
+}
+
+#group4-background-advantage {
+    top: -65px;
+    left: 170px;
+    transform: rotate(-105deg);
+}
+
+#thorus2-background-advantage {
+    top: -95px;
+    left: 45px;
+}
+
+#vector2-background-advantage {
+    top: 39px;
+    left: 562px;
+}
+
+#vector3-background-advantage {
+    top: 225px;
+    left: -64px;
+}
+
+#helix-background-advantage {
+    top: 260px;
+    left: 465px;
+}
+
+#group3-background-advantage {
+    top: 417px;
+    left: 647px;
+    transform: rotate(56deg);
+}
