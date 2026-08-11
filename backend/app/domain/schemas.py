@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, TypeVar, Generic
 
 
 class TagResponse(BaseModel):
@@ -54,3 +54,27 @@ class FAQResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+T = TypeVar("T")
+
+class PaginatedResponse(BaseModel, Generic[T]):
+    items: List[T]
+    total_items: int
+    page: int
+    size: int
+    total_pages: int
+
+class MetaInfo(BaseModel):
+    total_questions: int
+    current_question_index: int
+
+class SessionQuestionResponse(BaseModel):
+    card: CardResponse
+    metainfo: MetaInfo
+
+class NextQuestionRequest(BaseModel):
+    topic_ids: List[int]
+    current_index: int
+
+    
