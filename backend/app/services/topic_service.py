@@ -83,7 +83,7 @@ def get_paginated_topics(db: Session, page: int, size: int) -> Tuple[List[Topic]
     topics = db.query(Topic).options(
         selectinload(Topic.tags),
         selectinload(Topic.cards)
-    ).offset((page - 1) * size).limit(size).all()
+    ).order_by(Topic.id).offset((page - 1) * size).limit(size).all()
 
     return topics, total_items
 
@@ -100,6 +100,8 @@ def get_session_question(db: Session, topic_ids: List[int], current_index: int) 
         selectinload(Card.answers)
     ).filter(
         Card.topic_id.in_(topic_ids)
+    ).order_by(
+        Card.id
     ).offset(current_index - 1).limit(1).first()
 
     return card, total_questions
