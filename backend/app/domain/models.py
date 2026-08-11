@@ -16,42 +16,75 @@ from sqlalchemy.orm import relationship
 
 class Topic(Base):
     __tablename__ = "topics"
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
 
-    tags = relationship("Tag", secondary="topic_tags", back_populates="topics")
+    tags = relationship(
+        "Tag",
+        secondary="z1.topic_tags",
+        primaryjoin="Topic.id == z1.topic_tags.c.topic_id",
+        secondaryjoin="Tag.id == z1.topic_tags.c.tag_id",
+        back_populates="topics",
+        viewonly=True,
+    )
     cards = relationship("Card", back_populates="topic", cascade="all, delete-orphan")
-    professions = relationship("Profession", secondary="topic_professions", back_populates="topics")
+    professions = relationship(
+        "Profession",
+        secondary="z1.topic_professions",
+        primaryjoin="Topic.id == z1.topic_professions.c.topic_id",
+        secondaryjoin="Profession.id == z1.topic_professions.c.profession_id",
+        back_populates="topics",
+        viewonly=True,
+    )
 
 
 class Tag(Base):
     __tablename__ = "tags"
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
 
-    topics = relationship("Topic", secondary="topic_tags", back_populates="tags")
-    professions = relationship("Profession", secondary="profession_tags", back_populates="tags")
+    topics = relationship(
+        "Topic",
+        secondary="z1.topic_tags",
+        primaryjoin="Tag.id == z1.topic_tags.c.tag_id",
+        secondaryjoin="Topic.id == z1.topic_tags.c.topic_id",
+        back_populates="tags",
+        viewonly=True,
+    )
+    professions = relationship(
+        "Profession",
+        secondary="z1.profession_tags",
+        primaryjoin="Tag.id == z1.profession_tags.c.tag_id",
+        secondaryjoin="Profession.id == z1.profession_tags.c.profession_id",
+        back_populates="tags",
+        viewonly=True,
+    )
 
 
 class Card(Base):
     __tablename__ = "cards"
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
-    topic_id = Column(Integer, ForeignKey("topics.id"), nullable=False)
+    topic_id = Column(Integer, ForeignKey("z1.topics.id"), nullable=False)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
 
     topic = relationship("Topic", back_populates="cards")
     answers = relationship("Answer", back_populates="card", cascade="all, delete-orphan")
 
+
 class Answer(Base):
     __tablename__ = "answers"
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
-    card_id = Column(Integer, ForeignKey("cards.id"), nullable=False)
+    card_id = Column(Integer, ForeignKey("z1.cards.id"), nullable=False)
     title = Column(String, nullable=False)
     is_correct = Column(Boolean, nullable=False, default=False)
 
@@ -60,14 +93,16 @@ class Answer(Base):
 
 class FAQ(Base):
     __tablename__ = "faq"
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
 
+
 class Role(Base):
     __tablename__ = "roles"
-    __table_args__ = {"schema": "z1", "extend_existing": True}
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False, unique=True)
@@ -75,9 +110,10 @@ class Role(Base):
 
     users = relationship("User", back_populates="role")
 
+
 class User(Base):
     __tablename__ = "users"
-    __table_args__ = {"schema": "z1", "extend_existing": True}
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(100), nullable=False, unique=True)
@@ -89,30 +125,47 @@ class User(Base):
 
     role = relationship("Role", back_populates="users")
 
+
 class Profession(Base):
     __tablename__ = "professions"
-    __table_args__ = {"schema": "z1", "extend_existing": True}
+    __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False, unique=True)
     description = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    tags = relationship("Tag", secondary="profession_tags", back_populates="professions")
-    topics = relationship("Topic", secondary="topic_professions", back_populates="professions")
+    tags = relationship(
+        "Tag",
+        secondary="z1.profession_tags",
+        primaryjoin="Profession.id == z1.profession_tags.c.profession_id",
+        secondaryjoin="Tag.id == z1.profession_tags.c.tag_id",
+        back_populates="professions",
+        viewonly=True,
+    )
+    topics = relationship(
+        "Topic",
+        secondary="z1.topic_professions",
+        primaryjoin="Profession.id == z1.topic_professions.c.profession_id",
+        secondaryjoin="Topic.id == z1.topic_professions.c.topic_id",
+        back_populates="professions",
+        viewonly=True,
+    )
+
 
 topic_tags = Table(
     "topic_tags",
     Base.metadata,
-    Column("topic_id", Integer, ForeignKey("topics.id"), primary_key=True),
-    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
+    Column("topic_id", Integer, ForeignKey("z1.topics.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("z1.tags.id"), primary_key=True),
+    schema="z1",
 )
 
 profession_tags = Table(
     "profession_tags",
     Base.metadata,
     Column("profession_id", Integer, ForeignKey("z1.professions.id"), primary_key=True),
-    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("z1.tags.id"), primary_key=True),
     Column("weight", Integer, default=1),
     schema="z1",
 )
@@ -120,7 +173,7 @@ profession_tags = Table(
 topic_professions = Table(
     "topic_professions",
     Base.metadata,
-    Column("topic_id", Integer, ForeignKey("topics.id"), primary_key=True),
+    Column("topic_id", Integer, ForeignKey("z1.topics.id"), primary_key=True),
     Column("profession_id", Integer, ForeignKey("z1.professions.id"), primary_key=True),
     schema="z1",
 )
