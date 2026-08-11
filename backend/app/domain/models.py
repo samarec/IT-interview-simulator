@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.db.session import Base
 from sqlalchemy import (
@@ -71,7 +71,7 @@ class FAQ(Base):
 
 class Role(Base):
     __tablename__ = "roles"
-    __table_args__ = {"schema": "z1"}
+    __table_args__ = {"schema": "z1", "extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), nullable=False, unique=True)
@@ -80,8 +80,8 @@ class Role(Base):
     users = relationship("User", back_populates="role")
 
 class User(Base):
-    __tablename__ = "roles"
-    __table_args__ = {"schema": "z1"}
+    __tablename__ = "users"
+    __table_args__ = {"schema": "z1", "extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(100), nullable=False, unique=True)
@@ -89,6 +89,6 @@ class User(Base):
     password_hash = Column(String(255), nullable=False)
     role_id = Column(Integer, ForeignKey("z1.roles.id"), nullable=True)
     is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     role = relationship("Role", back_populates="users")
