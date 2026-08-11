@@ -26,6 +26,7 @@ class Tag(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True)
 
     topics = relationship("Topic", secondary=topic_tags, back_populates="tags")
 
