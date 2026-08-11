@@ -16,14 +16,25 @@ body {
     font-family: "Geologica", sans-serif;
     font-weight: 300;
     color: #162B3B;
+    width: 100%;
 
-    /*min-height: 100vh;*/
-    /*background:*/
-    /*        radial-gradient(circle at top left, #F56835, transparent 30%),*/
-    /*        radial-gradient(circle at top right, #6B35F5, transparent 28%),*/
-    /*        radial-gradient(circle at bottom left, #6B35F5, transparent 30%),*/
-    /*        radial-gradient(circle at bottom right, #F56835, transparent 30%),*/
-    /*        #ffffff;*/
+    background-image:
+            url("../../public/assets/BackgroundEllipse1.png"),
+            url("../../public/assets/BackgroundEllipse2.png"),
+            url("../../public/assets/BackgroundEllipse3.png");
+    background-repeat:
+            repeat-y,
+            no-repeat,
+            repeat-y;
+    background-position:
+            -10px 700px,
+            0 0,
+            750px 250px;
+    background-size:
+            754px 1052px,
+            1184px 1408px;
+
+
 }
 
 h1 {

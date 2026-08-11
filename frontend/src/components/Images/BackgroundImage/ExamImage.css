@@ -4,29 +4,25 @@
     height: 389px;
 }
 
-.part {
-    position: absolute;
-}
-
 .rectangle {
     bottom: 0;
     left: 0;
     z-index: 2;
 }
 
-.thorus1 {
+#thorus1-exam-image {
     top: 59px;
     left: 119px;
     z-index: 1;
 }
 
-.phone {
+#phone-exam-image {
     top: 0;
     left: 109px;
     z-index: 3;
 }
 
-.vector7 {
+#vector7-exam-image {
     top: 51px;
     left: 82px;
     z-index: 3;

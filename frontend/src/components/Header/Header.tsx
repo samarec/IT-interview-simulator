@@ -1,15 +1,18 @@
 import './Header.css';
-import {MenuButton} from "../Button/MenuButton";
+import {Button} from "../Buttons/Button";
 import {navItems} from "./headerData";
 
 export default function Header() {
     return (
         <header className="header">
-            <div className="header-logo">LOGO</div>
+            <div id="image-header-logo">
+                {/*логотип*/}
+            </div>
+            <div className="header-logo">ЛОГО</div>
 
             <nav className="nav">
                 {navItems.map((item) => (
-                    <MenuButton id={item.id} text={item.title} />
+                    <Button text={item.title} classes={['menu-button']}/>
                 ))}
             </nav>
         </header>

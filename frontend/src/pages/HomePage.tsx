@@ -1,5 +1,10 @@
 import './HomePage.css'
-import { HelloCard, AdvantagesCard, TrialCard, InfoCard, FormCard, WheelCard } from '../components/Card/Card';
+import {TrialCard} from "../components/Card/TrialCard/TrialCard";
+import {AdvantagesCard} from "../components/Card/AdvantagesCard/AdvantagesCard";
+import {HelloCard} from "../components/Card/HelloCard/HelloCard";
+import {InfoCard} from "../components/Card/InfoCard/InfoCard";
+import {FormCard} from "../components/Card/FormCard/FormCard";
+import {WheelCard } from '../components/Card/WheelCard/WheelCard';
 
 export function HomePage() {
     return (

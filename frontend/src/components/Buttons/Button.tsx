@@ -1,8 +1,9 @@
 import './MainButton.css'
+import './MenuButton.css'
+import './FormButton.css'
 
-export function MainButton(props: {text: string, classes: string[]}) {
+export function Button(props: {text: string, classes: string[]}) {
     const classes = props.classes;
-    classes.push("main-button");
 
     return (
         <button className={classes.join(' ')}>
