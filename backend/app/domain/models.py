@@ -20,6 +20,23 @@ topic_tags = Table(
     Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
 )
 
+profession_tags = Table(
+    "profession_tags",
+    Base.metadata,
+    Column("profession_id", Integer, ForeignKey("professions.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("tags.id"), primary_key=True),
+    Column("weight", Integer, default=1),
+    schema="z1",
+)
+
+topic_professions = Table(
+    "topic_professions",
+    Base.metadata,
+    Column("topic_id", Integer, ForeignKey("topics.id"), primary_key=True),
+    Column("profession_id", Integer, ForeignKey("professions.id"), primary_key=True),
+    schema="z1",
+)
+
 class Topic(Base):
     __tablename__ = "topics"
 
@@ -92,3 +109,15 @@ class User(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     role = relationship("Role", back_populates="users")
+
+class Profession(Base):
+    __tablename__ = "professions"
+    __table_args__ = {"schema": "z1", "extend_existing": True}
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False, unique=True)
+    description = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    tags = relationship("Tag", secondary=profession_tags, back_populates="professions")
+    topics = relationship("Topic", secondary=topic_professions, back_populates="professions")
