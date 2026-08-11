@@ -1,19 +1,25 @@
 from datetime import datetime, timedelta, timezone
 
+import bcrypt
 from app.core import config
 from app.domain.models import User
 from app.domain.schemas import UserCreate
 from jose import jwt
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# проверка пароля против хеша
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    plain_bytes = plain_password.encode("utf-8")
+    hash_bytes = hashed_password.encode("utf-8")
+    return bcrypt.checkpw(plain_bytes, hash_bytes)
 
+# хэширование пароля 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    password_bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode("utf-8")
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
