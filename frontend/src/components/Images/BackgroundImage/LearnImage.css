@@ -1,0 +1,37 @@
+.learn-image {
+    position: relative;
+    width: 424px;
+    height: 389px;
+}
+
+.rectangle {
+    width: 424px;
+    height: 270px;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+}
+
+#phone-learn-image {
+    top: 0;
+    left: 127px;
+    z-index: 3;
+}
+
+#cube-learn-image {
+    top: 58px;
+    left: 0;
+    z-index: 1;
+}
+
+#group3-learn-image {
+    top: -1px;
+    left: 343px;
+    z-index: 3;
+}
+
+#group4-learn-image {
+    top: 331px;
+    left: 265px;
+    z-index: 3;
+}

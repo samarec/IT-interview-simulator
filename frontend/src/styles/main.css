@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV@100..900,0&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+}
+
+body {
+    font-family: "Geologica", sans-serif;
+    font-weight: 300;
+    color: #162B3B;
+    width: 100%;
+
+    background-image:
+            url("../../public/assets/BackgroundEllipse1.png"),
+            url("../../public/assets/BackgroundEllipse2.png"),
+            url("../../public/assets/BackgroundEllipse3.png");
+    background-repeat:
+            repeat-y,
+            no-repeat,
+            repeat-y;
+    background-position:
+            -10px 700px,
+            0 0,
+            750px 250px;
+    background-size:
+            754px 1052px,
+            1184px 1408px;
+
+
+}
+
+h1 {
+    font-size: 48px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+h2 {
+    font-size: 32px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 22px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+h4 {
+    font-size: 18px;
+    line-height: 120%;
+    font-weight: 400;
+}
+
+.but1 {
+    font-family: "Geologica", sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.but2 {
+    font-family: "Geologica", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.b1 {
+    font-size: 24px;
+    line-height: 120%;
+    opacity: 80%;
+}
+
+.b2 {
+    font-size: 18px;
+    line-height: 120%;
+    opacity: 80%;
+}
+
+.b3 {
+    font-size: 16px;
+    line-height: 120%;
+    opacity: 80%;
+}

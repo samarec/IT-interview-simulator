@@ -13,7 +13,3 @@ export default defineConfig({
     }
   }
 })
-
-// запуск frontend
-// из frontend/ производить запуск через
-// npm run dev

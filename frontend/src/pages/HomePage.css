@@ -1,0 +1,22 @@
+#home-page {
+    width: 880px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 128px;
+}
+
+#container-hello-advantages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 80px;
+}
+
+.background-container {
+    position: relative;
+}
+
+.part {
+    position: absolute;
+}

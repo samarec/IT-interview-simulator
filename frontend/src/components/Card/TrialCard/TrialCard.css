@@ -1,0 +1,52 @@
+#trial-card {
+    position: relative;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+#trial-card > div {
+    width: 652px;
+    display: flex;
+}
+
+#trial-qr {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    background: linear-gradient(121deg,
+    rgba(238, 247, 255, 0.6) 15%,
+    rgba(224, 240, 255, 0.6) 80%,
+    rgba(238, 247, 255, 0.6) 100%);
+    border-radius: 32px;
+    transform: rotate(-4deg);
+}
+
+#trial-qr > div {
+    width: 252px;
+    height: 252px;
+    background: linear-gradient(#FFFFFF, #F5F9FF);
+    border-radius: 32px;
+}
+
+#thorus-kont-background-trial {
+    top: 175px;
+    left: 265px;
+}
+
+#vector7-background-trial {
+    top: 135px;
+    left: -23px;
+    transform: rotate(-4deg);
+}
+
+#group4-background-trial {
+    top: 390px;
+    left: 295px;
+    transform: rotate(-15deg);
+
+}

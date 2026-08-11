@@ -1,5 +1,8 @@
+from typing import List, Optional
 from pydantic import BaseModel
 from typing import List, Optional, TypeVar, Generic
+
+from pydantic import BaseModel
 
 
 class TagResponse(BaseModel):
@@ -55,6 +58,46 @@ class FAQResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+class UserCreate(BaseModel):
+    username: str
+    email: str
+    password: str
+    role_id: Optional[int] = None
+
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
+class UserOut(BaseModel):
+    id: int
+    username: str
+    email: str
+    is_active: bool
+    role_id: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+class ProfessionResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class ProfessionMatchRequest(BaseModel):
+    tag_ids: List[int]
+
+
+class ProfessionMatchResponse(BaseModel):
+    correct_profession: ProfessionResponse
+    wheel_professions: List[ProfessionResponse]
+
 
 T = TypeVar("T")
 
@@ -77,4 +120,3 @@ class NextQuestionRequest(BaseModel):
     topic_ids: List[int]
     current_index: int
 
-    
