@@ -79,3 +79,19 @@ class UserOut(BaseModel):
 
     class Config:
         from_attributes = True 
+
+class ProfessionResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class ProfessionMatchRequest(BaseModel):
+    tag_ids: List[int]
+
+
+class ProfessionMatchResponse(BaseModel):
+    correct_profession: ProfessionResponse
+    wheel_professions: List[ProfessionResponse]
