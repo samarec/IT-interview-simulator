@@ -7,7 +7,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://postgres:password@localhost:5432/it_trainer"
+    "postgresql://z1:S5IfwD9lGjyRWb5X@127.0.0.1:5432/sabypractice?options=-csearch_path%3Dz1"
 )
 
 engine = create_engine(DATABASE_URL)

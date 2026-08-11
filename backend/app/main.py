@@ -1,8 +1,7 @@
 import uvicorn
+from app.api.routes import auth, topics, professions
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.api.routes import topics
 
 app = FastAPI()
 
@@ -16,6 +15,8 @@ app.add_middleware(
 )
 
 app.include_router(topics.router, prefix = "/api")
+app.include_router(auth.router, prefix="/api")
+app.include_router(professions.router, prefix="/api")
 
 @app.get("/")
 async def root():
