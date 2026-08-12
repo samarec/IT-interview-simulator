@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.api.deps import get_db
+from app.api.routes.deps import get_db
 from app.domain.schemas import ProfessionMatchRequest, ProfessionMatchResponse
 from app.services.profession_service import match_profession
 from sqlalchemy.orm import Session

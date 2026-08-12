@@ -1,4 +1,6 @@
 from typing import List, Optional
+from pydantic import BaseModel
+from typing import List, Optional, TypeVar, Generic
 
 from pydantic import BaseModel
 
@@ -78,7 +80,7 @@ class UserOut(BaseModel):
     role_id: Optional[int] = None
 
     class Config:
-        from_attributes = True 
+        from_attributes = True
 
 class ProfessionResponse(BaseModel):
     id: int
@@ -95,3 +97,26 @@ class ProfessionMatchRequest(BaseModel):
 class ProfessionMatchResponse(BaseModel):
     correct_profession: ProfessionResponse
     wheel_professions: List[ProfessionResponse]
+
+
+T = TypeVar("T")
+
+class PaginatedResponse(BaseModel, Generic[T]):
+    items: List[T]
+    total_items: int
+    page: int
+    size: int
+    total_pages: int
+
+class MetaInfo(BaseModel):
+    total_questions: int
+    current_question_index: int
+
+class SessionQuestionResponse(BaseModel):
+    card: CardResponse
+    metainfo: MetaInfo
+
+class NextQuestionRequest(BaseModel):
+    topic_ids: List[int]
+    current_index: int
+
