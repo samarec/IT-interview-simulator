@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 from sqlalchemy.orm import Session, selectinload
 
 from app.domain.models import FAQ, Card, Topic
@@ -72,3 +72,37 @@ def get_all_faqs(db: Session) -> List[FAQResponse]:
         FAQResponse(id=faq.id, title=faq.title, description=faq.description)
         for faq in faqs
     ]
+
+
+def get_paginated_topics(db: Session, page: int, size: int) -> Tuple[List[Topic], int]:
+    """
+    Возвращает список тем с пагинацией и общее количество тем в БД.
+    """
+    total_items = db.query(Topic).count()
+
+    topics = db.query(Topic).options(
+        selectinload(Topic.tags),
+        selectinload(Topic.cards)
+    ).order_by(Topic.id).offset((page - 1) * size).limit(size).all()
+
+    return topics, total_items
+
+
+def get_session_question(db: Session, topic_ids: List[int], current_index: int) -> Tuple[Card, int]:
+    """
+    Возвращает конкретную карточку по индексу и общее число вопросов в выбранных темах.
+    """
+    # Считаем общее количество карточек по выбранным темам
+    total_questions = db.query(Card).filter(Card.topic_id.in_(topic_ids)).count()
+
+    # Достаем нужную карточку, "пропуская" предыдущие с помощью offset
+    card = db.query(Card).options(
+        selectinload(Card.answers)
+    ).filter(
+        Card.topic_id.in_(topic_ids)
+    ).order_by(
+        Card.id
+    ).offset(current_index - 1).limit(1).first()
+
+    return card, total_questions
+
