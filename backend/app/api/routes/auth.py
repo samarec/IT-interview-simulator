@@ -1,7 +1,7 @@
 from datetime import timedelta
 from typing import Annotated
 
-from app.api.deps import get_db
+from app.api.routes.deps import get_db
 from app.core import config
 from app.domain.models import User
 from app.domain.schemas import Token, UserCreate, UserLogin, UserOut

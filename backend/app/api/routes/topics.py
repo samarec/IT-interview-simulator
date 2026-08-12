@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, selectinload
 
-from app.api.deps import get_db
+from app.api.routes.deps import get_db
 from app.domain.models import Topic
 from app.domain.schemas import (
     CardResponse,
