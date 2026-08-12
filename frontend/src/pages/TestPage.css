@@ -1,0 +1,7 @@
+#test-page {
+    width: 880px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
