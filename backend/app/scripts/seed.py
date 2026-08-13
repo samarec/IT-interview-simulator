@@ -1,10 +1,10 @@
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.db.session import Base, SessionLocal, engine
-from app.domain.models import FAQ, Answer, Card, Tag, Topic
+from app.domain.models import FAQ, Answer, Card, Tag, Topic, Role, Profession
 
 
 def seed_data():
@@ -12,22 +12,33 @@ def seed_data():
     db = SessionLocal()
 
     try:
-        if db.query(Topic).first():
+        if db.query(Role).first() or db.query(Topic).first():
             print("База данных уже содержит данные. Пропуск заполнения.")
             return
 
         print("Заполнение базы данных начальными данными...")
+
+        role_admin = Role(id=1, name="Admin")
+        role_user = Role(id=2, name="User")
+        db.add_all([role_admin, role_user])
 
         tag_web = Tag(name="Web")
         tag_networks = Tag(name="Сети")
         tag_devops = Tag(name="DevOps")
         tag_db = Tag(name="Базы данных")
 
+        prof_frontend = Profession(name="Frontend-разработчик", description="Создает UI", tags=[tag_web])
+        prof_backend = Profession(name="Backend-разработчик", description="Пишет API",
+                                  tags=[tag_web, tag_db, tag_networks])
+        prof_devops = Profession(name="DevOps-инженер", description="Настраивает CI/CD",
+                                 tags=[tag_devops, tag_networks])
+        db.add_all([prof_frontend, prof_backend, prof_devops])
+
         topic_http = Topic(name="HTTP-статусы", tags=[tag_web, tag_networks])
         topic_git = Topic(name="Основы Git", tags=[tag_devops])
         topic_sql = Topic(name="Базовый SQL", tags=[tag_db])
-
         db.add_all([topic_http, topic_git, topic_sql])
+
         db.flush()
 
         card_1 = Card(
@@ -74,7 +85,6 @@ def seed_data():
             ],
         )
 
-        # 4. FAQ
         faq_1 = FAQ(
             title="Как работать с тренажёром?",
             description="Выбирайте интересующие темы на главной странице и нажимайте 'Запустить тренажёр'.",
@@ -93,3 +103,4 @@ def seed_data():
 
 if __name__ == "__main__":
     seed_data()
+
