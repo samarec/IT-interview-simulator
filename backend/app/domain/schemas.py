@@ -117,3 +117,21 @@ class SessionQuestionResponse(BaseModel):
 class NextQuestionRequest(BaseModel):
     topic_ids: List[int]
     current_index: int = Field(..., ge=1, description="Индекс текущего вопроса (начиная с 1)")
+
+
+class TestResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    duration_minutes: Optional[int] = None
+    profession_id: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+class CountersResponse(BaseModel):
+    questions: int
+    topics: int
+    tests: int
+    users: int
+
