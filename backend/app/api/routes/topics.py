@@ -6,6 +6,7 @@ from app.domain.models import Topic, User
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
+    CountersResponse,
     FAQResponse,
     MetaInfo,
     NextQuestionRequest,
@@ -20,6 +21,7 @@ from app.services.topic_service import (
     get_all_faqs,
     get_all_topics,
     get_cards_by_topics,
+    get_counters,
     get_paginated_topics,
     get_session_question,
 )
@@ -42,6 +44,21 @@ def read_topics(
 @router.get("/faq", response_model=List[FAQResponse], tags=["faq"])
 def read_faqs(db: Session = Depends(get_db)):
     return get_all_faqs(db)
+
+
+@router.get("/counters", response_model=CountersResponse)
+def read_counters(db: Session = Depends(get_db)):
+    """
+    Получить агрегированные счетчики для шапки страницы 'Тесты'.
+    Возвращает общее количество:
+      - questions
+      - topics
+      - tests
+      - users
+    Доступен без авторизации (public endpoint), т.к. это публичная статистика.
+    """
+    counters = get_counters(db)
+    return CountersResponse(**counters)
 
 
 @router.get("/paginated", response_model=PaginatedResponse[TopicResponse])
