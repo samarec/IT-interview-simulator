@@ -10,13 +10,13 @@ router = APIRouter(prefix="/professions", tags=["professions"])
 
 @router.post("/match", response_model=ProfessionMatchResponse)
 def match_professions(
-    pauload: ProfessionMatchRequest,
+    payload: ProfessionMatchRequest,
     db: Session = Depends(get_db),
 ):
-    if not pauload.tag_ids:
+    if not payload.tag_ids:
         raise HTTPException(status_code=400, detail="Необходимо выбрать хотя бы один тег.")
 
-    unique_tag_ids = list(set(pauload.tag_ids))
+    unique_tag_ids = list(set(payload.tag_ids))
 
     return match_profession(db, unique_tag_ids)
 
