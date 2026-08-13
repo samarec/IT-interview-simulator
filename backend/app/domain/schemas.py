@@ -1,8 +1,5 @@
-from typing import List, Optional
-from pydantic import BaseModel
 from typing import List, Optional, TypeVar, Generic
-
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TagResponse(BaseModel):
@@ -118,5 +115,6 @@ class SessionQuestionResponse(BaseModel):
 
 class NextQuestionRequest(BaseModel):
     topic_ids: List[int]
-    current_index: int
+    current_index: int = Field(..., ge=1, description="Индекс текущего вопроса (начиная с 1)")
 
+    
