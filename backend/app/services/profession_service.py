@@ -1,5 +1,6 @@
 import random
 from typing import List, Tuple
+from fastapi import HTTPException  # Добавлен импорт HTTPException
 
 from app.domain.models import Profession
 from app.domain.schemas import ProfessionMatchResponse, ProfessionResponse
@@ -8,9 +9,10 @@ from sqlalchemy.orm import Session
 
 def match_profession(db: Session, tag_ids: List[int]) -> ProfessionMatchResponse:
     professions = db.query(Profession).all()
-    
+
     if not professions:
-        raise ValueError("No professions found in database")
+        raise HTTPException(status_code=404, detail="В базе данных нет профессий.")
+
     scored: List[Tuple[Profession, int]] = []
     for prof in professions:
         prof_tag_ids = {tag.id for tag in prof.tags}
@@ -44,3 +46,4 @@ def match_profession(db: Session, tag_ids: List[int]) -> ProfessionMatchResponse
             for p in wheel
         ],
     )
+
