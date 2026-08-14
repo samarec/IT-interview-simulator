@@ -1,7 +1,21 @@
 from unittest.mock import MagicMock
 
-from app.domain.schemas import TopicResponse, TagResponse, CardResponse, AnswerResponse
-from app.services.topic_service import get_all_topics, get_cards_by_topics
+from app.domain.schemas import (
+    AnswerResponse,
+    CardResponse,
+    FAQResponse,
+    TagResponse,
+    TopicResponse,
+)
+from app.services.topic_service import get_all_faqs, get_all_topics, get_cards_by_topics
+
+
+def create_mock_faq(id, title, description):
+    mock_faq = MagicMock()
+    mock_faq.id = id
+    mock_faq.title = title
+    mock_faq.description = description
+    return mock_faq
 
 def create_mock_answer(id, title, is_correct):
     mock_answer = MagicMock()
@@ -137,7 +151,11 @@ def test_get_cards_by_topics_success():
         create_mock_card(3, 1, "card3", "desc3", [])
     ]
 
-    mock_db.query.return_value.options.return_value.filter.return_value.all.return_value = mock_cards
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    all_mock = filter_mock.all
+    all_mock.return_value = mock_cards
 
     topic_ids = [1, 2]
     result = get_cards_by_topics(mock_db, topic_ids)
@@ -153,7 +171,12 @@ def test_get_cards_by_topics_success():
 def test_get_cards_by_topics_no_result():
     mock_db = MagicMock()
 
-    mock_db.query.return_value.options.return_value.filter.return_value.all.return_value = []
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    all_mock = filter_mock.all
+    all_mock.return_value = []
+
     topic_ids = [10]
     result = get_cards_by_topics(mock_db, topic_ids)
 
@@ -164,7 +187,11 @@ def test_get_cards_by_topics_without_answers():
 
     mock_card = create_mock_card(1, 1, "card1", "desc1", [])
 
-    mock_db.query.return_value.options.return_value.filter.return_value.all.return_value = [mock_card]
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    all_mock = filter_mock.all
+    all_mock.return_value = [mock_card]
 
     result = get_cards_by_topics(mock_db, [1])
 
@@ -176,9 +203,48 @@ def test_get_cards_by_topics_response_structure():
 
     answers = [create_mock_answer(1, "ans1", True)]
     mock_card = create_mock_card(1, 1, "card1", "desc1", answers)
-    mock_db.query.return_value.options.return_value.filter.return_value.all.return_value = [mock_card]
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    all_mock = filter_mock.all
+    all_mock.return_value = [mock_card]
 
     result = get_cards_by_topics(mock_db, [1])
 
     assert isinstance(result[0], CardResponse)
     assert isinstance(result[0].answers[0], AnswerResponse)
+
+def test_get_all_faqs_empty():
+    mock_db = MagicMock()
+    mock_db.query.return_value.all.return_value = []
+
+    result = get_all_faqs(mock_db)
+
+    assert result == []
+
+def test_get_all_faqs_success():
+    mock_db = MagicMock()
+
+    mock_faqs = [
+        create_mock_faq(1, "ask1", "ans1"),
+        create_mock_faq(2, "ask2", "ans2"),
+        create_mock_faq(3, "ask3", "ans3"),
+    ]
+
+    mock_db.query.return_value.all.return_value = mock_faqs
+
+    result = get_all_faqs(mock_db)
+
+    assert len(result) == 3
+    assert result[0].title == "ask1"
+    assert result[0].description == "ans1"
+
+def test_get_all_faqs_response_structure():
+    mock_db = MagicMock()
+    mock_faq = create_mock_faq(1, "ask1", "ans1")
+    mock_db.query.return_value.all.return_value = [mock_faq]
+
+    result = get_all_faqs(mock_db)
+
+    assert isinstance(result[0], FAQResponse)
