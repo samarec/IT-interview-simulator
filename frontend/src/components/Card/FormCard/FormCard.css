@@ -25,10 +25,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(121deg,
-    rgba(238, 247, 255, 0.6) 15%,
-    rgba(224, 240, 255, 0.6) 80%,
-    rgba(238, 247, 255, 0.6) 100%);
     border-radius: 32px;
     padding: 48px;
     box-sizing: border-box;
@@ -67,8 +63,8 @@
 }
 
 #group3-background-form {
-    top: 654px;
-    left: 69px;
+    top: 646px;
+    left: -35px;
     transform: scaleX(-1) rotate(60deg);
 }
 

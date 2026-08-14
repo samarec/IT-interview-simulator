@@ -211,6 +211,19 @@ class TestCard(Base):
     card = relationship("Card")
 
 
+class UserTopicCounter(Base):
+    __tablename__ = "user_topic_counters"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("z1.users.id"), nullable=False)
+    topic_id = Column(Integer, ForeignKey("z1.topics.id"), nullable=False)
+    completed_count = Column(Integer, default=0, nullable=False)
+
+    user = relationship("User", back_populates="topic_counters")
+    topic = relationship("Topic", back_populates="user_counters")
+
+
 topic_tags = Table(
     "topic_tags",
     Base.metadata,

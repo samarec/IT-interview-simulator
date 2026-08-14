@@ -27,9 +27,9 @@ body {
             no-repeat,
             repeat-y;
     background-position:
-            -10px 700px,
+            0 700px,
             0 0,
-            750px 250px;
+            120% 250px;
     background-size:
             754px 1052px,
             1184px 1408px;
@@ -89,4 +89,31 @@ h4 {
     font-size: 16px;
     line-height: 120%;
     opacity: 80%;
+}
+
+.gradient-wight-card-fill {
+    background: linear-gradient(121deg,
+    rgba(238, 247, 255, 0.6) 15%,
+    rgba(224, 240, 255, 0.6) 80%,
+    rgba(238, 247, 255, 0.6) 100%);
+}
+
+.gradient-wight-card-stroke {
+    background: linear-gradient(#D1E7FF, #FFFFFF);
+}
+
+.gradient-blue-card-stroke {
+    background: linear-gradient(#45A4FF, #ABD6FF);
+}
+
+.gradient-button-blue {
+    background: linear-gradient(#ABD6FF 0%, #0F89FF 97%);
+}
+
+.gradient-button-orange {
+    background: linear-gradient(#FFCEBC 0%, #FF936B 97%);
+}
+
+.gradient-withe-input {
+    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(238, 247, 255, 0.4));
 }

@@ -21,7 +21,6 @@ class TopicResponse(BaseModel):
         from_attributes = True
 
 
-# Схема для варианта ответа (таблица answers)
 class AnswerResponse(BaseModel):
     id: int
     title: str
@@ -31,19 +30,17 @@ class AnswerResponse(BaseModel):
         from_attributes = True
 
 
-# Схема для карточки (таблица cards)
 class CardResponse(BaseModel):
     id: int
     topic_id: int
-    title: str  # Текст вопроса
-    description: Optional[str] = None  # Развёрнутый кейс-объяснение
-    answers: List[AnswerResponse] = []  # Варианты ответов для режима экзамена
+    title: str
+    description: Optional[str] = None
+    answers: List[AnswerResponse] = []
 
     class Config:
         from_attributes = True
 
 
-# Схема входящего запроса для старта тренажёра по выбранным темам
 class StartTrainerRequest(BaseModel):
     topic_ids: List[int]
 
@@ -129,10 +126,9 @@ class TestResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 class CountersResponse(BaseModel):
     questions: int
     topics: int
     tests: int
     users: int
-
-    

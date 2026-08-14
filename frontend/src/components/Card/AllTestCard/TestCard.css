@@ -1,0 +1,15 @@
+.test-card {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    border-radius: 32px;
+}
+
+.test-tabs {
+    display: flex;
+    align-items: start;
+    gap: 8px;
+}
