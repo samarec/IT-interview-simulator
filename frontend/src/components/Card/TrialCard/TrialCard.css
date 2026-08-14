@@ -18,10 +18,6 @@
     flex-direction: column;
     gap: 16px;
     padding: 28px;
-    background: linear-gradient(121deg,
-    rgba(238, 247, 255, 0.6) 15%,
-    rgba(224, 240, 255, 0.6) 80%,
-    rgba(238, 247, 255, 0.6) 100%);
     border-radius: 32px;
     transform: rotate(-4deg);
 }

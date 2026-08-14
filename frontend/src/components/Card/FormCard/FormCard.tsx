@@ -19,7 +19,7 @@ export function FormCard() {
                         Заполни анкету, и мы подберем идеальное IT-направление под твой вайб.
                     </p>
                 </div>
-                <div className="form-container">
+                <div className="form-container gradient-wight-card-fill">
                     <div className="form">
                         <h2>Анкета</h2>
                         <Input text="Имя" />
