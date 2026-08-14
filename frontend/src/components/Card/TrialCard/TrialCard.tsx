@@ -6,7 +6,7 @@ export function TrialCard() {
             <section id='trial-card'>
                 <h2>Готов попробовать прямо сейчас?</h2>
                 <div>
-                    <div id="trial-qr">
+                    <div id="trial-qr" className='gradient-wight-card-fill'>
                         <div>
                             {/*qr-code*/}
                         </div>
