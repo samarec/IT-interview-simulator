@@ -78,7 +78,14 @@ class Card(Base):
 
     topic = relationship("Topic", back_populates="cards")
     answers = relationship("Answer", back_populates="card", cascade="all, delete-orphan")
-
+    tests = relationship(
+        "Test",
+        secondary="z1.test_cards",
+        primaryjoin="Card.id == z1.test_cards.c.card_id",
+        secondaryjoin="Test.id == z1.test_cards.c.test_id",
+        back_populates="cards",
+        viewonly=True,
+    )
 
 class Answer(Base):
     __tablename__ = "answers"
@@ -153,6 +160,7 @@ class Profession(Base):
         back_populates="professions",
         viewonly=True,
     )
+    tests = relationship("Test", back_populates="profession")
 
 
 class UserTopicCounter(Base):
@@ -180,9 +188,7 @@ class Test(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     profession = relationship("Profession", back_populates="tests")
-    # Прямая связь с записями test_cards (для управления порядком и CRUD)
     test_cards = relationship("TestCard", back_populates="test", cascade="all, delete-orphan")
-    # Представление теста как списка карточек (только для чтения)
     cards = relationship(
         "Card",
         secondary="z1.test_cards",
