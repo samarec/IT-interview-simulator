@@ -7,7 +7,12 @@ from app.domain.schemas import (
     TagResponse,
     TopicResponse,
 )
-from app.services.topic_service import get_all_faqs, get_all_topics, get_cards_by_topics
+from app.services.topic_service import (
+    get_all_faqs,
+    get_all_topics,
+    get_cards_by_topics,
+    get_paginated_topics,
+)
 
 
 def create_mock_tag(id, name):
@@ -258,3 +263,70 @@ def test_get_all_faqs_response_structure():
     result = get_all_faqs(mock_db)
 
     assert isinstance(result[0], FAQResponse)
+
+def test_get_paginated_topics_success():
+    mock_db = MagicMock()
+
+    topics = [
+        create_mock_topic(1, "topic1", [], []),
+        create_mock_topic(2, "topic2", [], []),
+    ]
+
+    mock_db.query.return_value.count.return_value = 10
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    order_by_mock = options_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    all_mock = limit_mock.all
+    all_mock.return_value = topics
+
+    page, size = 1, 2
+    result, total = get_paginated_topics(mock_db, page, size)
+
+    assert len(result) == 2
+    assert total == 10
+    assert result[0].id == 1
+    assert result[0].name == "topic1"
+
+def test_get_paginated_topics_empty():
+    mock_db = MagicMock()
+
+    mock_db.query.return_value.count.return_value = 0
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    order_by_mock = options_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    all_mock = limit_mock.all
+    all_mock.return_value = []
+
+    result, total = get_paginated_topics(mock_db, 1, 10)
+
+    assert result == []
+    assert total == 0
+
+def test_get_paginated_topics_response_structure():
+    mock_db = MagicMock()
+
+    topics = [
+        create_mock_topic(1, "topic1", [], []),
+        create_mock_topic(2, "topic2", [], []),
+    ]
+
+    mock_db.query.return_value.count.return_value = 10
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    order_by_mock = options_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    all_mock = limit_mock.all
+    all_mock.return_value = topics
+
+    page, size = 1, 2
+    result, _ = get_paginated_topics(mock_db, page, size)
+
+    assert isinstance(result[0], TopicResponse)
