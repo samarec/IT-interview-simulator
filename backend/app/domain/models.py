@@ -87,6 +87,7 @@ class Card(Base):
         viewonly=True,
     )
 
+
 class Answer(Base):
     __tablename__ = "answers"
     __table_args__ = {"schema": "z1"}
@@ -133,6 +134,7 @@ class User(Base):
 
     role = relationship("Role", back_populates="users")
     topic_counters = relationship("UserTopicCounter", back_populates="user", cascade="all, delete-orphan")
+    test_results = relationship("UserTestResult", back_populates="user", cascade="all, delete-orphan")
 
 
 class Profession(Base):
@@ -197,6 +199,7 @@ class Test(Base):
         back_populates="tests",
         viewonly=True,
     )
+    user_results = relationship("UserTestResult", back_populates="test", cascade="all, delete-orphan")
 
 
 class TestCard(Base):
@@ -209,6 +212,25 @@ class TestCard(Base):
 
     test = relationship("Test", back_populates="test_cards")
     card = relationship("Card")
+
+
+class UserTestResult(Base):
+    """
+    Результат прохождения теста пользователем.
+    """
+    __tablename__ = "user_test_results"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("z1.users.id"), nullable=False)
+    test_id = Column(Integer, ForeignKey("z1.tests.id"), nullable=False)
+    score = Column(Integer, nullable=True)
+    max_score = Column(Integer, nullable=True)
+    passed = Column(Boolean, default=False)
+    completed_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="test_results")
+    test = relationship("Test", back_populates="user_results")
 
 
 topic_tags = Table(
@@ -235,4 +257,3 @@ topic_professions = Table(
     Column("profession_id", Integer, ForeignKey("z1.professions.id"), primary_key=True),
     schema="z1",
 )
-
