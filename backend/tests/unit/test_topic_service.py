@@ -10,6 +10,12 @@ from app.domain.schemas import (
 from app.services.topic_service import get_all_faqs, get_all_topics, get_cards_by_topics
 
 
+def create_mock_tag(id, name):
+    mock_tag = MagicMock()
+    mock_tag.id = id
+    mock_tag.name = name
+    return mock_tag
+
 def create_mock_faq(id, title, description):
     mock_faq = MagicMock()
     mock_faq.id = id
@@ -33,34 +39,29 @@ def create_mock_card(id, topic_id, title, description, answers):
     mock_card.answers = answers
     return mock_card
 
-def create_mock_topic(id, name, tags_count, cards_count):
+def create_mock_topic(id, name, tags=None, cards=None):
     topic = MagicMock()
     topic.id = id
     topic.name = name
 
-    topic.tags = []
-    for i in range(tags_count):
-        tag = MagicMock()
-        tag.id = i
-        tag.name = f"tag_{i+1}"
-        topic.tags.append(tag)
+    topic.tags = tags or []
 
-    topic.cards = []
-    for i in range(cards_count):
-        card = MagicMock()
-        card.id = i
-        card.topic_id = 1
-        card.title = f"Card {i}"
-        card.description = f"Description {i}"
-        topic.cards.append(card)
+    topic.cards = cards or []
 
     return topic
 
 def test_get_all_topics_success():
     mock_db = MagicMock()
+
+    mock_tags = [create_mock_tag(1, "tag1")]
+    mock_cards = [
+        create_mock_card(1, "topic1",   "title1", "desc1", None),
+        create_mock_card(2, "topic2", "title2", "desc2", None),
+        create_mock_card(3, "topic3", "title3", "desc3", None),
+    ]
     mock_topics = [
-        create_mock_topic(1, "topic1", 1, 2),
-        create_mock_topic(2, "topic2", 1, 3)
+        create_mock_topic(1, "topic1", mock_tags, mock_cards[:2]),
+        create_mock_topic(2, "topic2", mock_tags, mock_cards)
     ]
 
     mock_db.query.return_value.options.return_value.all.return_value = mock_topics
@@ -85,8 +86,9 @@ def test_get_all_topics_empty():
 def test_get_all_topics_without_cards():
     mock_db = MagicMock()
 
+    mock_tags = [create_mock_tag(1, "tag1")]
     mock_topics = [
-        create_mock_topic(1, "topic1", 1, 0),
+        create_mock_topic(1, "topic1", mock_tags, None),
     ]
 
     mock_db.query.return_value.options.return_value.all.return_value = mock_topics
@@ -99,8 +101,15 @@ def test_get_all_topics_without_cards():
 def test_get_all_topics_without_tags():
     mock_db = MagicMock()
 
+    mock_cards = [
+        create_mock_card(1, "topic1", "title1", "desc1", None),
+        create_mock_card(2, "topic2", "title2", "desc2", None),
+        create_mock_card(3, "topic3", "title3", "desc3", None),
+        create_mock_card(4, "topic4", "title4", "desc4", None),
+        create_mock_card(5, "topic5", "title5", "desc5", None),
+    ]
     mock_topics = [
-        create_mock_topic(1, "topic1", 0, 5),
+        create_mock_topic(1, "topic1", None, mock_cards),
     ]
 
     mock_db.query.return_value.options.return_value.all.return_value = mock_topics
@@ -109,13 +118,14 @@ def test_get_all_topics_without_tags():
 
     assert len(result) == 1
     assert len(result[0].tags) == 0
+    assert result[0].cards_count == 5
 
 def test_get_all_topics_response_structure():
     mock_db = MagicMock()
 
+    mock_tags = [create_mock_tag(1, "tag1")]
     mock_topics = [
-        create_mock_topic(1, "topic1", 1, 2),
-        create_mock_topic(2, "topic2", 1, 3)
+        create_mock_topic(1, "topic1", mock_tags, None),
     ]
 
     mock_db.query.return_value.options.return_value.all.return_value = mock_topics
