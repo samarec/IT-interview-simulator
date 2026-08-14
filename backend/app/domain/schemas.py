@@ -15,6 +15,7 @@ class TopicResponse(BaseModel):
     name: str
     tags: List[TagResponse]
     cards_count: int
+    completed_count: int = 0
 
     class Config:
         from_attributes = True
@@ -117,4 +118,3 @@ class NextQuestionRequest(BaseModel):
     topic_ids: List[int]
     current_index: int = Field(..., ge=1, description="Индекс текущего вопроса (начиная с 1)")
 
-    

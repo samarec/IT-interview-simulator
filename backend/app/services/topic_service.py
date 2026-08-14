@@ -1,7 +1,7 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import FAQ, Card, Topic
+from app.domain.models import FAQ, Card, Topic, UserTopicCounter
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -11,16 +11,20 @@ from app.domain.schemas import (
 )
 
 
-def get_all_topics(db: Session) -> List[TopicResponse]:
+def get_all_topics(db: Session, user_id: Optional[int] = None) -> List[TopicResponse]:
     """
-    Возвращает список всех доступных тем из PostgreSQL
-    с подгруженными тегами и рассчитанным количеством карточек.
+    Возвращает список всех тем. Если передан user_id, подтягивает счетчики прохождения.
     """
-    # Запрашиваем темы, оптимизированно подгружая связанные теги и карточки
     topics = db.query(Topic).options(
         selectinload(Topic.tags),
         selectinload(Topic.cards)
     ).all()
+
+    # Словарь счетчиков {topic_id: completed_count}, если юзер авторизован
+    counters_map = {}
+    if user_id:
+        counters = db.query(UserTopicCounter).filter(UserTopicCounter.user_id == user_id).all()
+        counters_map = {c.topic_id: c.completed_count for c in counters}
 
     return [
         TopicResponse(
@@ -28,20 +32,16 @@ def get_all_topics(db: Session) -> List[TopicResponse]:
             name=topic.name,
             tags=[TagResponse(id=tag.id, name=tag.name) for tag in topic.tags],
             cards_count=len(topic.cards),
+            completed_count=counters_map.get(topic.id, 0) # Подставляем счетчик или 0
         )
         for topic in topics
     ]
 
 
 def get_cards_by_topics(db: Session, topic_ids: List[int]) -> List[CardResponse]:
-    """
-    Фильтрует и возвращает список карточек с вариантами ответов
-    по переданным ID тем из PostgreSQL.
-    """
     if not topic_ids:
         return []
 
-    # Запрашиваем карточки, фильтруя по ID тем и подгружая варианты ответов
     cards = db.query(Card).options(
         selectinload(Card.answers)
     ).filter(Card.topic_id.in_(topic_ids)).all()
@@ -52,31 +52,20 @@ def get_cards_by_topics(db: Session, topic_ids: List[int]) -> List[CardResponse]
             topic_id=card.topic_id,
             title=card.title,
             description=card.description,
-            answers=[
-                AnswerResponse(
-                    id=answer.id,
-                    title=answer.title,
-                    is_correct=answer.is_correct
-                )
-                for answer in card.answers
-            ],
+            answers=[AnswerResponse(id=a.id, title=a.title, is_correct=a.is_correct) for a in card.answers],
         )
         for card in cards
     ]
 
 
 def get_all_faqs(db: Session) -> List[FAQResponse]:
-    """Возвращает список всех часто задаваемых вопросов из PostgreSQL."""
     faqs = db.query(FAQ).all()
-    return [
-        FAQResponse(id=faq.id, title=faq.title, description=faq.description)
-        for faq in faqs
-    ]
+    return [FAQResponse(id=faq.id, title=faq.title, description=faq.description) for faq in faqs]
 
 
-def get_paginated_topics(db: Session, page: int, size: int) -> Tuple[List[Topic], int]:
+def get_paginated_topics(db: Session, page: int, size: int, user_id: Optional[int] = None) -> Tuple[List[Topic], int, dict]:
     """
-    Возвращает список тем с пагинацией и общее количество тем в БД.
+    Возвращает список тем с пагинацией, их количество и мапу счетчиков для пользователя.
     """
     total_items = db.query(Topic).count()
 
@@ -85,17 +74,21 @@ def get_paginated_topics(db: Session, page: int, size: int) -> Tuple[List[Topic]
         selectinload(Topic.cards)
     ).order_by(Topic.id).offset((page - 1) * size).limit(size).all()
 
-    return topics, total_items
+    counters_map = {}
+    if user_id and topics:
+        topic_ids = [t.id for t in topics]
+        counters = db.query(UserTopicCounter).filter(
+            UserTopicCounter.user_id == user_id,
+            UserTopicCounter.topic_id.in_(topic_ids)
+        ).all()
+        counters_map = {c.topic_id: c.completed_count for c in counters}
+
+    return topics, total_items, counters_map
 
 
 def get_session_question(db: Session, topic_ids: List[int], current_index: int) -> Tuple[Card, int]:
-    """
-    Возвращает конкретную карточку по индексу и общее число вопросов в выбранных темах.
-    """
-    # Считаем общее количество карточек по выбранным темам
     total_questions = db.query(Card).filter(Card.topic_id.in_(topic_ids)).count()
 
-    # Достаем нужную карточку, "пропуская" предыдущие с помощью offset
     card = db.query(Card).options(
         selectinload(Card.answers)
     ).filter(
@@ -105,4 +98,27 @@ def get_session_question(db: Session, topic_ids: List[int], current_index: int) 
     ).offset(current_index - 1).limit(1).first()
 
     return card, total_questions
+
+
+def complete_topic_session(db: Session, user_id: int, topic_id: int):
+    """
+    Увеличивает счетчик прохождения темы для конкретного пользователя.
+    """
+    topic = db.query(Topic).filter(Topic.id == topic_id).first()
+    if not topic:
+        raise ValueError("Тема не найдена.")
+
+    counter = db.query(UserTopicCounter).filter(
+        UserTopicCounter.user_id == user_id,
+        UserTopicCounter.topic_id == topic_id
+    ).first()
+
+    if counter:
+        counter.completed_count += 1
+    else:
+        counter = UserTopicCounter(user_id=user_id, topic_id=topic_id, completed_count=1)
+        db.add(counter)
+
+    db.commit()
+    return counter
 
