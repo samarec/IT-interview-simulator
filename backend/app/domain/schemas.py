@@ -1,4 +1,6 @@
-from typing import List, Optional, TypeVar, Generic
+from datetime import datetime
+from typing import Generic, List, Optional, TypeVar
+
 from pydantic import BaseModel, Field
 
 
@@ -135,4 +137,41 @@ class CountersResponse(BaseModel):
     tests: int
     users: int
 
-    
+
+class UserProfileResponse(BaseModel):
+    id: int
+    username: str
+    email: str
+    is_active: bool
+    role_id: Optional[int] = None
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class UserUpdateRequest(BaseModel):
+    """
+    Все поля optional — передаются только те, что нужно изменить.
+    role_id НЕ включён: пользователь не может менять себе роль.
+    """
+    username: Optional[str] = None
+    email: Optional[str] = None
+
+
+class UserPasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
+
+
+class CompletedTestResponse(BaseModel):
+    id: int
+    test_id: int
+    test_name: str
+    score: Optional[int] = None
+    max_score: Optional[int] = None
+    passed: bool
+    completed_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
