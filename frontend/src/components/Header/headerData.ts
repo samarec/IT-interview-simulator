@@ -13,16 +13,16 @@ export const navItems: HeaderData[] = [
     {
         id: "2",
         title: "О нас",
-        href: "/",
+        href: "/about",
     },
     {
         id: "3",
         title: "Тесты",
-        href: "/",
+        href: "/test",
     },
     {
         id: "4",
         title: "FAQ",
-        href: "/",
+        href: "/faq",
     }
 ]
