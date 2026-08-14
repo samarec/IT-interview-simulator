@@ -12,6 +12,7 @@ from app.services.topic_service import (
     get_all_topics,
     get_cards_by_topics,
     get_paginated_topics,
+    get_session_question,
 )
 
 
@@ -330,3 +331,85 @@ def test_get_paginated_topics_response_structure():
     result, _ = get_paginated_topics(mock_db, page, size)
 
     assert isinstance(result[0], TopicResponse)
+
+def test_get_session_question_success():
+    mock_db = MagicMock()
+
+    mock_card = create_mock_card(1, 1, "card1", "desc1", None)
+
+    mock_db.query.return_value.filter.return_value.count.return_value = 10
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    order_by_mock = filter_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    first_mock = limit_mock.first
+    first_mock.return_value = mock_card
+
+    card, total = get_session_question(mock_db, [1], 1)
+
+    assert card.id == 1
+    assert card.title == "card1"
+    assert total == 10
+
+def test_get_session_question_empty():
+    mock_db = MagicMock()
+
+    mock_db.query.return_value.filter.return_value.count.return_value = 0
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    order_by_mock = filter_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    first_mock = limit_mock.first
+    first_mock.return_value = None
+
+    card, total = get_session_question(mock_db, [100], 1)
+
+    assert card is None
+    assert total == 0
+
+
+def test_get_session_question_over_index():
+    mock_db = MagicMock()
+
+    mock_db.query.return_value.filter.return_value.count.return_value = 2
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    order_by_mock = filter_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    first_mock = limit_mock.first
+    first_mock.return_value = None
+
+    card, _ = get_session_question(mock_db, [1], 3)
+
+    mock_db.query.return_value.options.return_value.filter.return_value.order_by.return_value.offset.assert_called_with(
+        2)
+    assert card is None
+
+def test_get_session_question_response_structure():
+    mock_db = MagicMock()
+
+    mock_card = create_mock_card(1, 1, "card1", "desc1", None)
+
+    mock_db.query.return_value.filter.return_value.count.return_value = 10
+
+    query_mock = mock_db.query.return_value
+    options_mock = query_mock.options.return_value
+    filter_mock = options_mock.filter.return_value
+    order_by_mock = filter_mock.order_by.return_value
+    offset_mock = order_by_mock.offset.return_value
+    limit_mock = offset_mock.limit.return_value
+    first_mock = limit_mock.first
+    first_mock.return_value = mock_card
+
+    card, _ = get_session_question(mock_db, [1], 1)
+
+    assert isinstance(card, CardResponse)
