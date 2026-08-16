@@ -21,6 +21,7 @@ class Topic(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     code = Column(String(100), nullable=True, unique=True, index=True)
+    difficulty_id = Column(Integer, ForeignKey("z1.difficulties.id"), nullable=True)
 
     tags = relationship(
         "Tag",
@@ -28,7 +29,6 @@ class Topic(Base):
         primaryjoin="Topic.id == z1.topic_tags.c.topic_id",
         secondaryjoin="Tag.id == z1.topic_tags.c.tag_id",
         back_populates="topics",
-        viewonly=True,
     )
     cards = relationship("Card", back_populates="topic", cascade="all, delete-orphan")
     professions = relationship(
@@ -37,9 +37,9 @@ class Topic(Base):
         primaryjoin="Topic.id == z1.topic_professions.c.topic_id",
         secondaryjoin="Profession.id == z1.topic_professions.c.profession_id",
         back_populates="topics",
-        viewonly=True,
     )
     user_counters = relationship("UserTopicCounter", back_populates="topic", cascade="all, delete-orphan")
+    difficulty = relationship("Difficulty")
 
 
 class Tag(Base):
@@ -56,7 +56,6 @@ class Tag(Base):
         primaryjoin="Tag.id == z1.topic_tags.c.tag_id",
         secondaryjoin="Topic.id == z1.topic_tags.c.topic_id",
         back_populates="tags",
-        viewonly=True,
     )
     professions = relationship(
         "Profession",
@@ -64,7 +63,6 @@ class Tag(Base):
         primaryjoin="Tag.id == z1.profession_tags.c.tag_id",
         secondaryjoin="Profession.id == z1.profession_tags.c.profession_id",
         back_populates="tags",
-        viewonly=True,
     )
 
 
@@ -100,6 +98,14 @@ class FAQ(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
+
+
+class Difficulty(Base):
+    __tablename__ = "difficulties"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
 
 
 class Role(Base):
@@ -145,7 +151,6 @@ class Profession(Base):
         primaryjoin="Profession.id == z1.profession_tags.c.profession_id",
         secondaryjoin="Tag.id == z1.profession_tags.c.tag_id",
         back_populates="professions",
-        viewonly=True,
     )
     topics = relationship(
         "Topic",
@@ -153,7 +158,6 @@ class Profession(Base):
         primaryjoin="Profession.id == z1.topic_professions.c.profession_id",
         secondaryjoin="Topic.id == z1.topic_professions.c.topic_id",
         back_populates="professions",
-        viewonly=True,
     )
 
 
