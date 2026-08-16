@@ -10,7 +10,7 @@
 
 .footer-inner {
     position: relative;
-    width: 880px;
+    width: var(--content-width);
     margin: 0 auto;
 }
 
@@ -96,4 +96,32 @@
     width: 68px;
     top: 148px;
     left: 804px;
+}
+
+@media (max-width: 720px) {
+    .footer-wrap {
+        margin-top: 32px;
+    }
+
+    #footer {
+        flex-direction: column;
+        gap: 32px;
+        padding: 36px 0 56px;
+    }
+
+    .footer-brand {
+        max-width: none;
+    }
+
+    .footer-columns {
+        width: 100%;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-columns {
+        flex-direction: column;
+        gap: 28px;
+    }
 }

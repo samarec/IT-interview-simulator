@@ -23,3 +23,14 @@
 .test-status {
     text-align: center;
 }
+
+@media (max-width: 720px) {
+    #all-test-card .single-test-card {
+        grid-template-columns: 1fr;
+        padding: 20px 0 72px;
+    }
+
+    #all-test-card .single-test-card .test-card-wrap:nth-child(5n + 3) {
+        grid-column: auto;
+    }
+}

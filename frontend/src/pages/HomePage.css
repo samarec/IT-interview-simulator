@@ -1,5 +1,7 @@
 #home-page {
-    width: 880px;
+    width: var(--content-width);
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,8 +9,25 @@
 }
 
 #container-hello-advantages {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 80px;
+}
+
+@media (max-width: 880px) {
+    #home-page {
+        gap: 80px;
+    }
+
+    #container-hello-advantages {
+        gap: 48px;
+    }
+}
+
+@media (max-width: 640px) {
+    #home-page {
+        gap: 56px;
+    }
 }

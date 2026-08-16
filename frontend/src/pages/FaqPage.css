@@ -1,5 +1,5 @@
 #faq-page {
-    width: 880px;
+    width: var(--content-width);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,4 +106,16 @@
     top: 268px;
     left: 860px;
     transform: rotate(18deg);
+}
+
+@media (max-width: 640px) {
+    #faq-content {
+        gap: 32px;
+    }
+
+    .faq-item-trigger,
+    .faq-item-answer p {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 }

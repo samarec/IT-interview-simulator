@@ -27,3 +27,9 @@
 .main-button--orange {
     background: linear-gradient(#FFCEBC 0%, #FF936B 97%);
 }
+
+@media (max-width: 480px) {
+    .main-button {
+        padding: 14px 24px;
+    }
+}

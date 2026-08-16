@@ -43,6 +43,10 @@ export interface TestSubmitResult {
     }>
 }
 
+export function fetchTests() {
+    return apiRequest<TestInfo[]>('/api/tests')
+}
+
 export function fetchTest(code: string) {
     return apiRequest<TestInfo>(`/api/tests/${code}`)
 }

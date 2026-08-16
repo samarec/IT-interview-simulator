@@ -1,4 +1,5 @@
 #categories-test-card {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -27,4 +28,11 @@
 
 #categories-test-sort .sort-active {
     color: rgba(22, 43, 59, 0.8);
+}
+
+@media (max-width: 640px) {
+    #categories-test-sort {
+        flex-wrap: wrap;
+        gap: 8px 16px;
+    }
 }

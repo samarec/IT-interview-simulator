@@ -1,5 +1,5 @@
 #profile-page {
-    width: 880px;
+    width: var(--content-width);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -109,4 +109,20 @@
 
 .profile-tests-status {
     text-align: center;
+}
+
+@media (max-width: 720px) {
+    .profile-data {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .profile-avatar-side {
+        width: 100%;
+    }
+
+    .profile-form {
+        padding: 32px 20px;
+    }
 }

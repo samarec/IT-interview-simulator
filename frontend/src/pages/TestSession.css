@@ -1,5 +1,5 @@
 .test-session {
-    width: 880px;
+    width: var(--content-width);
     min-height: 640px;
     display: flex;
     flex-direction: column;
@@ -240,4 +240,74 @@
 .test-run .main-button,
 .test-result .main-button {
     min-width: 240px;
+}
+
+@media (max-width: 720px) {
+    .test-session {
+        min-height: 0;
+        gap: 24px;
+    }
+
+    .test-intro-stats {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .test-intro-stat {
+        width: min(220px, calc(50% - 8px));
+        min-width: 0;
+        flex: 1 1 160px;
+    }
+
+    .test-intro-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .test-intro-actions .main-button,
+    .test-run .main-button,
+    .test-result .main-button {
+        min-width: 0;
+        width: min(280px, 100%);
+    }
+
+    .test-result-main {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+    }
+
+    .test-question h2 {
+        font-size: clamp(20px, 5vw, 28px);
+    }
+
+    .test-answer {
+        padding: 16px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .test-session-hero {
+        width: 128px;
+        height: 128px;
+    }
+
+    .test-progress-item {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .test-progress-item--current {
+        width: 40px;
+        height: 40px;
+    }
+
+    .test-progress-arrow {
+        width: 28px;
+        height: 28px;
+        font-size: 28px;
+    }
 }

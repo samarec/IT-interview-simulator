@@ -41,6 +41,20 @@
     transform: rotate(16deg);
 }
 
+@media (max-width: 480px) {
+    .test-card-skill {
+        width: 56px;
+        height: 56px;
+        top: -16px;
+        right: 0;
+    }
+
+    .test-card h3,
+    .test-tabs {
+        max-width: calc(100% - 56px);
+    }
+}
+
 .test-card-body {
     display: flex;
     flex-direction: column;
@@ -67,6 +81,7 @@
 .test-card-footer {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 16px;
     margin-top: 8px;
 }

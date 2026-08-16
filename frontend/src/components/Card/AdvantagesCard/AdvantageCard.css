@@ -1,5 +1,5 @@
 .advantage-card {
-    width: 483px;
+    width: min(483px, 100%);
     display: flex;
     align-items: start;
     gap: 12px;
@@ -32,4 +32,15 @@
     color: white;
     font-size: 24px;
     background: linear-gradient(#ABD6FF, #0F89FF);
+}
+
+@media (max-width: 640px) {
+    .advantage-card {
+        padding: 20px;
+    }
+
+    .advantage-card.rotate,
+    .advantage-card.rotate-neg {
+        transform: none;
+    }
 }
