@@ -311,3 +311,4 @@ build/
 data/
 !frontend/src/data/
 !frontend/src/data/**
+!/data/schema.sql
