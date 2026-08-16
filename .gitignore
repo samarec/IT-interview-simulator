@@ -309,3 +309,5 @@ dist/
 build/
 
 data/
+!frontend/src/data/
+!frontend/src/data/**

@@ -5,11 +5,40 @@
     padding: 0;
 }
 
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
 #root {
+    position: relative;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 64px;
+    padding-top: 32px;
+    box-sizing: border-box;
+}
+
+#root > *:not(.floating-primitives) {
+    position: relative;
+    z-index: 1;
+}
+
+.background-container {
+    position: relative;
+}
+
+.part {
+    position: absolute;
+}
+
+html {
+    overflow-x: hidden;
 }
 
 body {
@@ -92,10 +121,15 @@ h4 {
 }
 
 .gradient-wight-card-fill {
+    box-sizing: border-box;
     background: linear-gradient(121deg,
-    rgba(238, 247, 255, 0.6) 15%,
-    rgba(224, 240, 255, 0.6) 80%,
-    rgba(238, 247, 255, 0.6) 100%);
+        rgba(238, 247, 255, 0.55) 15%,
+        rgba(224, 240, 255, 0.55) 80%,
+        rgba(238, 247, 255, 0.55) 100%);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.04);
 }
 
 .gradient-wight-card-stroke {

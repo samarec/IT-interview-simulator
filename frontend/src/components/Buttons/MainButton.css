@@ -6,8 +6,24 @@
     background: linear-gradient(#ABD6FF, #0F89FF);
     border: none;
     border-radius: 32px;
+    transition: box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-.main-button:hover {
-    opacity: 80%;
+.main-button:hover:not(.main-button--orange):not(:disabled) {
+    box-shadow: 0 10px 28px rgba(15, 137, 255, 0.45);
+}
+
+.main-button:disabled {
+    background: linear-gradient(#D1E7FF, #8BB8E0);
+    opacity: 50%;
+    box-shadow: none;
+}
+
+.main-button:disabled:hover {
+    opacity: 50%;
+    box-shadow: none;
+}
+
+.main-button--orange {
+    background: linear-gradient(#FFCEBC 0%, #FF936B 97%);
 }

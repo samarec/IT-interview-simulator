@@ -20,6 +20,7 @@ class Topic(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
+    code = Column(String(100), nullable=True, unique=True, index=True)
 
     tags = relationship(
         "Tag",
@@ -126,6 +127,7 @@ class User(Base):
 
     role = relationship("Role", back_populates="users")
     topic_counters = relationship("UserTopicCounter", back_populates="user", cascade="all, delete-orphan")
+    test_results = relationship("UserTestResult", back_populates="user", cascade="all, delete-orphan")
 
 
 class Profession(Base):
@@ -153,6 +155,56 @@ class Profession(Base):
         back_populates="professions",
         viewonly=True,
     )
+
+
+class Test(Base):
+    __tablename__ = "tests"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False)
+    code = Column(String(100), nullable=True, unique=True, index=True)
+    description = Column(Text, nullable=True)
+    duration_minutes = Column(Integer, default=5)
+    profession_id = Column(Integer, ForeignKey("z1.professions.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    profession = relationship("Profession")
+    card_links = relationship(
+        "TestCard",
+        back_populates="test",
+        cascade="all, delete-orphan",
+        order_by="TestCard.order_index",
+    )
+    results = relationship("UserTestResult", back_populates="test", cascade="all, delete-orphan")
+
+
+class TestCard(Base):
+    __tablename__ = "test_cards"
+    __table_args__ = {"schema": "z1"}
+
+    test_id = Column(Integer, ForeignKey("z1.tests.id"), primary_key=True)
+    card_id = Column(Integer, ForeignKey("z1.cards.id"), primary_key=True)
+    order_index = Column(Integer, default=0)
+
+    test = relationship("Test", back_populates="card_links")
+    card = relationship("Card")
+
+
+class UserTestResult(Base):
+    __tablename__ = "user_test_results"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("z1.users.id"), nullable=False)
+    test_id = Column(Integer, ForeignKey("z1.tests.id"), nullable=False)
+    score = Column(Integer, nullable=True)
+    max_score = Column(Integer, nullable=True)
+    passed = Column(Boolean, default=False)
+    completed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+
+    user = relationship("User", back_populates="test_results")
+    test = relationship("Test", back_populates="results")
 
 
 class UserTopicCounter(Base):

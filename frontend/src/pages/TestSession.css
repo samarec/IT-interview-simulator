@@ -1,0 +1,243 @@
+.test-session {
+    width: 880px;
+    min-height: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    text-align: center;
+}
+
+.test-session-status {
+    margin-top: 80px;
+}
+
+.test-session-hero {
+    width: 168px;
+    height: 168px;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 28px rgba(22, 43, 59, 0.14));
+}
+
+.test-intro-label {
+    font-size: 16px;
+    line-height: 120%;
+    color: rgba(22, 43, 59, 0.45);
+}
+
+.test-intro h1,
+.test-result h1 {
+    max-width: 640px;
+}
+
+.test-intro-stats {
+    display: flex;
+    gap: 16px;
+}
+
+.test-intro-stat {
+    width: 220px;
+    min-height: 96px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 16px;
+    border-radius: 24px;
+}
+
+.test-intro-stat strong {
+    font-size: 28px;
+    line-height: 120%;
+    font-weight: 500;
+    color: #0F89FF;
+}
+
+.test-intro-stat span {
+    font-size: 16px;
+    line-height: 120%;
+    color: rgba(22, 43, 59, 0.55);
+}
+
+.test-stat-correct {
+    color: #2FA36B !important;
+}
+
+.test-intro-description {
+    max-width: 560px;
+}
+
+.test-intro-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.test-intro-actions .main-button {
+    min-width: 180px;
+}
+
+.test-progress {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.test-progress-list {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.test-progress-arrow {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: rgba(22, 43, 59, 0.35);
+    font-size: 32px;
+    line-height: 1;
+}
+
+.test-progress-arrow:disabled {
+    opacity: 0.25;
+}
+
+.test-progress-item {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 6px 16px rgba(22, 43, 59, 0.06);
+    color: rgba(22, 43, 59, 0.55);
+    font-family: inherit;
+    font-size: 16px;
+}
+
+.test-progress-item--current {
+    width: 48px;
+    height: 48px;
+    color: #fff;
+    background: linear-gradient(#FFCEBC 0%, #FF936B 97%);
+    box-shadow: 0 10px 24px rgba(255, 147, 107, 0.45);
+}
+
+.test-progress-item--current .test-progress-dot {
+    display: none;
+}
+
+.test-progress-dot {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #FF8AA0;
+    transform: translateX(-50%);
+}
+
+.test-question {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 720px;
+}
+
+.test-question h2 {
+    font-size: 28px;
+}
+
+.test-answers {
+    width: 100%;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.test-answer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    border: 1px solid transparent;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.62);
+    color: #162B3B;
+    text-align: left;
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 130%;
+}
+
+.test-answer-radio {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid rgba(22, 43, 59, 0.25);
+    border-radius: 50%;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.test-answer--selected .test-answer-radio {
+    border: 6px solid #0F89FF;
+}
+
+.test-answer--correct {
+    border-color: rgba(47, 163, 107, 0.45);
+    background: rgba(47, 163, 107, 0.12);
+}
+
+.test-answer--correct .test-answer-radio {
+    border: 6px solid #2FA36B;
+}
+
+.test-answer--wrong {
+    border-color: rgba(232, 107, 107, 0.45);
+    background: rgba(232, 107, 107, 0.12);
+}
+
+.test-answer--wrong .test-answer-radio {
+    border: 6px solid #E86B6B;
+}
+
+.test-result-subtitle {
+    font-size: 22px;
+    line-height: 120%;
+    color: rgba(22, 43, 59, 0.45);
+    margin-top: -16px;
+}
+
+.test-result-main {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 28px 32px;
+    border-radius: 32px;
+    text-align: left;
+}
+
+.test-result-main h2 {
+    margin-bottom: 8px;
+}
+
+.test-score-ring text {
+    font-size: 22px;
+    font-weight: 500;
+    fill: #162B3B;
+}
+
+.test-run .main-button,
+.test-result .main-button {
+    min-width: 240px;
+}

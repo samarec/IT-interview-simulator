@@ -9,7 +9,6 @@ from app.domain.schemas import (
     CardResponse,
     FAQResponse,
     StartTrainerRequest,
-    TagResponse,
     TopicResponse,
     PaginatedResponse,
     SessionQuestionResponse,
@@ -18,10 +17,12 @@ from app.domain.schemas import (
     AnswerResponse
 )
 from app.services.topic_service import (
+    build_topic_response,
     get_all_faqs,
     get_all_topics,
     get_cards_by_topics,
     get_paginated_topics,
+    get_passed_counts_map,
     get_session_question,
     complete_topic_session
 )
@@ -56,13 +57,12 @@ def read_topics_paginated(
     topics, total_items, counters_map = get_paginated_topics(db, page, size, user_id=user_id)
     total_pages = math.ceil(total_items / size) if size else 0
 
+    passed_map = get_passed_counts_map(db, [topic.id for topic in topics])
     topic_responses = [
-        TopicResponse(
-            id=topic.id,
-            name=topic.name,
-            tags=[TagResponse(id=tag.id, name=tag.name) for tag in topic.tags],
-            cards_count=len(topic.cards),
-            completed_count=counters_map.get(topic.id, 0)
+        build_topic_response(
+            topic,
+            counters_map.get(topic.id, 0),
+            passed_map.get(topic.id, 0),
         )
         for topic in topics
     ]
@@ -95,13 +95,8 @@ def read_topic_by_id(
         if counter:
             completed_count = counter.completed_count
 
-    return TopicResponse(
-        id=topic.id,
-        name=topic.name,
-        tags=[TagResponse(id=tag.id, name=tag.name) for tag in topic.tags],
-        cards_count=len(topic.cards),
-        completed_count=completed_count
-    )
+    passed_count = get_passed_counts_map(db, [topic_id]).get(topic_id, 0)
+    return build_topic_response(topic, completed_count, passed_count)
 
 
 @router.post("/cards", response_model=List[CardResponse])

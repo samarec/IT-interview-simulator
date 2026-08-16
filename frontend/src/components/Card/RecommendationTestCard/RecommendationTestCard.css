@@ -37,6 +37,25 @@
 
 #recommendation-test-tabs {
     display: flex;
+    flex-wrap: wrap;
     justify-content: start;
     gap: 8px;
+}
+
+.recommendation-test-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.recommendation-test-footer .test-card-passed {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.recommendation-test-footer .test-card-passed img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.55;
 }

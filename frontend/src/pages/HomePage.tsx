@@ -18,6 +18,5 @@ export function HomePage() {
             <FormCard />
             <WheelCard />
         </div>
-
     )
 }

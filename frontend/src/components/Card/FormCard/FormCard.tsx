@@ -1,7 +1,11 @@
+import {useState} from 'react'
+
 import './FormCard.css'
 
 import {Input} from "../../Input/Input";
 import {Button} from "../../Buttons/Button";
+
+const MAX_INTERESTS = 5
 
 const formButtons = [
     "Котики", "Зум", "led-подсветка", "Дошик", "Кофе", "Сникерс", "Энергетик", "Хабр",
@@ -10,6 +14,20 @@ const formButtons = [
 ]
 
 export function FormCard() {
+    const [selectedInterests, setSelectedInterests] = useState<string[]>([])
+
+    function toggleInterest(interest: string) {
+        setSelectedInterests((current) => {
+            if (current.includes(interest)) {
+                return current.filter((item) => item !== interest)
+            }
+            if (current.length >= MAX_INTERESTS) {
+                return current
+            }
+            return [...current, interest]
+        })
+    }
+
     return (
         <div className='background-container'>
             <section id='form-card'>
@@ -27,12 +45,24 @@ export function FormCard() {
                             <p className="b2">Выбери до 5 интересов:</p>
                             <div className="form-buttons">
                                 {formButtons.map((button) => (
-                                    <Button text={button} classes={['form-button']} />
+                                    <Button
+                                        key={button}
+                                        text={button}
+                                        onClick={() => toggleInterest(button)}
+                                        classes={[
+                                            'form-button',
+                                            selectedInterests.includes(button) ? 'form-button--selected' : '',
+                                        ]}
+                                    />
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <Button text="Подобрать профессию" classes={["but1", "main-button"]}/>
+                    <Button
+                        text="Подобрать профессию"
+                        classes={["but1", "main-button"]}
+                        disabled={selectedInterests.length === 0}
+                    />
                 </div>
             </section>
             <img id='vector2-background-form' className='part' src='/assets/Vector2.svg' alt=''/>

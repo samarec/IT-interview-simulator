@@ -1,14 +1,15 @@
 from datetime import timedelta
 from typing import Annotated
 
-from app.api.routes.deps import get_db
+from app.api.routes.deps import get_current_user, get_db
 from app.core import config
 from app.domain.models import User
-from app.domain.schemas import Token, UserCreate, UserLogin, UserOut
+from app.domain.schemas import Token, UserCreate, UserLogin, UserOut, UserUpdate
 from app.services.auth_service import (
     authenticate_user,
     create_access_token,
     register_user,
+    update_user,
 )
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -56,3 +57,32 @@ def login(user_data: UserLogin, db: DbSession):
     )
     
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/me", response_model=UserOut)
+def read_me(current_user: User = Depends(get_current_user)):
+    return current_user
+
+
+@router.patch("/me", response_model=UserOut)
+def update_me(
+    user_data: UserUpdate,
+    db: DbSession,
+    current_user: User = Depends(get_current_user),
+):
+    if user_data.username is not None and user_data.username != current_user.username:
+        existing_username = db.query(User).filter(User.username == user_data.username).first()
+        if existing_username:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Username already taken",
+            )
+    if user_data.email is not None and user_data.email != current_user.email:
+        existing_email = db.query(User).filter(User.email == user_data.email).first()
+        if existing_email:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email already registered",
+            )
+
+    return update_user(db, current_user, user_data)

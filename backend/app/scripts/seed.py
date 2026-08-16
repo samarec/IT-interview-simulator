@@ -4,7 +4,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from app.db.session import Base, SessionLocal, engine
-from app.domain.models import FAQ, Answer, Card, Tag, Topic, Role, Profession
+from app.domain.models import FAQ, Answer, Card, Tag, Topic, Role, Profession, Test, TestCard
 
 
 def seed_data():
@@ -34,9 +34,9 @@ def seed_data():
                                  tags=[tag_devops, tag_networks])
         db.add_all([prof_frontend, prof_backend, prof_devops])
 
-        topic_http = Topic(name="HTTP-статусы", tags=[tag_web, tag_networks])
-        topic_git = Topic(name="Основы Git", tags=[tag_devops])
-        topic_sql = Topic(name="Базовый SQL", tags=[tag_db])
+        topic_http = Topic(name="HTTP-статусы", code="http", tags=[tag_web, tag_networks])
+        topic_git = Topic(name="Основы Git", code="git", tags=[tag_devops])
+        topic_sql = Topic(name="Базовый SQL", code="sql", tags=[tag_db])
         db.add_all([topic_http, topic_git, topic_sql])
 
         db.flush()
@@ -90,7 +90,18 @@ def seed_data():
             description="Выбирайте интересующие темы на главной странице и нажимайте 'Запустить тренажёр'.",
         )
 
-        db.add_all([card_1, card_2, card_3, card_4, faq_1])
+        test_http = Test(
+            name="HTTP-статусы",
+            code="http",
+            description="Тест по теме «HTTP-статусы». Проверьте знания на ключевых вопросах.",
+            duration_minutes=5,
+        )
+        db.add_all([card_1, card_2, card_3, card_4, faq_1, test_http])
+        db.flush()
+        db.add_all([
+            TestCard(test_id=test_http.id, card_id=card_1.id, order_index=0),
+            TestCard(test_id=test_http.id, card_id=card_2.id, order_index=1),
+        ])
         db.commit()
         print("База данных успешно заполнена!")
 

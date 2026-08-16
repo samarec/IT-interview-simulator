@@ -1,4 +1,5 @@
-from typing import List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional
+from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
 from app.domain.models import FAQ, Card, Topic, UserTopicCounter
@@ -9,6 +10,45 @@ from app.domain.schemas import (
     TopicResponse,
     FAQResponse
 )
+
+
+def get_passed_counts_map(db: Session, topic_ids: Optional[List[int]] = None) -> Dict[int, int]:
+    query = db.query(
+        UserTopicCounter.topic_id,
+        func.count(UserTopicCounter.user_id),
+    ).filter(UserTopicCounter.completed_count > 0)
+
+    if topic_ids is not None:
+        if not topic_ids:
+            return {}
+        query = query.filter(UserTopicCounter.topic_id.in_(topic_ids))
+
+    return {
+        topic_id: count
+        for topic_id, count in query.group_by(UserTopicCounter.topic_id).all()
+    }
+
+
+def build_topic_response(
+    topic: Topic,
+    completed_count: int = 0,
+    passed_count: int = 0,
+) -> TopicResponse:
+    description = None
+    if topic.cards:
+        first_card = min(topic.cards, key=lambda card: card.id)
+        description = first_card.description
+
+    return TopicResponse(
+        id=topic.id,
+        name=topic.name,
+        code=topic.code,
+        tags=[TagResponse(id=tag.id, name=tag.name) for tag in topic.tags],
+        cards_count=len(topic.cards),
+        completed_count=completed_count,
+        passed_count=passed_count,
+        description=description,
+    )
 
 
 def get_all_topics(db: Session, user_id: Optional[int] = None) -> List[TopicResponse]:
@@ -26,13 +66,13 @@ def get_all_topics(db: Session, user_id: Optional[int] = None) -> List[TopicResp
         counters = db.query(UserTopicCounter).filter(UserTopicCounter.user_id == user_id).all()
         counters_map = {c.topic_id: c.completed_count for c in counters}
 
+    passed_map = get_passed_counts_map(db)
+
     return [
-        TopicResponse(
-            id=topic.id,
-            name=topic.name,
-            tags=[TagResponse(id=tag.id, name=tag.name) for tag in topic.tags],
-            cards_count=len(topic.cards),
-            completed_count=counters_map.get(topic.id, 0) # Подставляем счетчик или 0
+        build_topic_response(
+            topic,
+            counters_map.get(topic.id, 0),
+            passed_map.get(topic.id, 0),
         )
         for topic in topics
     ]

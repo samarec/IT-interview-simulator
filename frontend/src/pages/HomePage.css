@@ -12,11 +12,3 @@
     align-items: center;
     gap: 80px;
 }
-
-.background-container {
-    position: relative;
-}
-
-.part {
-    position: absolute;
-}
