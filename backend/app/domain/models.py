@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from sqlalchemy import Table, Column, Integer, ForeignKey
 
 from app.db.session import Base
 from sqlalchemy import (
@@ -13,6 +14,13 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
+user_tags = Table(
+    "user_tags",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("z1.users.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("z1.tags.id"), primary_key=True),
+    schema="z1",
+)
 
 class Topic(Base):
     __tablename__ = "topics"
@@ -62,6 +70,13 @@ class Tag(Base):
         secondary="z1.profession_tags",
         primaryjoin="Tag.id == z1.profession_tags.c.tag_id",
         secondaryjoin="Profession.id == z1.profession_tags.c.profession_id",
+        back_populates="tags",
+    )
+    users = relationship(
+        "User",
+        secondary="z1.user_tags",
+        primaryjoin="Tag.id == z1.user_tags.c.tag_id",
+        secondaryjoin="User.id == z1.user_tags.c.user_id",
         back_populates="tags",
     )
 
@@ -134,6 +149,14 @@ class User(Base):
     role = relationship("Role", back_populates="users")
     topic_counters = relationship("UserTopicCounter", back_populates="user", cascade="all, delete-orphan")
     test_results = relationship("UserTestResult", back_populates="user", cascade="all, delete-orphan")
+
+    tags = relationship(
+        "Tag",
+        secondary="z1.user_tags",
+        primaryjoin="User.id == z1.user_tags.c.user_id",
+        secondaryjoin="Tag.id == z1.user_tags.c.tag_id",
+        back_populates="users",
+    )
 
 
 class Profession(Base):
