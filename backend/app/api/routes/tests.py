@@ -35,7 +35,7 @@ def read_test(code: str, db: Session = Depends(get_db)):
     test = get_test_by_code(db, code)
     if not test:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Тест не найден.")
-    return build_test_response(test)
+    return build_test_response(db, test)
 
 
 @router.get("/{code}/cards", response_model=TestDetailResponse)
@@ -49,7 +49,7 @@ def read_test_cards(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Тест не найден.")
     if not test.card_links:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="В тесте пока нет вопросов.")
-    return get_test_detail(test, reveal_correct=(mode == "training"))
+    return get_test_detail(db, test, reveal_correct=(mode == "training"))
 
 
 @router.post("/{code}/submit", response_model=TestSubmitResponse)
