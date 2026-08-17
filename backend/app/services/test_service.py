@@ -1,10 +1,14 @@
 from sqlalchemy import func, or_
-from app.domain.models import topic_tags, Profession, profession_tags, CardType
+from app.domain.models import (
+    Card, Test, TestCard,
+    Topic, UserTestResult,
+    Difficulty, CardType,
+    Profession,
+    topic_tags, profession_tags
+)
 from typing import List, Optional
 
 from sqlalchemy.orm import Session, selectinload
-
-from app.domain.models import Card, Test, TestCard, Topic, UserTestResult
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -20,7 +24,13 @@ def _cards_count(test: Test) -> int:
     return len(test.card_links)
 
 
-def build_test_response(test: Test) -> TestResponse:
+def build_test_response(db: Session, test: Test) -> TestResponse:
+    difficulty_name = None
+    if test.difficulty_id is not None:
+        difficulty = db.query(Difficulty).get(test.difficulty_id)
+        if difficulty:
+            difficulty_name = str(difficulty.name)
+
     return TestResponse(
         id=test.id,
         name=test.name,
@@ -29,6 +39,7 @@ def build_test_response(test: Test) -> TestResponse:
         duration_minutes=test.duration_minutes or 5,
         cards_count=_cards_count(test),
         profession_id=test.profession_id,
+        difficulty=difficulty_name
     )
 
 
@@ -109,7 +120,7 @@ def get_all_tests(
         query = query.order_by(Test.id)
 
     tests = query.all()
-    return [build_test_response(test) for test in tests]
+    return [build_test_response(db, test) for test in tests]
 
 
 def get_test_by_code(db: Session, code: str) -> Optional[Test]:
