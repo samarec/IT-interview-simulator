@@ -1,0 +1,36 @@
+#all-test-card {
+    width: 100%;
+}
+
+#all-test-card .single-test-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    padding: 20px 20px 128px 0;
+    overflow: visible;
+}
+
+#all-test-card .single-test-card .test-card-wrap {
+    width: 100%;
+    min-width: 0;
+}
+
+#all-test-card .single-test-card .test-card-wrap:nth-child(5n + 3) {
+    grid-column: 1 / -1;
+}
+
+.test-status {
+    text-align: center;
+}
+
+@media (max-width: 720px) {
+    #all-test-card .single-test-card {
+        grid-template-columns: 1fr;
+        padding: 20px 0 72px;
+    }
+
+    #all-test-card .single-test-card .test-card-wrap:nth-child(5n + 3) {
+        grid-column: auto;
+    }
+}

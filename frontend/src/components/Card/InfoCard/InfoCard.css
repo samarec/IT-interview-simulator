@@ -1,24 +1,30 @@
 #info-card {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 48px;
 }
 
-.info-section-photo-right {
+.info-section-photo-right,
+.info-section-photo-left {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 32px;
+}
+
+.info-section-photo-right {
+    flex-direction: row;
 }
 
 .info-section-photo-left {
-    display: flex;
-    align-items: center;
     flex-direction: row-reverse;
-    gap: 32px;
 }
 
 .info-text {
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -28,4 +34,23 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+.info-visual {
+    container-type: inline-size;
+    width: min(424px, 100%);
+    aspect-ratio: 424 / 389;
+    overflow: hidden;
+}
+
+@media (max-width: 880px) {
+    .info-section-photo-right,
+    .info-section-photo-left {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-text {
+        align-items: center;
+    }
 }

@@ -18,7 +18,7 @@ export function InfoCard() {
                     </div>
                     <Button text="Попробовать" classes={["but2", "main-button"]}/>
                 </div>
-                <div>
+                <div className="info-visual">
                     <LearnImage />
                 </div>
             </div>
@@ -33,7 +33,7 @@ export function InfoCard() {
                     </div>
                     <Button text="Попробовать" classes={["but2", "main-button"]}/>
                 </div>
-                <div>
+                <div className="info-visual">
                     <ExamImage />
                 </div>
             </div>

@@ -13,9 +13,12 @@ class TagResponse(BaseModel):
 class TopicResponse(BaseModel):
     id: int
     name: str
+    code: Optional[str] = None
     tags: List[TagResponse]
     cards_count: int
     completed_count: int = 0
+    passed_count: int = 0
+    description: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -25,7 +28,7 @@ class TopicResponse(BaseModel):
 class AnswerResponse(BaseModel):
     id: int
     title: str
-    is_correct: bool
+    is_correct: Optional[bool] = None
 
     class Config:
         from_attributes = True
@@ -69,6 +72,11 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: str
     password: str
+
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
 
 class UserOut(BaseModel):
     id: int
@@ -122,17 +130,53 @@ class NextQuestionRequest(BaseModel):
 class TestResponse(BaseModel):
     id: int
     name: str
+    code: str
     description: Optional[str] = None
-    duration_minutes: Optional[int] = None
+    duration_minutes: int = 5
+    cards_count: int
     profession_id: Optional[int] = None
 
     class Config:
         from_attributes = True
 
-class CountersResponse(BaseModel):
-    questions: int
-    topics: int
-    tests: int
-    users: int
 
-    
+class TestDetailResponse(TestResponse):
+    cards: List[CardResponse] = []
+
+
+class TestAnswerSubmit(BaseModel):
+    card_id: int
+    answer_id: int
+
+
+class TestSubmitRequest(BaseModel):
+    answers: List[TestAnswerSubmit]
+
+
+class TestAnswerResult(BaseModel):
+    card_id: int
+    selected_answer_id: Optional[int] = None
+    correct_answer_id: Optional[int] = None
+    is_correct: bool
+
+
+class TestSubmitResponse(BaseModel):
+    test: TestResponse
+    correct_count: int
+    total: int
+    passed: bool
+    results: List[TestAnswerResult]
+
+
+class TagWithSelectionResponse(BaseModel):
+    id: int
+    name: str
+    is_selected: bool
+
+    class Config:
+        from_attributes = True
+
+class UserTagsUpdateRequest(BaseModel):
+    tag_ids: List[int]
+
+

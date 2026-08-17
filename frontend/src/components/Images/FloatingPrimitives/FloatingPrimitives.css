@@ -1,0 +1,70 @@
+.floating-primitives {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-primitive {
+    position: absolute;
+    animation-name: floating-primitive-bob;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    will-change: transform;
+}
+
+.floating-primitive-shape {
+    display: block;
+    height: auto;
+    user-select: none;
+}
+
+.floating-accent {
+    display: block;
+}
+
+.floating-accent--sphere {
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #FFE8DA 0%, #FFB089 42%, #FF7A4A 78%, #E45A2C 100%);
+    box-shadow: 0 8px 16px rgba(255, 122, 74, 0.22);
+}
+
+.floating-accent--ring {
+    border-radius: 50%;
+    background: radial-gradient(
+        circle at 34% 30%,
+        transparent 34%,
+        #FFD3BE 38%,
+        #FF8C5A 68%,
+        #E45A2C 82%,
+        transparent 86%
+    );
+}
+
+.floating-accent--cube {
+    border-radius: 6px;
+    background: linear-gradient(145deg, #FFD8C6 0%, #FF8C5A 58%, #E45A2C 100%);
+    box-shadow: 3px 5px 0 rgba(196, 74, 36, 0.35);
+}
+
+@keyframes floating-primitive-bob {
+    0%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    50% {
+        transform: translate3d(0, var(--float-amp, -16px), 0);
+    }
+}
+
+@media (max-width: 1199px) {
+    .floating-primitives {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .floating-primitive {
+        animation: none;
+    }
+}

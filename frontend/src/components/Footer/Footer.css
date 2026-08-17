@@ -1,0 +1,127 @@
+.footer-wrap {
+    align-self: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 64px;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+
+.footer-inner {
+    position: relative;
+    width: var(--content-width);
+    margin: 0 auto;
+}
+
+#footer {
+    position: relative;
+    z-index: 10;
+
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 64px;
+    padding: 48px 0 72px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+}
+
+.footer-brand-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-brand-title img {
+    height: 44px;
+    width: auto;
+}
+
+.footer-brand-title span {
+    font-weight: 500;
+}
+
+.footer-columns {
+    display: flex;
+    gap: 72px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.footer-column nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-link {
+    font-family: "Geologica", sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 120%;
+    color: rgba(22, 43, 59, 0.8);
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: #0F89FF;
+}
+
+#thorus-knot-background-footer {
+    width: 168px;
+    top: 78px;
+    left: -86px;
+}
+
+#helix-background-footer {
+    width: 132px;
+    top: -48px;
+    left: 792px;
+    transform: rotate(18deg);
+}
+
+#cube-background-footer {
+    width: 68px;
+    top: 148px;
+    left: 804px;
+}
+
+@media (max-width: 720px) {
+    .footer-wrap {
+        margin-top: 32px;
+    }
+
+    #footer {
+        flex-direction: column;
+        gap: 32px;
+        padding: 36px 0 56px;
+    }
+
+    .footer-brand {
+        max-width: none;
+    }
+
+    .footer-columns {
+        width: 100%;
+        gap: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-columns {
+        flex-direction: column;
+        gap: 28px;
+    }
+}

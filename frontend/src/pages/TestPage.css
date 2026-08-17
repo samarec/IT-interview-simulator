@@ -1,0 +1,13 @@
+#test-page {
+    width: var(--content-width);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+
+@media (max-width: 640px) {
+    #test-page {
+        gap: 32px;
+    }
+}
