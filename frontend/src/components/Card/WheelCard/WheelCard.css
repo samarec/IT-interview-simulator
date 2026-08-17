@@ -2,4 +2,104 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 24px;
+    width: 100%;
+}
+
+#wheel-card > h2 {
+    text-align: center;
+}
+
+.wheel-card-lead {
+    text-align: center;
+    max-width: 560px;
+}
+
+.wheel-stage {
+    position: relative;
+    width: min(420px, 100%);
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -8px;
+    z-index: 2;
+    width: 0;
+    height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 28px solid #FF936B;
+    filter: drop-shadow(0 4px 8px rgba(22, 43, 59, 0.16));
+}
+
+.wheel-disk {
+    --wheel-label-offset: -148px;
+    width: min(400px, 100%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 16px 40px rgba(22, 43, 59, 0.12);
+    border: 8px solid rgba(255, 255, 255, 0.7);
+    box-sizing: border-box;
+}
+
+.wheel-disk--spinning {
+    transition: transform 4.2s cubic-bezier(0.12, 0.7, 0.2, 1);
+}
+
+.wheel-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 110px;
+    margin-left: -55px;
+    margin-top: -10px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 14px;
+    line-height: 120%;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(22, 43, 59, 0.35);
+    pointer-events: none;
+}
+
+.wheel-result {
+    width: min(520px, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px;
+    border-radius: 32px;
+    text-align: center;
+}
+
+.wheel-result-label {
+    opacity: 0.7;
+}
+
+@media (max-width: 520px) {
+    .wheel-stage {
+        width: min(320px, 100%);
+    }
+
+    .wheel-disk {
+        --wheel-label-offset: -108px;
+        width: min(300px, 100%);
+        border-width: 6px;
+    }
+
+    .wheel-label {
+        width: 88px;
+        margin-left: -44px;
+        font-size: 12px;
+    }
+
+    .wheel-result {
+        padding: 24px 20px;
+    }
 }

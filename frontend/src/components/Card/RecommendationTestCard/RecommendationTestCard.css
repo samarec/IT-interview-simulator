@@ -1,4 +1,5 @@
 #recommendation-test-card {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -6,12 +7,13 @@
 }
 
 #recommendation-test-card > div {
+    width: 100%;
     display: flex;
     gap: 32px;
 }
 
 #recommendation-test-image {
-    width: 310px;
+    width: min(310px, 100%);
     height: 282px;
     background: linear-gradient(121deg,
     rgba(238, 247, 255) 15%,
@@ -21,7 +23,7 @@
 }
 
 #recommendation-test-info {
-    width: 538px;
+    width: min(538px, 100%);
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -37,6 +39,39 @@
 
 #recommendation-test-tabs {
     display: flex;
+    flex-wrap: wrap;
     justify-content: start;
     gap: 8px;
+}
+
+.recommendation-test-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.recommendation-test-footer .test-card-passed {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.recommendation-test-footer .test-card-passed img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.55;
+}
+
+@media (max-width: 720px) {
+    #recommendation-test-card > div {
+        flex-direction: column;
+    }
+
+    #recommendation-test-image {
+        height: 200px;
+    }
+
+    #recommendation-test-info {
+        width: 100%;
+    }
 }

@@ -1,15 +1,58 @@
 @import url('https://fonts.googleapis.com/css2?family=Geologica:wght,CRSV@100..900,0&display=swap');
 
+:root {
+    --content-max: 880px;
+    --page-gutter: 20px;
+    --content-width: min(var(--content-max), calc(100% - var(--page-gutter) * 2));
+}
+
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
 }
 
 #root {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 64px;
+    padding-top: 32px;
+    box-sizing: border-box;
+}
+
+#root > *:not(.floating-primitives) {
+    position: relative;
+    z-index: 1;
+}
+
+.background-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+}
+
+.part {
+    position: absolute;
+}
+
+html {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
 }
 
 body {
@@ -17,6 +60,10 @@ body {
     font-weight: 300;
     color: #162B3B;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+    background-color: #F4F8FF;
 
     background-image:
             url("../../public/assets/BackgroundEllipse1.png"),
@@ -32,25 +79,28 @@ body {
             120% 250px;
     background-size:
             754px 1052px,
-            1184px 1408px;
+            1184px 1408px,
+            754px 1052px;
+}
 
-
+h1, h2, h3, h4, p {
+    overflow-wrap: break-word;
 }
 
 h1 {
-    font-size: 48px;
+    font-size: clamp(28px, 6vw, 48px);
     line-height: 120%;
     font-weight: 400;
 }
 
 h2 {
-    font-size: 32px;
+    font-size: clamp(22px, 4vw, 32px);
     line-height: 120%;
     font-weight: 400;
 }
 
 h3 {
-    font-size: 22px;
+    font-size: clamp(18px, 3vw, 22px);
     line-height: 120%;
     font-weight: 400;
 }
@@ -74,13 +124,13 @@ h4 {
 }
 
 .b1 {
-    font-size: 24px;
+    font-size: clamp(18px, 3.2vw, 24px);
     line-height: 120%;
     opacity: 80%;
 }
 
 .b2 {
-    font-size: 18px;
+    font-size: clamp(16px, 2.4vw, 18px);
     line-height: 120%;
     opacity: 80%;
 }
@@ -92,10 +142,15 @@ h4 {
 }
 
 .gradient-wight-card-fill {
+    box-sizing: border-box;
     background: linear-gradient(121deg,
-    rgba(238, 247, 255, 0.6) 15%,
-    rgba(224, 240, 255, 0.6) 80%,
-    rgba(238, 247, 255, 0.6) 100%);
+        rgba(238, 247, 255, 0.55) 15%,
+        rgba(224, 240, 255, 0.55) 80%,
+        rgba(238, 247, 255, 0.55) 100%);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.04);
 }
 
 .gradient-wight-card-stroke {
@@ -116,4 +171,32 @@ h4 {
 
 .gradient-withe-input {
     background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(238, 247, 255, 0.4));
+}
+
+#home-page,
+#about-page,
+#faq-page,
+#profile-page,
+#test-page,
+.test-session,
+.header,
+.footer-inner {
+    max-width: 100%;
+    min-width: 0;
+}
+
+@media (max-width: 880px) {
+    .background-container > .part,
+    #statistics-test-card > .part,
+    #faq-zigzag,
+    #faq-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    #root {
+        gap: 40px;
+        padding-top: 16px;
+    }
 }

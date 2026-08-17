@@ -2,6 +2,8 @@
     position: relative;
     width: 424px;
     height: 389px;
+    transform: scale(calc(100cqw / 424));
+    transform-origin: top left;
 }
 
 .rectangle {

@@ -1,0 +1,117 @@
+.auth-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(22, 43, 59, 0.36);
+    backdrop-filter: blur(10px);
+}
+
+.auth-modal {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 48px 40px 40px;
+    border-radius: 32px;
+    box-sizing: border-box;
+    background: linear-gradient(121deg,
+        rgba(238, 247, 255, 0.96) 15%,
+        rgba(224, 240, 255, 0.96) 80%,
+        rgba(238, 247, 255, 0.96) 100%);
+    box-shadow: 0 16px 48px rgba(22, 43, 59, 0.18);
+}
+
+.auth-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.auth-modal-close:hover {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.auth-modal-close::before,
+.auth-modal-close::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 8px;
+    width: 16px;
+    height: 2px;
+    background: #162B3B;
+}
+
+.auth-modal-close::before {
+    transform: rotate(45deg);
+}
+
+.auth-modal-close::after {
+    transform: rotate(-45deg);
+}
+
+.auth-modal-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.auth-modal-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 100px;
+    background: linear-gradient(#FFFFFF, #F7FAFF);
+}
+
+.auth-modal-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.auth-modal-error {
+    color: #C24A2C;
+    text-align: center;
+}
+
+@media (max-width: 520px) {
+    .auth-modal-overlay {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .auth-modal {
+        padding: 40px 20px 24px;
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
+    }
+
+    .auth-modal-tabs {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .auth-modal .main-button {
+        width: 100%;
+    }
+}

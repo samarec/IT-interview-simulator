@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 import bcrypt
 from app.core import config
 from app.domain.models import User
-from app.domain.schemas import UserCreate
+from app.domain.schemas import UserCreate, UserUpdate
 from jose import jwt
 from sqlalchemy.orm import Session
 
@@ -54,3 +54,15 @@ def register_user(db: Session, user_data: UserCreate) -> User:
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def update_user(db: Session, user: User, user_data: UserUpdate) -> User:
+    if user_data.username is not None:
+        user.username = user_data.username
+    if user_data.email is not None:
+        user.email = user_data.email
+    if user_data.password:
+        user.password_hash = get_password_hash(user_data.password)
+    db.commit()
+    db.refresh(user)
+    return user

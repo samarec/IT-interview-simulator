@@ -1,5 +1,6 @@
 #statistics-test-card {
     position: relative;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,7 +9,7 @@
 #statistics-test {
     position: relative;
     z-index: 3;
-    width: 650px;
+    width: min(650px, 100%);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -82,4 +83,28 @@
     top: 2px;
     left: 387px;
     z-index: 4;
+}
+
+@media (max-width: 720px) {
+    #statistics-test {
+        padding: 24px 20px 28px;
+    }
+
+    #statistics-test-search {
+        position: relative;
+        top: auto;
+        width: min(424px, 100%);
+        margin-top: 16px;
+    }
+
+    #statistics-test-tabs {
+        width: 100%;
+        gap: 8px;
+    }
+
+    .statistics-test-tab {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+    }
 }

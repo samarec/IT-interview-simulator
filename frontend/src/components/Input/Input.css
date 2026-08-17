@@ -6,6 +6,7 @@
     border-radius: 48px;
     box-sizing: border-box;
     border: none;
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.12);
 }
 
 .input:focus-visible {

@@ -15,7 +15,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(topics.router, prefix = "/api")
+app.include_router(topics.router, prefix="/api")
+app.include_router(tests.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(professions.router, prefix="/api")
 app.include_router(users_router, prefix="/api")
