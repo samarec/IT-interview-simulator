@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, selectinload
 
 from app.api.routes.deps import get_db, get_current_user, get_optional_current_user
-from app.domain.models import Topic, User
+from app.domain.models import Topic, User, CardType
 from app.domain.schemas import (
     CardResponse,
     FAQResponse,
@@ -116,12 +116,17 @@ def read_session_question(payload: NextQuestionRequest, db: Session = Depends(ge
     if not card:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Вопрос с таким индексом не найден.")
 
+    card_name = ""
+    if card.card_type_id:
+        card_name = getattr(db.query(CardType).get(card.card_type_id), "name", "")
+
     card_resp = CardResponse(
         id=card.id,
         topic_id=card.topic_id,
         title=card.title,
         description=card.description,
-        answers=[AnswerResponse(id=a.id, title=a.title, is_correct=a.is_correct) for a in card.answers]
+        answers=[AnswerResponse(id=a.id, title=a.title, is_correct=a.is_correct) for a in card.answers],
+        card_type=card_name
     )
     metainfo = MetaInfo(total_questions=total_questions, current_question_index=payload.current_index)
 
