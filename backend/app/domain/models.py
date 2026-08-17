@@ -14,13 +14,6 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 
-user_tags = Table(
-    "user_tags",
-    Base.metadata,
-    Column("user_id", Integer, ForeignKey("z1.users.id"), primary_key=True),
-    Column("tag_id", Integer, ForeignKey("z1.tags.id"), primary_key=True),
-    schema="z1",
-)
 
 class Topic(Base):
     __tablename__ = "topics"
@@ -246,6 +239,14 @@ class UserTopicCounter(Base):
     user = relationship("User", back_populates="topic_counters")
     topic = relationship("Topic", back_populates="user_counters")
 
+
+user_tags = Table(
+    "user_tags",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("z1.users.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("z1.tags.id"), primary_key=True),
+    schema="z1",
+)
 
 topic_tags = Table(
     "topic_tags",
