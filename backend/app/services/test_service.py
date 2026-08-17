@@ -140,7 +140,7 @@ def get_test_detail(db: Session, test: Test, reveal_correct: bool) -> TestDetail
         for link in sorted(test.card_links, key=lambda item: item.order_index)
         if link.card
     ]
-    base = build_test_response(test)
+    base = build_test_response(db, test)
     return TestDetailResponse(**base.model_dump(), cards=cards)
 
 
@@ -192,7 +192,7 @@ def submit_test(
             db.commit()
 
     return TestSubmitResponse(
-        test=build_test_response(test),
+        test=build_test_response(db, test),
         correct_count=correct_count,
         total=total,
         passed=passed,
