@@ -18,8 +18,16 @@ router = APIRouter(prefix="/tests", tags=["tests"])
 
 
 @router.get("", response_model=List[TestResponse])
-def read_tests(db: Session = Depends(get_db)):
-    return get_all_tests(db)
+def read_tests(
+    search: Optional[str] = Query(None, description="Поиск по названию или описанию"),
+    sort_by: Optional[str] = Query(None, description="Сортировка: 'newest' или 'popular'"),
+    tags: List[int] = Query(None, description="Список ID тегов для фильтрации"),
+    db: Session = Depends(get_db)
+):
+    """
+    Получить список всех тестов с поддержкой поиска, фильтрации по тегам и сортировки.
+    """
+    return get_all_tests(db, search=search, sort_by=sort_by, tags=tags)
 
 
 @router.get("/{code}", response_model=TestResponse)
@@ -56,3 +64,4 @@ def finish_test(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Тест не найден.")
     user_id = current_user.id if current_user else None
     return submit_test(db, test, payload.answers, user_id=user_id)
+

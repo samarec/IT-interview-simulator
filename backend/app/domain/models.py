@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from sqlalchemy import Table, Column, Integer, ForeignKey
 
 from app.db.session import Base
 from sqlalchemy import (
@@ -21,6 +22,7 @@ class Topic(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     code = Column(String(100), nullable=True, unique=True, index=True)
+    difficulty_id = Column(Integer, ForeignKey("z1.difficulties.id"), nullable=True)
 
     tags = relationship(
         "Tag",
@@ -28,7 +30,6 @@ class Topic(Base):
         primaryjoin="Topic.id == z1.topic_tags.c.topic_id",
         secondaryjoin="Tag.id == z1.topic_tags.c.tag_id",
         back_populates="topics",
-        viewonly=True,
     )
     cards = relationship("Card", back_populates="topic", cascade="all, delete-orphan")
     professions = relationship(
@@ -37,9 +38,9 @@ class Topic(Base):
         primaryjoin="Topic.id == z1.topic_professions.c.topic_id",
         secondaryjoin="Profession.id == z1.topic_professions.c.profession_id",
         back_populates="topics",
-        viewonly=True,
     )
     user_counters = relationship("UserTopicCounter", back_populates="topic", cascade="all, delete-orphan")
+    difficulty = relationship("Difficulty")
 
 
 class Tag(Base):
@@ -56,7 +57,6 @@ class Tag(Base):
         primaryjoin="Tag.id == z1.topic_tags.c.tag_id",
         secondaryjoin="Topic.id == z1.topic_tags.c.topic_id",
         back_populates="tags",
-        viewonly=True,
     )
     professions = relationship(
         "Profession",
@@ -64,7 +64,13 @@ class Tag(Base):
         primaryjoin="Tag.id == z1.profession_tags.c.tag_id",
         secondaryjoin="Profession.id == z1.profession_tags.c.profession_id",
         back_populates="tags",
-        viewonly=True,
+    )
+    users = relationship(
+        "User",
+        secondary="z1.user_tags",
+        primaryjoin="Tag.id == z1.user_tags.c.tag_id",
+        secondaryjoin="User.id == z1.user_tags.c.user_id",
+        back_populates="tags",
     )
 
 
@@ -102,6 +108,14 @@ class FAQ(Base):
     description = Column(Text, nullable=False)
 
 
+class Difficulty(Base):
+    __tablename__ = "difficulties"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
+
+
 class Role(Base):
     __tablename__ = "roles"
     __table_args__ = {"schema": "z1"}
@@ -129,6 +143,14 @@ class User(Base):
     topic_counters = relationship("UserTopicCounter", back_populates="user", cascade="all, delete-orphan")
     test_results = relationship("UserTestResult", back_populates="user", cascade="all, delete-orphan")
 
+    tags = relationship(
+        "Tag",
+        secondary="z1.user_tags",
+        primaryjoin="User.id == z1.user_tags.c.user_id",
+        secondaryjoin="Tag.id == z1.user_tags.c.tag_id",
+        back_populates="users",
+    )
+
 
 class Profession(Base):
     __tablename__ = "professions"
@@ -145,7 +167,6 @@ class Profession(Base):
         primaryjoin="Profession.id == z1.profession_tags.c.profession_id",
         secondaryjoin="Tag.id == z1.profession_tags.c.tag_id",
         back_populates="professions",
-        viewonly=True,
     )
     topics = relationship(
         "Topic",
@@ -153,7 +174,6 @@ class Profession(Base):
         primaryjoin="Profession.id == z1.topic_professions.c.profession_id",
         secondaryjoin="Topic.id == z1.topic_professions.c.topic_id",
         back_populates="professions",
-        viewonly=True,
     )
 
 
@@ -219,6 +239,14 @@ class UserTopicCounter(Base):
     user = relationship("User", back_populates="topic_counters")
     topic = relationship("Topic", back_populates="user_counters")
 
+
+user_tags = Table(
+    "user_tags",
+    Base.metadata,
+    Column("user_id", Integer, ForeignKey("z1.users.id"), primary_key=True),
+    Column("tag_id", Integer, ForeignKey("z1.tags.id"), primary_key=True),
+    schema="z1",
+)
 
 topic_tags = Table(
     "topic_tags",

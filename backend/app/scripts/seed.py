@@ -27,6 +27,14 @@ def seed_data():
         tag_devops = Tag(name="DevOps")
         tag_db = Tag(name="Базы данных")
 
+        extra_tags_names = [
+            "HTML", "JavaScript", "Go", "Python", "PHP", "Java", "C++",
+            "Docker", "Linux", "Git", "QA", "Администрирование"
+        ]
+        extra_tags = [Tag(name=name) for name in extra_tags_names]
+
+        db.add_all([tag_web, tag_networks, tag_devops, tag_db] + extra_tags)
+
         prof_frontend = Profession(name="Frontend-разработчик", description="Создает UI", tags=[tag_web])
         prof_backend = Profession(name="Backend-разработчик", description="Пишет API",
                                   tags=[tag_web, tag_db, tag_networks])

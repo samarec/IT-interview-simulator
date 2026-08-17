@@ -1,5 +1,6 @@
 from datetime import timedelta
 from typing import Annotated
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.api.routes.deps import get_current_user, get_db
 from app.core import config
@@ -36,9 +37,14 @@ def register(user_data: UserCreate, db: DbSession):
     
     return register_user(db, user_data)
 
+
 @router.post("/login", response_model=Token)
-def login(user_data: UserLogin, db: DbSession):
-    user = authenticate_user(db, user_data.email, user_data.password)
+def login(
+    db: DbSession,                                     # <-- Сначала параметр без дефолтного значения
+    form_data: OAuth2PasswordRequestForm = Depends()   # <-- Затем параметр с дефолтным значением
+):
+    user = authenticate_user(db, form_data.username, form_data.password)
+
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -55,7 +61,7 @@ def login(user_data: UserLogin, db: DbSession):
         },
         expires_delta=access_token_expires,
     )
-    
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 

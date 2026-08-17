@@ -1,3 +1,5 @@
+from sqlalchemy import func, or_
+from app.domain.models import TestCard, Card, Topic, topic_tags, Profession, profession_tags, UserTestResult
 from typing import List, Optional
 
 from sqlalchemy.orm import Session, selectinload
@@ -47,14 +49,65 @@ def serialize_card(card: Card, reveal_correct: bool) -> CardResponse:
     )
 
 
-def get_all_tests(db: Session) -> List[TestResponse]:
-    tests = (
-        db.query(Test)
-        .options(selectinload(Test.card_links))
-        .filter(Test.code.isnot(None))
-        .order_by(Test.id)
-        .all()
-    )
+def get_all_tests(
+        db: Session,
+        search: Optional[str] = None,
+        sort_by: Optional[str] = None,
+        tags: Optional[List[int]] = None
+) -> List[TestResponse]:
+    query = db.query(Test).options(selectinload(Test.card_links)).filter(Test.code.isnot(None))
+
+    # Поиск по подстроке в названии или описании (регистронезависимый)
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            or_(
+                Test.name.ilike(search_term),
+                Test.description.ilike(search_term)
+            )
+        )
+
+    # Фильтрация по тегам
+    if tags:
+        # Подзапрос: ID тестов, связанных с тегами через карточки (темы)
+        topic_test_ids = (
+            db.query(TestCard.test_id)
+            .join(Card, TestCard.card_id == Card.id)
+            .join(Topic, Card.topic_id == Topic.id)
+            .join(topic_tags, Topic.id == topic_tags.c.topic_id)
+            .filter(topic_tags.c.tag_id.in_(tags))
+        )
+
+        # Подзапрос: ID тестов, связанных с тегами через профессию
+        prof_test_ids = (
+            db.query(Test.id)
+            .join(Profession, Test.profession_id == Profession.id)
+            .join(profession_tags, Profession.id == profession_tags.c.profession_id)
+            .filter(profession_tags.c.tag_id.in_(tags))
+        )
+
+        # Оставляем тесты, которые попадают под любое из условий
+        query = query.filter(
+            or_(
+                Test.id.in_(topic_test_ids),
+                Test.id.in_(prof_test_ids)
+            )
+        )
+
+    # Сортировка
+    if sort_by == "popular":
+        # Сортировка по популярности (по количеству записей в UserTestResult)
+        query = query.outerjoin(UserTestResult, Test.id == UserTestResult.test_id)
+        query = query.group_by(Test.id)
+        query = query.order_by(func.count(UserTestResult.id).desc())
+    elif sort_by == "newest":
+        # Сортировка по новизне
+        query = query.order_by(Test.created_at.desc())
+    else:
+        # Сортировка по умолчанию
+        query = query.order_by(Test.id)
+
+    tests = query.all()
     return [build_test_response(test) for test in tests]
 
 

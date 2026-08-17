@@ -167,3 +167,16 @@ class TestSubmitResponse(BaseModel):
     passed: bool
     results: List[TestAnswerResult]
 
+
+class TagWithSelectionResponse(BaseModel):
+    id: int
+    name: str
+    is_selected: bool
+
+    class Config:
+        from_attributes = True
+
+class UserTagsUpdateRequest(BaseModel):
+    tag_ids: List[int]
+
+
