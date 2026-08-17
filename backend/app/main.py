@@ -1,5 +1,5 @@
 import uvicorn
-from app.api.routes import auth, topics, professions
+from app.api.routes import auth, tests, topics, professions, tags
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,9 +14,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(topics.router, prefix = "/api")
+app.include_router(topics.router, prefix="/api")
+app.include_router(tests.router, prefix="/api")
 app.include_router(auth.router, prefix="/api")
 app.include_router(professions.router, prefix="/api")
+app.include_router(tags.router, prefix="/api")
 
 @app.get("/")
 async def root():
@@ -28,3 +30,4 @@ if __name__ == "__main__":
 #запуск backend
 # из backend/ производить запуск через 
 # uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+

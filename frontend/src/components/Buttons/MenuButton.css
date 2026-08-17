@@ -1,11 +1,25 @@
 .menu-button {
+    font-family: "Geologica", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 120%;
     color: #162B3B;
     padding: 12px 24px;
     border-radius: 32px;
     border: none;
+    background: transparent;
+    white-space: nowrap;
 }
 
 .menu-button:hover {
-    background: linear-gradient(#FFCEBC, #FF936B) white;
-    opacity: 72%;
+    background: linear-gradient(#FFCEBC, #FF936B);
+    color: #FFFFFF;
+    opacity: 0.72;
+}
+
+.menu-button-active,
+.menu-button-active:hover {
+    background: linear-gradient(#FFCEBC 0%, #FF936B 97%);
+    color: #FFFFFF;
+    opacity: 1;
 }

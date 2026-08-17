@@ -1,0 +1,121 @@
+#faq-page {
+    width: var(--content-width);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#faq-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+}
+
+.faq-intro {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+}
+
+.faq-list {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.faq-status {
+    text-align: center;
+}
+
+.faq-item {
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.04);
+    overflow: hidden;
+}
+
+.faq-item-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+}
+
+.faq-item-trigger h3 {
+    font-weight: 500;
+}
+
+.faq-chevron {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid #162B3B;
+    border-bottom: 2px solid #162B3B;
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.25s ease;
+}
+
+.faq-item--open .faq-chevron {
+    transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.faq-item-answer {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.25s ease;
+}
+
+.faq-item--open .faq-item-answer {
+    grid-template-rows: 1fr;
+}
+
+.faq-item-answer-inner {
+    overflow: hidden;
+}
+
+.faq-item-answer p {
+    padding: 0 24px 20px;
+}
+
+#faq-zigzag {
+    width: 14px;
+    height: 48px;
+    top: -56px;
+    left: 50%;
+    margin-left: -7px;
+}
+
+#faq-arrow {
+    width: 120px;
+    top: 268px;
+    left: 860px;
+    transform: rotate(18deg);
+}
+
+@media (max-width: 640px) {
+    #faq-content {
+        gap: 32px;
+    }
+
+    .faq-item-trigger,
+    .faq-item-answer p {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

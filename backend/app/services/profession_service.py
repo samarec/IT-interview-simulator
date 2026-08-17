@@ -4,11 +4,11 @@ from fastapi import HTTPException  # Добавлен импорт HTTPException
 
 from app.domain.models import Profession
 from app.domain.schemas import ProfessionMatchResponse, ProfessionResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 
 def match_profession(db: Session, tag_ids: List[int]) -> ProfessionMatchResponse:
-    professions = db.query(Profession).all()
+    professions = db.query(Profession).options(selectinload(Profession.tags)).all()
 
     if not professions:
         raise HTTPException(status_code=404, detail="В базе данных нет профессий.")

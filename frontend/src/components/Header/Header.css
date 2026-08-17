@@ -1,29 +1,202 @@
 .header {
-    width: fit-content;
-    height: fit-content;
+    width: var(--content-width);
     display: flex;
     align-items: center;
-    border-radius: 100px;
-    background: linear-gradient(rgba(255, 255, 255, 0.64), rgba(245, 249, 255, 0.64));
+    justify-content: space-between;
     gap: 12px;
+}
+
+#root > .header.header--menu-open {
+    z-index: 40;
+}
+
+.header-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 8px 6px 16px;
+    border-radius: 100px;
+    background: linear-gradient(#FFFFFF, #F7FAFF);
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.06);
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #162B3B;
+    padding: 0 4px 0 0;
+    flex-shrink: 0;
+}
+
+.header-logo img {
+    width: 22px;
+    height: 30px;
+    display: block;
+}
+
+.header-logo-text {
+    font-size: 16px;
+    line-height: 120%;
+    font-weight: 300;
+    white-space: nowrap;
+}
+
+.header-logo-text span {
+    font-weight: 500;
 }
 
 .nav {
     display: flex;
+    align-items: center;
     list-style: none;
-    margin: 12px 15px;
-    gap: 10px;
+    gap: 4px;
 }
 
-.link {
-    text-decoration: none;
-    color: black;
-}
-
-#image-header-logo {
-    width: 32px;
-    height: 32px;
+.header-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
     border-radius: 50%;
-    margin: 0 0 0 15px;
-    background-color: #0F89FF;
+    background: transparent;
+}
+
+.header-menu-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: #162B3B;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.header--menu-open .header-menu-toggle span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.header--menu-open .header-menu-toggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.header--menu-open .header-menu-toggle span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.header-menu-backdrop {
+    display: none;
+}
+
+.header-login {
+    box-shadow: 0 8px 20px rgba(15, 137, 255, 0.28);
+    flex-shrink: 0;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 220px;
+    padding: 4px 16px 4px 4px;
+    border-radius: 100px;
+    background: linear-gradient(#FFFFFF, #F7FAFF);
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.06);
+    text-decoration: none;
+    color: #162B3B;
+    flex-shrink: 0;
+}
+
+.header-user:hover {
+    box-shadow: 0 8px 20px rgba(15, 137, 255, 0.18);
+}
+
+.header-user-name {
+    font-size: 16px;
+    line-height: 120%;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header-user-placeholder {
+    width: 120px;
+    height: 48px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 880px) {
+    .header-bar {
+        flex: 1;
+        min-width: 0;
+        justify-content: space-between;
+        position: relative;
+        z-index: 30;
+    }
+
+    .header-menu-toggle {
+        display: flex;
+    }
+
+    .nav {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 8px;
+        border-radius: 24px;
+        background: linear-gradient(#FFFFFF, #F7FAFF);
+        box-shadow: 0 16px 40px rgba(22, 43, 59, 0.16);
+    }
+
+    .nav--open {
+        display: flex;
+    }
+
+    .nav .menu-button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .header-menu-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        border: none;
+        background: rgba(22, 43, 59, 0.2);
+    }
+
+    .header-user {
+        max-width: 56px;
+        padding: 4px;
+    }
+
+    .header-user-name {
+        display: none;
+    }
+
+    .header-user-placeholder {
+        width: 48px;
+    }
+
+    .header-login {
+        padding: 12px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-logo-text {
+        font-size: 14px;
+    }
 }
