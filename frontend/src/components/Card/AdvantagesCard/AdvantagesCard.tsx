@@ -5,7 +5,7 @@ import { advantagesCard } from "./dataAdvantageCard";
 
 export function AdvantagesCard() {
     return (
-        <div className='background-container'>
+        <div id='advantages-card-background' className='background-container'>
             <section id='advantages-card'>
                 {advantagesCard.map((advantage) => (
                     <AdvantageCard id={advantage.id} title={advantage.title} description={advantage.description} />
