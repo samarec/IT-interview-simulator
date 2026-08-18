@@ -41,6 +41,7 @@ class CardResponse(BaseModel):
     title: str  # Текст вопроса
     description: Optional[str] = None  # Развёрнутый кейс-объяснение
     answers: List[AnswerResponse] = []  # Варианты ответов для режима экзамена
+    card_type: str
 
     class Config:
         from_attributes = True

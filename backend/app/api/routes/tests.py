@@ -49,7 +49,7 @@ def read_test_cards(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Тест не найден.")
     if not test.card_links:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="В тесте пока нет вопросов.")
-    return get_test_detail(test, reveal_correct=(mode == "training"))
+    return get_test_detail(db, test, reveal_correct=(mode == "training"))
 
 
 @router.post("/{code}/submit", response_model=TestSubmitResponse)

@@ -22,7 +22,6 @@ class Topic(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     code = Column(String(100), nullable=True, unique=True, index=True)
-    difficulty_id = Column(Integer, ForeignKey("z1.difficulties.id"), nullable=True)
 
     tags = relationship(
         "Tag",
@@ -40,7 +39,6 @@ class Topic(Base):
         back_populates="topics",
     )
     user_counters = relationship("UserTopicCounter", back_populates="topic", cascade="all, delete-orphan")
-    difficulty = relationship("Difficulty")
 
 
 class Tag(Base):
@@ -82,10 +80,17 @@ class Card(Base):
     topic_id = Column(Integer, ForeignKey("z1.topics.id"), nullable=False)
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)
+    card_type_id = Column(Integer, ForeignKey("z1.card_types.id"), nullable=False)
 
     topic = relationship("Topic", back_populates="cards")
     answers = relationship("Answer", back_populates="card", cascade="all, delete-orphan")
 
+class CardType(Base):
+    __tablename__ = "card_types"
+    __table_args__ = {"schema": "z1"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
 
 class Answer(Base):
     __tablename__ = "answers"
