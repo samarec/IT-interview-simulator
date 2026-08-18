@@ -2,7 +2,15 @@ from typing import Dict, List, Tuple, Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import FAQ, Card, Topic, UserTopicCounter, CardType
+from app.domain.models import (
+    FAQ,
+    Card,
+    Topic,
+    UserTopicCounter,
+    CardType,
+    Test,
+    User,
+)
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -11,6 +19,18 @@ from app.domain.schemas import (
     FAQResponse
 )
 
+def get_counters(db: Session) -> dict:
+    questions_count = db.query(Card).count()
+    topics_count = db.query(Topic).count()
+    tests_count = db.query(Test).count()
+    users_count = db.query(User).count()
+
+    return {
+        "questions": questions_count,
+        "topics": topics_count,
+        "tests": tests_count,
+        "users": users_count,
+    }
 
 def get_passed_counts_map(db: Session, topic_ids: Optional[List[int]] = None) -> Dict[int, int]:
     query = db.query(
