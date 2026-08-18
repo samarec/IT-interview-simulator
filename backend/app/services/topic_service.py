@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import FAQ, Card, Topic, UserTopicCounter, User, Test
+from app.domain.models import FAQ, Card, Topic, UserTopicCounter, CardType
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -89,6 +89,7 @@ def get_cards_by_topics(db: Session, topic_ids: List[int]) -> List[CardResponse]
             title=card.title,
             description=card.description,
             answers=[AnswerResponse(id=a.id, title=a.title, is_correct=a.is_correct) for a in card.answers],
+            card_type=getattr(db.query(CardType).get(card.card_type_id), 'name', ''),
         )
         for card in cards
     ]

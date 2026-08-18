@@ -1,5 +1,5 @@
 from sqlalchemy import func, or_
-from app.domain.models import TestCard, Card, Topic, topic_tags, Profession, profession_tags, UserTestResult
+from app.domain.models import topic_tags, Profession, profession_tags, CardType
 from typing import List, Optional
 
 from sqlalchemy.orm import Session, selectinload
@@ -32,12 +32,13 @@ def build_test_response(test: Test) -> TestResponse:
     )
 
 
-def serialize_card(card: Card, reveal_correct: bool) -> CardResponse:
+def serialize_card(card: Card, reveal_correct: bool, card_type: str) -> CardResponse:
     return CardResponse(
         id=card.id,
         topic_id=card.topic_id,
         title=card.title,
         description=card.description,
+        card_type=card_type,
         answers=[
             AnswerResponse(
                 id=answer.id,
@@ -122,9 +123,9 @@ def get_test_by_code(db: Session, code: str) -> Optional[Test]:
     )
 
 
-def get_test_detail(test: Test, reveal_correct: bool) -> TestDetailResponse:
+def get_test_detail(db: Session, test: Test, reveal_correct: bool) -> TestDetailResponse:
     cards = [
-        serialize_card(link.card, reveal_correct)
+        serialize_card(link.card, reveal_correct, getattr(db.query(CardType).get(link.card.card_type_id), 'name', ''))
         for link in sorted(test.card_links, key=lambda item: item.order_index)
         if link.card
     ]
