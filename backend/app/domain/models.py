@@ -269,6 +269,7 @@ class Test(Base):
     description = Column(Text, nullable=True)
     duration_minutes = Column(Integer, default=5)
     profession_id = Column(Integer, ForeignKey("z1.professions.id"), nullable=True)
+    difficulty_id = Column(Integer, ForeignKey("z1.difficulties.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     profession = relationship("Profession")
