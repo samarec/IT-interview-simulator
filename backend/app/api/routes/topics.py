@@ -1,8 +1,8 @@
 import math
 from typing import List, Optional
 
-from app.api.routes.deps import get_current_user, get_db, get_optional_current_user
-from app.domain.models import CardType, Topic, User
+from app.api.routes.deps import get_db, get_current_user, get_optional_current_user
+from app.domain.models import Topic, User, CardType
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -105,6 +105,7 @@ def read_topic_by_id(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Тема с ID {topic_id} не найдена.")
 
     user_id = current_user.id if current_user else None
+    # Получаем счетчик только для этой темы
     completed_count = 0
     if user_id:
         from app.domain.models import UserTopicCounter

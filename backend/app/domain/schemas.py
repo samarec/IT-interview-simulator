@@ -1,4 +1,6 @@
-from typing import List, Optional, TypeVar, Generic
+from datetime import datetime
+from typing import Generic, List, Optional, TypeVar
+
 from pydantic import BaseModel, Field
 
 
@@ -136,6 +138,7 @@ class TestResponse(BaseModel):
     duration_minutes: int = 5
     cards_count: int
     profession_id: Optional[int] = None
+    difficulty: Optional[str] = None
 
     class Config:
         from_attributes = True

@@ -182,4 +182,3 @@ def complete_topic_session(db: Session, user_id: int, topic_id: int):
 
     db.commit()
     return counter
-
