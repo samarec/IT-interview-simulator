@@ -5,6 +5,12 @@
     width: min(658px, 100%);
     display: flex;
     flex-direction: column;
+
+}
+
+#advantages-card-background {
+    display: flex;
+    justify-content: center;
 }
 
 #advantages-card > .rotate {
@@ -13,32 +19,34 @@
 
 #group4-background-advantage {
     top: -65px;
-    left: 170px;
+    left: 270px;
     transform: rotate(-105deg);
 }
 
 #thorus2-background-advantage {
     top: -95px;
-    left: 45px;
+    left: 145px;
 }
 
 #vector2-background-advantage {
-    top: 39px;
-    left: 562px;
+    top: 31px;
+    left: 630px;
+    transform: rotate(-15deg);
 }
 
 #vector3-background-advantage {
-    top: 225px;
-    left: -64px;
+    top: 231px;
+    left: 76px;
+    transform: rotate(15deg);
 }
 
 #helix-background-advantage {
-    top: 260px;
-    left: 465px;
+    top: 311px;
+    left: 524px;
 }
 
 #group3-background-advantage {
-    top: 417px;
-    left: 647px;
+    top: 468px;
+    left: 706px;
     transform: rotate(56deg);
 }

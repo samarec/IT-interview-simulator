@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import FAQ, Card, Topic, UserTopicCounter, CardType
+from app.domain.models import FAQ, Card, Test, Topic, User, UserTopicCounter, CardType
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -153,6 +153,7 @@ def complete_topic_session(db: Session, user_id: int, topic_id: int):
     db.commit()
     return counter
 
+def get_counters(db: Session) -> dict:
 
 def get_counters(db: Session) -> dict:
     questions_count = db.query(Card).count()

@@ -97,6 +97,7 @@ def read_topic_by_id(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Тема с ID {topic_id} не найдена.")
 
     user_id = current_user.id if current_user else None
+    # Получаем счетчик только для этой темы
     completed_count = 0
     if user_id:
         from app.domain.models import UserTopicCounter

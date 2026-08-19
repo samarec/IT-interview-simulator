@@ -180,55 +180,6 @@ class Profession(Base):
         secondaryjoin="Topic.id == z1.topic_professions.c.topic_id",
         back_populates="professions",
     )
-    tests = relationship("Test", back_populates="profession")
-
-
-class UserTopicCounter(Base):
-    __tablename__ = "user_topic_counters"
-    __table_args__ = {"schema": "z1"}
-
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("z1.users.id"), nullable=False)
-    topic_id = Column(Integer, ForeignKey("z1.topics.id"), nullable=False)
-    completed_count = Column(Integer, default=0, nullable=False)
-
-    user = relationship("User", back_populates="topic_counters")
-    topic = relationship("Topic", back_populates="user_counters")
-
-
-class Test(Base):
-    __tablename__ = "tests"
-    __table_args__ = {"schema": "z1"}
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    description = Column(Text, nullable=True)
-    duration_minutes = Column(Integer, nullable=True)
-    profession_id = Column(Integer, ForeignKey("z1.professions.id"), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    profession = relationship("Profession", back_populates="tests")
-    test_cards = relationship("TestCard", back_populates="test", cascade="all, delete-orphan")
-    cards = relationship(
-        "Card",
-        secondary="z1.test_cards",
-        primaryjoin="Test.id == z1.test_cards.c.test_id",
-        secondaryjoin="Card.id == z1.test_cards.c.card_id",
-        back_populates="tests",
-        viewonly=True,
-    )
-
-
-class TestCard(Base):
-    __tablename__ = "test_cards"
-    __table_args__ = {"schema": "z1"}
-
-    test_id = Column(Integer, ForeignKey("z1.tests.id"), primary_key=True)
-    card_id = Column(Integer, ForeignKey("z1.cards.id"), primary_key=True)
-    order_index = Column(Integer, nullable=True)
-
-    test = relationship("Test", back_populates="test_cards")
-    card = relationship("Card")
 
 
 class Test(Base):
@@ -241,6 +192,7 @@ class Test(Base):
     description = Column(Text, nullable=True)
     duration_minutes = Column(Integer, default=5)
     profession_id = Column(Integer, ForeignKey("z1.professions.id"), nullable=True)
+    difficulty_id = Column(Integer, ForeignKey("z1.difficulties.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     profession = relationship("Profession")
