@@ -26,7 +26,6 @@ class TopicResponse(BaseModel):
         from_attributes = True
 
 
-# Схема для варианта ответа (таблица answers)
 class AnswerResponse(BaseModel):
     id: int
     title: str
@@ -36,7 +35,6 @@ class AnswerResponse(BaseModel):
         from_attributes = True
 
 
-# Схема для карточки (таблица cards)
 class CardResponse(BaseModel):
     id: int
     topic_id: int
@@ -49,7 +47,6 @@ class CardResponse(BaseModel):
         from_attributes = True
 
 
-# Схема входящего запроса для старта тренажёра по выбранным темам
 class StartTrainerRequest(BaseModel):
     topic_ids: List[int]
 

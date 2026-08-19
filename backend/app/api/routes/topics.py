@@ -50,12 +50,6 @@ def read_faqs(db: Session = Depends(get_db)):
 def read_counters(db: Session = Depends(get_db)):
     """
     Получить агрегированные счетчики для шапки страницы 'Тесты'.
-    Возвращает общее количество:
-      - questions
-      - topics
-      - tests
-      - users
-    Доступен без авторизации (public endpoint), т.к. это публичная статистика.
     """
     counters = get_counters(db)
     return CountersResponse(**counters)
@@ -153,7 +147,7 @@ def read_session_question(payload: NextQuestionRequest, db: Session = Depends(ge
 def complete_topic(
     topic_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user) # Заметь, здесь строгая авторизация!
+    current_user: User = Depends(get_current_user)
 ):
     """
     Увеличивает счетчик прохождений темы.
@@ -164,4 +158,3 @@ def complete_topic(
         return {"message": "Счетчик прохождений успешно обновлен"}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
-
