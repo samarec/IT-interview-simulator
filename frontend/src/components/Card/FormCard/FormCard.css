@@ -61,9 +61,8 @@
 }
 
 #vector2-background-form {
-    top: 56px;
-    left: 633px;
-    transform: rotate(30deg);
+    top: 6px;
+    left: 790px;
 }
 
 #helix-background-form {
@@ -73,14 +72,14 @@
 }
 
 #group3-background-form {
-    top: 646px;
-    left: -35px;
-    transform: scaleX(-1) rotate(60deg);
+    bottom: -40px;
+    left: -45px;
+    transform: scaleX(-1) rotate(70deg);
 }
 
 #thours-background-form {
-    top: 562px;
-    left: 555px;
+    bottom: -85px;
+    left: 785px;
     transform: rotate(-50deg);
 }
 

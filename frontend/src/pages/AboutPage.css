@@ -40,29 +40,28 @@
 }
 
 #cube-background-about {
-    width: 200px;
-    top: -8px;
-    left: 48px;
-    transform: rotate(-16deg);
+    width: 110px;
+    height: 110px;
+    top: 21px;
+    left: 69px;
 }
 
 #helix-background-about {
     width: 228px;
-    top: 118px;
-    left: 568px;
-    transform: rotate(32deg);
+    bottom: -57px;
+    right: -3px;
 }
 
 #stripes-top-about {
-    top: 12px;
-    left: 728px;
-    transform: scaleY(-1) rotate(-18deg);
+    top: 26px;
+    right: 96px;
+    transform: rotate(-5deg);
 }
 
 #stripes-bottom-about {
-    top: 252px;
+    bottom: 36px;
     left: 96px;
-    transform: rotate(168deg);
+    transform: rotate(175deg);
 }
 
 .about-section {
