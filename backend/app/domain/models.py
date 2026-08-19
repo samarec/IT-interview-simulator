@@ -204,41 +204,6 @@ class UserTopicCounter(Base):
     topic = relationship("Topic", back_populates="user_counters")
 
 
-class Test(Base):
-    __tablename__ = "tests"
-    __table_args__ = {"schema": "z1"}
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    description = Column(Text, nullable=True)
-    duration_minutes = Column(Integer, nullable=True)
-    profession_id = Column(Integer, ForeignKey("z1.professions.id"), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    profession = relationship("Profession", back_populates="tests")
-    test_cards = relationship("TestCard", back_populates="test", cascade="all, delete-orphan")
-    cards = relationship(
-        "Card",
-        secondary="z1.test_cards",
-        primaryjoin="Test.id == z1.test_cards.c.test_id",
-        secondaryjoin="Card.id == z1.test_cards.c.card_id",
-        back_populates="tests",
-        viewonly=True,
-    )
-    user_results = relationship("UserTestResult", back_populates="test", cascade="all, delete-orphan")
-
-
-class TestCard(Base):
-    __tablename__ = "test_cards"
-    __table_args__ = {"schema": "z1"}
-
-    test_id = Column(Integer, ForeignKey("z1.tests.id"), primary_key=True)
-    card_id = Column(Integer, ForeignKey("z1.cards.id"), primary_key=True)
-    order_index = Column(Integer, nullable=True)
-
-    test = relationship("Test", back_populates="test_cards")
-    card = relationship("Card")
-
 
 class UserTestResult(Base):
     """
