@@ -55,33 +55,33 @@
 
 #pill1-background-statistics-test {
     top: -82px;
-    left: 400px;
+    left: 514px;
     z-index: 1;
 }
 
 #sphere-background-statistics-test {
     top: 29px;
-    left: -19px;
+    left: 95px;
     z-index: 4;
 }
 
 #thorus-knot-background-statistics-test {
     top: 7px;
-    left: 48px;
+    left: 162px;
 }
 
 #helix-background-statistics-test {
     width: 94px;
     height: 94px;
-    top: 139px;
-    left: 600px;
+    bottom: -43px;
+    right: 72px;
     z-index: 4;
     transform: rotate(-90deg) scaleX(-1);
 }
 
 #group3-background-statistics-test {
     top: 2px;
-    left: 387px;
+    right: 327px;
     z-index: 4;
 }
 
