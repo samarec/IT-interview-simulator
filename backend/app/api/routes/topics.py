@@ -1,31 +1,32 @@
 import math
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.orm import Session, selectinload
 
 from app.api.routes.deps import get_db, get_current_user, get_optional_current_user
 from app.domain.models import Topic, User, CardType
 from app.domain.schemas import (
+    AnswerResponse,
     CardResponse,
+    CountersResponse,
     FAQResponse,
-    StartTrainerRequest,
-    TopicResponse,
+    MetaInfo,
+    NextQuestionRequest,
     PaginatedResponse,
     SessionQuestionResponse,
-    NextQuestionRequest,
-    MetaInfo,
-    AnswerResponse
+    StartTrainerRequest,
+    TopicResponse,
 )
 from app.services.topic_service import (
     build_topic_response,
     get_all_faqs,
     get_all_topics,
     get_cards_by_topics,
+    get_counters,
     get_paginated_topics,
     get_passed_counts_map,
     get_session_question,
-    complete_topic_session
 )
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session, selectinload
 
 router = APIRouter(prefix="/topics", tags=["topics"])
 
@@ -43,6 +44,21 @@ def read_topics(
 @router.get("/faq", response_model=List[FAQResponse], tags=["faq"])
 def read_faqs(db: Session = Depends(get_db)):
     return get_all_faqs(db)
+
+
+@router.get("/counters", response_model=CountersResponse)
+def read_counters(db: Session = Depends(get_db)):
+    """
+    Получить агрегированные счетчики для шапки страницы 'Тесты'.
+    Возвращает общее количество:
+      - questions
+      - topics
+      - tests
+      - users
+    Доступен без авторизации (public endpoint), т.к. это публичная статистика.
+    """
+    counters = get_counters(db)
+    return CountersResponse(**counters)
 
 
 @router.get("/paginated", response_model=PaginatedResponse[TopicResponse])

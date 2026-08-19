@@ -1,4 +1,6 @@
-from typing import List, Optional, TypeVar, Generic
+from datetime import datetime
+from typing import Generic, List, Optional, TypeVar
+
 from pydantic import BaseModel, Field
 
 
@@ -179,5 +181,4 @@ class TagWithSelectionResponse(BaseModel):
 
 class UserTagsUpdateRequest(BaseModel):
     tag_ids: List[int]
-
 

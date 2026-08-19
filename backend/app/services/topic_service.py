@@ -163,3 +163,16 @@ def complete_topic_session(db: Session, user_id: int, topic_id: int):
     db.commit()
     return counter
 
+def get_counters(db: Session) -> dict:
+
+    questions_count = db.query(Card).count()
+    topics_count = db.query(Topic).count()
+    tests_count = db.query(Test).count()
+    users_count = db.query(User).count()
+
+    return {
+        "questions": questions_count,
+        "topics": topics_count,
+        "tests": tests_count,
+        "users": users_count,
+    }
