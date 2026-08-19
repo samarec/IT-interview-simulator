@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import FAQ, Card, Topic, UserTopicCounter, CardType
+from app.domain.models import FAQ, Card, Test, Topic, User, UserTopicCounter, CardType
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,

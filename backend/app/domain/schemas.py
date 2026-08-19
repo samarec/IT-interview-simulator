@@ -183,3 +183,45 @@ class TagWithSelectionResponse(BaseModel):
 class UserTagsUpdateRequest(BaseModel):
     tag_ids: List[int]
 
+
+class CountersResponse(BaseModel):
+    questions: int
+    topics: int
+    tests: int
+    users: int
+
+
+class UserProfileResponse(BaseModel):
+    id: int
+    username: str
+    email: str
+    is_active: bool
+    role_id: Optional[int] = None
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class UserUpdateRequest(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+
+
+class UserPasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
+
+
+class CompletedTestResponse(BaseModel):
+    id: int
+    test_id: int
+    test_name: str
+    score: Optional[int] = None
+    max_score: Optional[int] = None
+    passed: bool
+    completed_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
