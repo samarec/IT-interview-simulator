@@ -75,7 +75,7 @@ export function AboutPage() {
                             <ChevronIcon direction="prev" />
                         </button>
 
-                        <article className="team-card" key={member.id}>
+                        <article className="team-card gradient-wight-card-fill" key={member.id}>
                             <div className="team-card-text">
                                 <div className="team-card-heading">
                                     <h3>{member.name}</h3>
