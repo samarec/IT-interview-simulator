@@ -42,7 +42,7 @@ def authenticate_user(db: Session, email: str, password: str) -> User | None:
     return user
 
 def register_user(db: Session, user_data: UserCreate) -> User:
-    role_id = user_data.role_id if user_data.role_id is not None else 2
+    role_id = user_data.role_id if user_data.role_id else 2
     
     db_user = User(
         username=user_data.username,

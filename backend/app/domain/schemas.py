@@ -1,4 +1,6 @@
-from typing import List, Optional, TypeVar, Generic
+from datetime import datetime
+from typing import Generic, List, Optional, TypeVar
+
 from pydantic import BaseModel, Field
 
 
@@ -24,7 +26,6 @@ class TopicResponse(BaseModel):
         from_attributes = True
 
 
-# Схема для варианта ответа (таблица answers)
 class AnswerResponse(BaseModel):
     id: int
     title: str
@@ -34,7 +35,6 @@ class AnswerResponse(BaseModel):
         from_attributes = True
 
 
-# Схема для карточки (таблица cards)
 class CardResponse(BaseModel):
     id: int
     topic_id: int
@@ -47,7 +47,6 @@ class CardResponse(BaseModel):
         from_attributes = True
 
 
-# Схема входящего запроса для старта тренажёра по выбранным темам
 class StartTrainerRequest(BaseModel):
     topic_ids: List[int]
 
@@ -136,6 +135,7 @@ class TestResponse(BaseModel):
     duration_minutes: int = 5
     cards_count: int
     profession_id: Optional[int] = None
+    difficulty: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -180,4 +180,45 @@ class TagWithSelectionResponse(BaseModel):
 class UserTagsUpdateRequest(BaseModel):
     tag_ids: List[int]
 
+
+class CountersResponse(BaseModel):
+    questions: int
+    topics: int
+    tests: int
+    users: int
+
+
+class UserProfileResponse(BaseModel):
+    id: int
+    username: str
+    email: str
+    is_active: bool
+    role_id: Optional[int] = None
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
+class UserUpdateRequest(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+
+
+class UserPasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
+
+
+class CompletedTestResponse(BaseModel):
+    id: int
+    test_id: int
+    test_name: str
+    score: Optional[int] = None
+    max_score: Optional[int] = None
+    passed: bool
+    completed_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
 

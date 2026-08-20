@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple, Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session, selectinload
 
-from app.domain.models import FAQ, Card, Topic, UserTopicCounter, CardType
+from app.domain.models import FAQ, Card, Test, Topic, User, UserTopicCounter, CardType
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
@@ -52,15 +52,11 @@ def build_topic_response(
 
 
 def get_all_topics(db: Session, user_id: Optional[int] = None) -> List[TopicResponse]:
-    """
-    Возвращает список всех тем. Если передан user_id, подтягивает счетчики прохождения.
-    """
     topics = db.query(Topic).options(
         selectinload(Topic.tags),
         selectinload(Topic.cards)
     ).all()
 
-    # Словарь счетчиков {topic_id: completed_count}, если юзер авторизован
     counters_map = {}
     if user_id:
         counters = db.query(UserTopicCounter).filter(UserTopicCounter.user_id == user_id).all()
@@ -105,9 +101,6 @@ def get_all_faqs(db: Session) -> List[FAQResponse]:
 
 
 def get_paginated_topics(db: Session, page: int, size: int, user_id: Optional[int] = None) -> Tuple[List[Topic], int, dict]:
-    """
-    Возвращает список тем с пагинацией, их количество и мапу счетчиков для пользователя.
-    """
     total_items = db.query(Topic).count()
 
     topics = db.query(Topic).options(
@@ -142,9 +135,6 @@ def get_session_question(db: Session, topic_ids: List[int], current_index: int) 
 
 
 def complete_topic_session(db: Session, user_id: int, topic_id: int):
-    """
-    Увеличивает счетчик прохождения темы для конкретного пользователя.
-    """
     topic = db.query(Topic).filter(Topic.id == topic_id).first()
     if not topic:
         raise ValueError("Тема не найдена.")
@@ -163,3 +153,17 @@ def complete_topic_session(db: Session, user_id: int, topic_id: int):
     db.commit()
     return counter
 
+def get_counters(db: Session) -> dict:
+
+def get_counters(db: Session) -> dict:
+    questions_count = db.query(Card).count()
+    topics_count = db.query(Topic).count()
+    tests_count = db.query(Test).count()
+    users_count = db.query(User).count()
+
+    return {
+        "questions": questions_count,
+        "topics": topics_count,
+        "tests": tests_count,
+        "users": users_count,
+    }
