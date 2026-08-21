@@ -39,6 +39,13 @@ export function fetchCurrentUser(token: string) {
     return apiRequest<User>('/api/auth/me', { token })
 }
 
+export function refreshAccessToken(token: string) {
+    return apiRequest<TokenResponse>('/api/auth/refresh', {
+        method: 'POST',
+        token,
+    })
+}
+
 export interface CompletedAttempt {
     id: number
     test_id: number

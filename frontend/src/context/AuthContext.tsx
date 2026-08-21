@@ -4,6 +4,7 @@ import { ApiError } from '../api/client'
 import {
     fetchCurrentUser,
     loginUser,
+    refreshAccessToken,
     registerUser,
     updateCurrentUser,
     type User,
@@ -35,10 +36,9 @@ export function AuthProvider(props: { children: ReactNode }) {
             return
         }
 
-        fetchCurrentUser(storedToken)
-            .then((currentUser) => {
-                setToken(storedToken)
-                setUser(currentUser)
+        refreshAccessToken(storedToken)
+            .then(async (response) => {
+                await persistSession(response.access_token)
             })
             .catch((error) => {
                 if (error instanceof ApiError && error.status === 401) {

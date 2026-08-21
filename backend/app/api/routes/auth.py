@@ -78,6 +78,11 @@ def login(user_data: UserLogin, db: DbSession):
     return _issue_token(user)
 
 
+@router.post("/refresh", response_model=Token)
+def refresh(current_user: User = Depends(get_current_user)):
+    return _issue_token(current_user)
+
+
 @router.get("/me", response_model=UserOut)
 def read_me(current_user: User = Depends(get_current_user)):
     return current_user

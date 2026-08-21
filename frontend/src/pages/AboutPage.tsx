@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 
 import './AboutPage.css'
 
-import { InfoCard } from '../components/Card/InfoCard/InfoCard'
-
-import { projectIntro, schemaGroups, schemaLinks, schemaLinksDescription, teamMembers, techStack } from './aboutData'
+import { teamMembers, techStack } from './aboutData'
 
 function ChevronIcon({ direction }: { direction: 'prev' | 'next' }) {
     const isPrev = direction === 'prev'
@@ -127,79 +125,6 @@ export function AboutPage() {
                         >
                             <ChevronIcon direction="next" />
                         </button>
-                    </div>
-                </section>
-
-                <section className="about-section about-project" aria-labelledby="about-project-title">
-                    <h2 id="about-project-title">О проекте</h2>
-                    <div className="about-project-lead">
-                        {projectIntro.map((paragraph) => (
-                            <p key={paragraph} className="b2">{paragraph}</p>
-                        ))}
-                    </div>
-                    <InfoCard />
-                </section>
-
-                <section className="about-section about-schema" aria-labelledby="about-schema-title">
-                    <h2 id="about-schema-title">База данных</h2>
-                    <p className="b2 about-schema-lead">
-                        PostgreSQL, схема <code>z1</code>. Контент, тесты и пользователи связаны через
-                        внешние ключи и таблицы-связки.
-                    </p>
-
-                    <div className="schema-legend">
-                        <span className="schema-key schema-key--pk">PK</span>
-                        <span className="b3">первичный ключ</span>
-                        <span className="schema-key schema-key--fk">FK</span>
-                        <span className="b3">внешний ключ</span>
-                    </div>
-
-                    <div className="schema-groups">
-                        {schemaGroups.map((group) => (
-                            <div key={group.id} className="schema-group">
-                                <h3>{group.title}</h3>
-                                <p className="b2 schema-group-lead">{group.description}</p>
-                                <div className="schema-tables">
-                                    {group.tables.map((table) => (
-                                        <article key={table.name} className="schema-table">
-                                            <header className="schema-table-head">
-                                                <span>{table.name}</span>
-                                            </header>
-                                            <ul>
-                                                {table.columns.map((column) => (
-                                                    <li key={column.name}>
-                                                        <span className="schema-col-name">{column.name}</span>
-                                                        <span className="schema-col-meta">
-                                                            {column.key && (
-                                                                <span className={`schema-key schema-key--${column.key}`}>
-                                                                    {column.key.toUpperCase()}
-                                                                </span>
-                                                            )}
-                                                            <span className="schema-col-type">{column.type}</span>
-                                                        </span>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </article>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="schema-links-block">
-                        <h3>Связки M:N</h3>
-                        <p className="b2 schema-group-lead">{schemaLinksDescription}</p>
-                        <div className="schema-links">
-                            {schemaLinks.map((link) => (
-                                <article key={link.name} className="schema-link">
-                                    <strong>{link.name}</strong>
-                                    <span>{link.from}</span>
-                                    <span className="schema-link-arrow" aria-hidden="true" />
-                                    <span>{link.to}</span>
-                                </article>
-                            ))}
-                        </div>
                     </div>
                 </section>
 

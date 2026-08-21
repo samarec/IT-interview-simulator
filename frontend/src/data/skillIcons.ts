@@ -20,6 +20,7 @@ export const skillIcons = {
     python: `${SKILL_DIR}/python.png`,
     code: `${SKILL_DIR}/code.png`,
     docker: `${SKILL_DIR}/docker.png`,
+    figma: `${SKILL_DIR}/figma.png`,
 } as const
 
 export type SkillId = keyof typeof skillIcons
@@ -83,6 +84,8 @@ const aliases: Record<string, SkillId> = {
     пайтон: 'python',
     docker: 'docker',
     докер: 'docker',
+    figma: 'figma',
+    фигма: 'figma',
 }
 
 const skillInText: Array<[RegExp, SkillId]> = [
@@ -112,6 +115,7 @@ const skillInText: Array<[RegExp, SkillId]> = [
     [/\bphp\b|пхп/i, 'php'],
     [/python|питон|пайтон/i, 'python'],
     [/docker|докер/i, 'docker'],
+    [/figma|фигма/i, 'figma'],
 ]
 
 function normalize(value: string): string {

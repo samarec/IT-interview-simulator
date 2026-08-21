@@ -33,7 +33,7 @@ export const teamMembers: TeamMember[] = [
         tools: [
             { id: 'photoshop', label: 'Adobe Photoshop', src: skillIcons.photoshop },
             { id: 'illustrator', label: 'Adobe Illustrator', src: skillIcons.illustrator },
-            { id: 'css', label: 'CSS', src: skillIcons.css },
+            { id: 'figma', label: 'Figma', src: skillIcons.figma },
         ],
     },
     {
@@ -46,6 +46,7 @@ export const teamMembers: TeamMember[] = [
         tools: [
             { id: 'python', label: 'Python', src: skillIcons.python },
             { id: 'sql', label: 'SQL', src: skillIcons.sql },
+            { id: 'git', label: 'Git', src: skillIcons.git },
         ],
     },
     {

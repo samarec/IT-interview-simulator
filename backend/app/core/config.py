@@ -11,5 +11,6 @@ DATABASE_URL = os.getenv(
 )
 SECRET_KEY = os.getenv("SECRET_KEY", "secret-key")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+# 7 дней: без refresh короткое JWT-время сразу выкидывает пользователя из аккаунта
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "10080"))
 

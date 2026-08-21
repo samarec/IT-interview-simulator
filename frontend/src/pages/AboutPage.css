@@ -1,5 +1,7 @@
 #about-page {
     width: var(--content-width);
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -68,16 +70,8 @@
     gap: 32px;
 }
 
-.about-project-lead {
-    max-width: 720px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.about-project #info-card {
-    width: 100%;
-    text-align: left;
+.about-schema {
+    overflow-x: clip;
 }
 
 .team-slider {
@@ -454,6 +448,8 @@
 
 .about-stack {
     position: relative;
+    overflow-x: clip;
+    width: 100%;
 }
 
 .about-wave {
@@ -561,10 +557,6 @@
 @media (max-width: 880px) {
     #about-page {
         gap: 56px;
-    }
-
-    .about-project #info-card {
-        text-align: center;
     }
 
     .about-intro-wrap {
