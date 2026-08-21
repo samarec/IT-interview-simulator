@@ -1,11 +1,18 @@
 from typing import List, Optional
+import math
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.api.routes.deps import get_db, get_optional_current_user
 from app.domain.models import User
-from app.domain.schemas import TestDetailResponse, TestResponse, TestSubmitRequest, TestSubmitResponse
+from app.domain.schemas import (
+    TestDetailResponse,
+    TestResponse,
+    TestSubmitRequest,
+    TestSubmitResponse,
+    PaginatedResponse
+)
 from app.services.test_service import (
     build_test_response,
     get_all_tests,
@@ -17,18 +24,31 @@ from app.services.test_service import (
 router = APIRouter(prefix="/tests", tags=["tests"])
 
 
-@router.get("", response_model=List[TestResponse])
+@router.get("", response_model=PaginatedResponse[TestResponse])
 def read_tests(
     search: Optional[str] = Query(None, description="Поиск по названию или описанию"),
     sort_by: Optional[str] = Query(None, description="Сортировка: 'newest' или 'popular'"),
     tags: List[int] = Query(None, description="Список ID тегов для фильтрации"),
+    page: int = Query(1, ge=1, description="Номер текущей страницы"),
+    size: int = Query(10, ge=1, le=100, description="Количество элементов на странице"),
     db: Session = Depends(get_db)
 ):
     """
-    Получить список всех тестов с поддержкой поиска, фильтрации по тегам и сортировки.
-    """
-    return get_all_tests(db, search=search, sort_by=sort_by, tags=tags)
+        Получить список всех тестов с поддержкой поиска, фильтрации по тегам, сортировки и постраничной навигации.
+        """
+    # Теперь сервис возвращает кортеж из двух значений
+    test_responses, total_items = get_all_tests(db, search=search, sort_by=sort_by, tags=tags, page=page, size=size)
 
+    # Считаем количество страниц
+    total_pages = math.ceil(total_items / size) if size else 0
+
+    return PaginatedResponse(
+        items=test_responses,
+        total_items=total_items,
+        page=page,
+        size=size,
+        total_pages=total_pages
+    )
 
 @router.get("/{code}", response_model=TestResponse)
 def read_test(code: str, db: Session = Depends(get_db)):

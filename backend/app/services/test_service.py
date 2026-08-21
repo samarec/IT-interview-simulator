@@ -6,7 +6,7 @@ from app.domain.models import (
     Profession, Tag,
     topic_tags, profession_tags
 )
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from sqlalchemy.orm import Session, selectinload
 from app.domain.schemas import (
@@ -108,15 +108,20 @@ def serialize_card(card: Card, reveal_correct: bool, card_type: str) -> CardResp
     )
 
 
+from typing import Dict, List, Optional, Tuple  # Добавь Tuple в импорты сверху файла, если его нет
+
+
 def get_all_tests(
         db: Session,
         search: Optional[str] = None,
         sort_by: Optional[str] = None,
-        tags: Optional[List[int]] = None
-) -> List[TestResponse]:
+        tags: Optional[List[int]] = None,
+        page: int = 1,
+        size: int = 10
+) -> Tuple[List[TestResponse], int]:
     query = db.query(Test).options(*_test_list_options()).filter(Test.code.isnot(None))
 
-    # Поиск по подстроке в названии или описании (регистронезависимый)
+    # Поиск по подстроке в названии или описании
     if search:
         search_term = f"%{search}%"
         query = query.filter(
@@ -128,7 +133,6 @@ def get_all_tests(
 
     # Фильтрация по тегам
     if tags:
-        # Подзапрос: ID тестов, связанных с тегами через карточки (темы)
         topic_test_ids = (
             db.query(TestCard.test_id)
             .join(Card, TestCard.card_id == Card.id)
@@ -137,7 +141,6 @@ def get_all_tests(
             .filter(topic_tags.c.tag_id.in_(tags))
         )
 
-        # Подзапрос: ID тестов, связанных с тегами через профессию
         prof_test_ids = (
             db.query(Test.id)
             .join(Profession, Test.profession_id == Profession.id)
@@ -145,7 +148,6 @@ def get_all_tests(
             .filter(profession_tags.c.tag_id.in_(tags))
         )
 
-        # Оставляем тесты, которые попадают под любое из условий
         query = query.filter(
             or_(
                 Test.id.in_(topic_test_ids),
@@ -153,25 +155,29 @@ def get_all_tests(
             )
         )
 
+    # Считаем общее количество до применения сортировки
+    total_items = query.count()
+
     # Сортировка
     if sort_by == "popular":
-        # Сортировка по популярности (по количеству записей в UserTestResult)
         query = query.outerjoin(UserTestResult, Test.id == UserTestResult.test_id)
         query = query.group_by(Test.id)
         query = query.order_by(func.count(UserTestResult.id).desc())
     elif sort_by == "newest":
-        # Сортировка по новизне
         query = query.order_by(Test.created_at.desc())
     else:
-        # Сортировка по умолчанию
         query = query.order_by(Test.id)
 
-    tests = query.all()
+    tests = query.offset((page - 1) * size).limit(size).all()
+
     passed_map = get_test_passed_counts_map(db, [test.id for test in tests])
-    return [
+
+    test_responses = [
         build_test_response(db, test, passed_map.get(test.id, 0))
         for test in tests
     ]
+
+    return test_responses, total_items
 
 
 def get_test_by_code(db: Session, code: str) -> Optional[Test]:
