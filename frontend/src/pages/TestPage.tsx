@@ -49,7 +49,7 @@ export default function TestPage() {
 
         return [...list].sort((a, b) => {
             if (sortMode === 'popular') {
-                return b.cards_count - a.cards_count
+                return b.passed_count - a.passed_count
             }
             return b.id - a.id
         })

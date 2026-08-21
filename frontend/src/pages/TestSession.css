@@ -138,8 +138,20 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #FF8AA0;
+    background: #FFFFFF;
     transform: translateX(-50%);
+}
+
+.test-progress-dot--neutral {
+    background: #FFFFFF;
+}
+
+.test-progress-dot--correct {
+    background: #2ED573;
+}
+
+.test-progress-dot--wrong {
+    background: #FF8AA0;
 }
 
 .test-question {

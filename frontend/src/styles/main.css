@@ -66,16 +66,16 @@ body {
     background-color: #F4F8FF;
 
     background-image:
-            url("../../public/assets/BackgroundEllipse1.png"),
-            url("../../public/assets/BackgroundEllipse2.png"),
-            url("../../public/assets/BackgroundEllipse3.png");
+            url("../../public/assets/BackgroundEllipse1.svg"),
+            url("../../public/assets/BackgroundEllipse2.svg"),
+            url("../../public/assets/BackgroundEllipse3.svg");
     background-repeat:
             repeat-y,
             no-repeat,
             repeat-y;
     background-position:
             0 700px,
-            0 0,
+            -100px -250px,
             120% 250px;
     background-size:
             754px 1052px,

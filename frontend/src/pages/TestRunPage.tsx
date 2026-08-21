@@ -270,19 +270,35 @@ export function TestRunPage() {
                 </button>
                 <div className="test-progress-list">
                     {cards.map((item, itemIndex) => {
-                        const answered = selected[item.id] != null
+                        const answerId = selected[item.id]
+                        const answered = answerId != null
+                        const isCurrent = itemIndex === index
+                        const wasChecked = Boolean(checked[item.id])
+
+                        let dotClass = ''
+                        if (answered) {
+                            if (wasChecked) {
+                                const chosen = item.answers.find((a) => a.id === answerId)
+                                dotClass = chosen?.is_correct
+                                    ? 'test-progress-dot--correct'
+                                    : 'test-progress-dot--wrong'
+                            } else {
+                                dotClass = 'test-progress-dot--neutral'
+                            }
+                        }
+
                         return (
                             <button
                                 key={item.id}
                                 type="button"
                                 className={[
                                     'test-progress-item',
-                                    itemIndex === index ? 'test-progress-item--current' : '',
+                                    isCurrent ? 'test-progress-item--current' : '',
                                     answered ? 'test-progress-item--answered' : '',
                                 ].join(' ')}
                                 onClick={() => setIndex(itemIndex)}
                             >
-                                {answered && <span className="test-progress-dot" />}
+                                {answered && <span className={`test-progress-dot ${dotClass}`} />}
                                 {itemIndex + 1}
                             </button>
                         )

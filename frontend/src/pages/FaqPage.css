@@ -94,17 +94,18 @@
 }
 
 #faq-zigzag {
-    width: 14px;
-    height: 48px;
-    top: -56px;
-    left: 50%;
+    width: 11px;
+    height: 191px;
+    top: -109px;
+    left: 90px;
     margin-left: -7px;
+    transform: rotate(90deg);
 }
 
 #faq-arrow {
     width: 120px;
-    top: 268px;
-    left: 860px;
+    top: 113px;
+    right: -60px;
     transform: rotate(18deg);
 }
 
