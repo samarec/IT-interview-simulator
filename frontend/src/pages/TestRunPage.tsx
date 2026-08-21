@@ -150,7 +150,7 @@ export function TestRunPage() {
         }))
 
         try {
-            const result = await submitTest(code, payload, token)
+            const result = await submitTest(code, payload, token, testMode)
             setCorrectCount(result.correct_count)
         } catch {
             setCorrectCount(localCorrect)

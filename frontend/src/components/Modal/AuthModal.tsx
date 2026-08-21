@@ -54,12 +54,16 @@ export function AuthModal(props: { onClose: () => void }) {
             setError('Введите имя — минимум 2 символа')
             return
         }
-        if (!email.trim()) {
-            setError('Введите email')
+        if (!email.trim() || !email.includes('@')) {
+            setError('Введите корректный email')
             return
         }
         if (password.length < 6) {
             setError('Пароль должен быть не короче 6 символов')
+            return
+        }
+        if (password.length > 72) {
+            setError('Пароль слишком длинный')
             return
         }
 

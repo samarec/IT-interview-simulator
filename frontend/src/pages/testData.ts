@@ -16,24 +16,13 @@ export interface TopicData {
     description?: string | null
 }
 
-export async function fetchTopics(): Promise<TopicData[]> {
-    const response = await fetch('/api/topics')
-    if (!response.ok) {
-        throw new Error('Не удалось загрузить тесты')
-    }
-    return response.json()
-}
-
-export function estimateTestMinutes(cardsCount: number): number {
-    return Math.max(10, Math.round(cardsCount * 0.6))
-}
-
-export function uniqueTags(topics: TopicData[]): TopicTag[] {
+export function primaryTags(items: Array<{ tags?: TopicTag[] }>): TopicTag[] {
     const tags = new Map<number, TopicTag>()
-    topics.forEach((topic) => {
-        topic.tags.forEach((tag) => {
+    items.forEach((item) => {
+        const tag = item.tags?.[0]
+        if (tag) {
             tags.set(tag.id, tag)
-        })
+        }
     })
     return Array.from(tags.values())
 }

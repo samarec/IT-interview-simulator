@@ -1,4 +1,5 @@
 import { apiRequest } from './client'
+import type { TopicTag } from './topics'
 
 export type TestMode = 'training' | 'exam'
 
@@ -10,6 +11,9 @@ export interface TestInfo {
     duration_minutes: number
     cards_count: number
     profession_id?: number | null
+    difficulty?: string | null
+    tags?: TopicTag[]
+    passed_count?: number
 }
 
 export interface TestAnswer {
@@ -59,10 +63,11 @@ export function submitTest(
     code: string,
     answers: Array<{ card_id: number; answer_id: number }>,
     token?: string | null,
+    mode: TestMode = 'training',
 ) {
     return apiRequest<TestSubmitResult>(`/api/tests/${code}/submit`, {
         method: 'POST',
         token,
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify({ answers, mode }),
     })
 }

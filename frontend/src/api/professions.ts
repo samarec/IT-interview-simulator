@@ -4,6 +4,7 @@ export interface Profession {
     id: number
     name: string
     description?: string | null
+    tags?: Array<{ id: number; name: string }>
 }
 
 export interface ProfessionMatchResult {

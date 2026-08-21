@@ -6,13 +6,17 @@ from app.domain.models import User
 from app.domain.schemas import UserCreate, UserUpdate
 from jose import jwt
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 
 # проверка пароля против хеша
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    plain_bytes = plain_password.encode("utf-8")
-    hash_bytes = hashed_password.encode("utf-8")
-    return bcrypt.checkpw(plain_bytes, hash_bytes)
+    try:
+        plain_bytes = plain_password.encode("utf-8")
+        hash_bytes = hashed_password.encode("utf-8")
+        return bcrypt.checkpw(plain_bytes, hash_bytes)
+    except ValueError:
+        return False
 
 # хэширование пароля 
 def get_password_hash(password: str) -> str:
@@ -32,7 +36,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     return encoded_jwt
 
 def authenticate_user(db: Session, email: str, password: str) -> User | None:
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(User).filter(func.lower(User.email) == email.strip().lower()).first()
     if not user:
         return None
     if not verify_password(password, user.password_hash):

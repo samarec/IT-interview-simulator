@@ -21,7 +21,7 @@ export function TestCard(props: {
 
     return (
         <div className="test-card-wrap">
-            <div className="test-card gradient-wight-card-fill">
+            <div className="test-card">
                 <h3>{props.title}</h3>
                 <div className="test-card-body">
                     <div className="test-tabs">

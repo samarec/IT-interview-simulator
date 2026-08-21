@@ -18,7 +18,29 @@ function translateError(detail: unknown): string {
     if (typeof detail === 'string') {
         return ERROR_MESSAGES[detail] ?? detail
     }
-    if (Array.isArray(detail) && detail[0]?.msg) {
+    if (Array.isArray(detail) && detail[0]) {
+        const first = detail[0] as { loc?: unknown[]; msg?: string; type?: string }
+        const loc = Array.isArray(first.loc) ? first.loc.map(String).join('.') : ''
+        const msg = first.msg ?? ''
+
+        if (loc.includes('password') && (first.type === 'string_too_short' || msg.includes('at least'))) {
+            return 'Пароль должен быть не короче 6 символов'
+        }
+        if (loc.includes('password') && (first.type === 'string_too_long' || msg.includes('at most'))) {
+            return 'Пароль слишком длинный'
+        }
+        if (loc.includes('username') && (first.type === 'string_too_short' || msg.includes('at least'))) {
+            return 'Введите имя — минимум 2 символа'
+        }
+        if (loc.includes('email')) {
+            return 'Введите корректный email'
+        }
+        if (first.type === 'missing') {
+            return 'Заполните все поля'
+        }
+        if (msg.includes('корректный email')) {
+            return 'Введите корректный email'
+        }
         return 'Проверьте правильность заполнения полей'
     }
     return 'Не удалось выполнить запрос'

@@ -222,11 +222,12 @@ class UserTestResult(Base):
     __table_args__ = {"schema": "z1"}
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("z1.users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("z1.users.id"), nullable=True)
     test_id = Column(Integer, ForeignKey("z1.tests.id"), nullable=False)
     score = Column(Integer, nullable=True)
     max_score = Column(Integer, nullable=True)
     passed = Column(Boolean, default=False)
+    mode = Column(String(20), nullable=True, default="training")
     completed_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     user = relationship("User", back_populates="test_results")

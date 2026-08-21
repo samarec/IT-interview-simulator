@@ -1,14 +1,12 @@
 import './CategoriesTestCard.css'
 
 import { Button } from '../../Buttons/Button'
-import type { TestSortMode, TopicTag } from '../../../pages/testData'
+import type { TopicTag } from '../../../pages/testData'
 
 export function CategoriesTestCard(props: {
     tags: TopicTag[]
     selectedTagId: number | null
     onSelectTag: (tagId: number | null) => void
-    sortMode: TestSortMode
-    onSortChange: (mode: TestSortMode) => void
 }) {
     return (
         <section id="categories-test-card">
@@ -24,23 +22,6 @@ export function CategoriesTestCard(props: {
                         ]}
                     />
                 ))}
-            </div>
-            <div id="categories-test-sort">
-                <img src="/assets/Icons/icon.svg" alt="" />
-                <button
-                    type="button"
-                    className={`b2${props.sortMode === 'new' ? ' sort-active' : ''}`}
-                    onClick={() => props.onSortChange('new')}
-                >
-                    Новые
-                </button>
-                <button
-                    type="button"
-                    className={`b2${props.sortMode === 'popular' ? ' sort-active' : ''}`}
-                    onClick={() => props.onSortChange('popular')}
-                >
-                    Популярные
-                </button>
             </div>
         </section>
     )

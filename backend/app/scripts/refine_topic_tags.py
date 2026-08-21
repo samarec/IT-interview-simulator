@@ -9,20 +9,21 @@ from app.db.session import SessionLocal
 from app.domain.models import Tag, Topic, topic_tags
 
 
-# Один точный тег на тест: иконка и фильтр совпадают с темой.
+# Первый тег — основной (иконка и бейдж на карточке теста).
 TOPIC_TAGS = {
-    "HTML": ["HTML"],
-    "GO": ["Go"],
-    "Docker": ["Docker"],
-    "Сети": ["Сети", "Git"],
-    "JavaScript": ["JavaScript"],
-    "Python": ["Python"],
-    "Linux": ["Linux"],
-    "Тестирование ПО": ["QA"],
-    "Администрирование серверов": ["Администрирование"],
-    "PHP": ["PHP"],
-    "Java": ["Java"],
-    "C++": ["C++"],
+    "HTML": ["HTML", "CSS", "Frontend", "Верстка"],
+    "GO": ["Go", "Backend", "API", "Микросервисы", "REST"],
+    "Docker": ["Docker", "DevOps", "Kubernetes", "CI/CD", "Контейнеризация"],
+    "Сети": ["Сети", "Git", "TCP/IP", "HTTP", "DNS", "Безопасность"],
+    "JavaScript": ["JavaScript", "TypeScript", "React", "Vue", "Node.js", "Frontend"],
+    "Python": ["Python", "Backend", "Django", "SQL", "PostgreSQL"],
+    "Linux": ["Linux", "Bash", "DevOps", "Администрирование"],
+    "Тестирование ПО": ["QA", "Автотесты", "Selenium", "Postman"],
+    "Администрирование серверов": ["Администрирование", "Nginx", "Мониторинг", "Bash", "Безопасность"],
+    "PHP": ["PHP", "Backend", "Laravel", "MySQL", "SQL"],
+    "Java": ["Java", "Backend", "Spring", "ООП"],
+    "C++": ["C++", "ООП", "Алгоритмы"],
+    "Тензор": ["Saby", "Собеседование", "Стажировка"],
 }
 
 

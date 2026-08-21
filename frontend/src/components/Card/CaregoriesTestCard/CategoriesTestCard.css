@@ -11,28 +11,3 @@
     flex-wrap: wrap;
     gap: 8px;
 }
-
-#categories-test-sort {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-#categories-test-sort button {
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: rgba(22, 43, 59, 0.5);
-}
-
-#categories-test-sort .sort-active {
-    color: rgba(22, 43, 59, 0.8);
-}
-
-@media (max-width: 640px) {
-    #categories-test-sort {
-        flex-wrap: wrap;
-        gap: 8px 16px;
-    }
-}

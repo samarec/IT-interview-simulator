@@ -3,15 +3,16 @@ from app.domain.models import (
     Card, Test, TestCard,
     Topic, UserTestResult,
     Difficulty, CardType,
-    Profession,
+    Profession, Tag,
     topic_tags, profession_tags
 )
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from sqlalchemy.orm import Session, selectinload
 from app.domain.schemas import (
     AnswerResponse,
     CardResponse,
+    TagResponse,
     TestAnswerResult,
     TestAnswerSubmit,
     TestDetailResponse,
@@ -24,12 +25,56 @@ def _cards_count(test: Test) -> int:
     return len(test.card_links)
 
 
-def build_test_response(db: Session, test: Test) -> TestResponse:
+def _test_tags(test: Test) -> List[TagResponse]:
+    tags: Dict[int, Tag] = {}
+    profession = test.profession
+    if profession is not None:
+        for tag in profession.tags:
+            tags[tag.id] = tag
+    for link in test.card_links:
+        topic = link.card.topic if link.card is not None else None
+        if topic is None:
+            continue
+        for tag in topic.tags:
+            tags[tag.id] = tag
+    return [TagResponse(id=tag.id, name=tag.name) for tag in tags.values()]
+
+
+def get_test_passed_counts_map(db: Session, test_ids: Optional[List[int]] = None) -> Dict[int, int]:
+    query = db.query(
+        UserTestResult.test_id,
+        func.count(UserTestResult.id),
+    )
+    if test_ids is not None:
+        if not test_ids:
+            return {}
+        query = query.filter(UserTestResult.test_id.in_(test_ids))
+    return {
+        test_id: count
+        for test_id, count in query.group_by(UserTestResult.test_id).all()
+    }
+
+
+def _test_list_options():
+    return (
+        selectinload(Test.card_links).selectinload(TestCard.card).selectinload(Card.topic).selectinload(Topic.tags),
+        selectinload(Test.profession).selectinload(Profession.tags),
+    )
+
+
+def build_test_response(
+    db: Session,
+    test: Test,
+    passed_count: Optional[int] = None,
+) -> TestResponse:
     difficulty_name = None
     if test.difficulty_id is not None:
         difficulty = db.query(Difficulty).get(test.difficulty_id)
         if difficulty:
             difficulty_name = str(difficulty.name)
+
+    if passed_count is None:
+        passed_count = get_test_passed_counts_map(db, [test.id]).get(test.id, 0)
 
     return TestResponse(
         id=test.id,
@@ -39,7 +84,9 @@ def build_test_response(db: Session, test: Test) -> TestResponse:
         duration_minutes=test.duration_minutes or 5,
         cards_count=_cards_count(test),
         profession_id=test.profession_id,
-        difficulty=difficulty_name
+        difficulty=difficulty_name,
+        tags=_test_tags(test),
+        passed_count=passed_count,
     )
 
 
@@ -67,7 +114,7 @@ def get_all_tests(
         sort_by: Optional[str] = None,
         tags: Optional[List[int]] = None
 ) -> List[TestResponse]:
-    query = db.query(Test).options(selectinload(Test.card_links)).filter(Test.code.isnot(None))
+    query = db.query(Test).options(*_test_list_options()).filter(Test.code.isnot(None))
 
     # Поиск по подстроке в названии или описании (регистронезависимый)
     if search:
@@ -120,14 +167,19 @@ def get_all_tests(
         query = query.order_by(Test.id)
 
     tests = query.all()
-    return [build_test_response(db, test) for test in tests]
+    passed_map = get_test_passed_counts_map(db, [test.id for test in tests])
+    return [
+        build_test_response(db, test, passed_map.get(test.id, 0))
+        for test in tests
+    ]
 
 
 def get_test_by_code(db: Session, code: str) -> Optional[Test]:
     return (
         db.query(Test)
         .options(
-            selectinload(Test.card_links).selectinload(TestCard.card).selectinload(Card.answers)
+            *_test_list_options(),
+            selectinload(Test.card_links).selectinload(TestCard.card).selectinload(Card.answers),
         )
         .filter(Test.code == code)
         .first()
@@ -149,6 +201,7 @@ def submit_test(
     test: Test,
     answers: List[TestAnswerSubmit],
     user_id: Optional[int] = None,
+    mode: str = "training",
 ) -> TestSubmitResponse:
     selected = {item.card_id: item.answer_id for item in answers}
     results: List[TestAnswerResult] = []
@@ -173,16 +226,18 @@ def submit_test(
     total = len(results)
     passed = total > 0 and correct_count * 100 >= total * 70
 
-    if user_id:
-        db.add(
-            UserTestResult(
-                user_id=user_id,
-                test_id=test.id,
-                score=correct_count,
-                max_score=total,
-                passed=passed,
-            )
+    db.add(
+        UserTestResult(
+            user_id=user_id,
+            test_id=test.id,
+            score=correct_count,
+            max_score=total,
+            passed=passed,
+            mode=mode if mode in {"training", "exam"} else "training",
         )
+    )
+
+    if user_id:
         topic_ids = {link.card.topic_id for link in test.card_links if link.card}
         if len(topic_ids) == 1:
             from app.services.topic_service import complete_topic_session
@@ -190,6 +245,8 @@ def submit_test(
             complete_topic_session(db, user_id, next(iter(topic_ids)))
         else:
             db.commit()
+    else:
+        db.commit()
 
     return TestSubmitResponse(
         test=build_test_response(db, test),

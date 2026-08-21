@@ -2,7 +2,8 @@
     position: relative;
     z-index: 10;
     width: 100%;
-
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -11,18 +12,22 @@
 
 #form-card > div {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 24px;
 }
 
-#form-card > div > p {
+#form-intro > p {
     text-align: center;
 }
 
-.form-container {
+#form-card .form-container {
     width: min(650px, 100%);
+    max-width: 100%;
+    min-width: 0;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -31,16 +36,68 @@
     padding: 48px;
     box-sizing: border-box;
     gap: 36px;
+    overflow: hidden;
 }
 
-.form-container > .form {
+#form-card .form-container--wheel {
+    width: min(780px, 100%);
+    padding: 0;
+    gap: 0;
+}
+
+.form-panel,
+.form-container .form,
+.form-container .form > div {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.form-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+}
+
+.form-panel--leave {
+    animation: form-panel-leave 0.38s ease forwards;
+}
+
+.form-panel--enter {
+    animation: form-panel-enter 0.45s ease;
+}
+
+@keyframes form-panel-leave {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+}
+
+@keyframes form-panel-enter {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-container .form {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 24px;
 }
 
-.form-container > .form > div {
+.form-container .form > div {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -48,8 +105,40 @@
 
 .form-buttons {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(22, 43, 59, 0.25) transparent;
+}
+
+.form-buttons-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    width: max-content;
+    max-width: none;
+}
+
+.form-buttons .form-button {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.form-buttons::-webkit-scrollbar {
+    height: 4px;
+}
+
+.form-buttons::-webkit-scrollbar-thumb {
+    background: rgba(22, 43, 59, 0.25);
+    border-radius: 4px;
 }
 
 .form-card-status {
@@ -65,22 +154,10 @@
     left: 790px;
 }
 
-#helix-background-form {
-    top: 61px;
-    left: -129px;
-    transform: rotate(180deg);
-}
-
 #group3-background-form {
     bottom: -40px;
     left: -45px;
     transform: scaleX(-1) rotate(70deg);
-}
-
-#thours-background-form {
-    bottom: -85px;
-    left: 785px;
-    transform: rotate(-50deg);
 }
 
 @media (max-width: 640px) {
@@ -88,8 +165,17 @@
         gap: 32px;
     }
 
-    .form-container {
+    #form-card .form-container {
         padding: 28px 20px;
+        gap: 24px;
+    }
+
+    #form-card .form-container--wheel {
+        padding: 0;
+        gap: 0;
+    }
+
+    .form-panel {
         gap: 24px;
     }
 }

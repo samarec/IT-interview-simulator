@@ -23,6 +23,42 @@
     position: absolute;
     z-index: 4;
     top: 170px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    padding: 0 16px;
+}
+
+#categories-test-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.test-sort-label {
+    padding: 12px 18px;
+    border: 1px solid transparent;
+    border-radius: 48px;
+    background: #FFFFFF;
+    box-shadow: 0 8px 24px rgba(22, 43, 59, 0.08);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 120%;
+    color: rgba(22, 43, 59, 0.5);
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.test-sort-label.sort-active {
+    color: rgba(22, 43, 59, 0.8);
+    border-color: #FF936B;
 }
 
 #statistics-test-tabs {
@@ -93,8 +129,12 @@
     #statistics-test-search {
         position: relative;
         top: auto;
-        width: min(424px, 100%);
+        left: auto;
+        transform: none;
+        width: min(640px, 100%);
         margin-top: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     #statistics-test-tabs {

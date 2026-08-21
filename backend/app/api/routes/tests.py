@@ -63,5 +63,6 @@ def finish_test(
     if not test:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Тест не найден.")
     user_id = current_user.id if current_user else None
-    return submit_test(db, test, payload.answers, user_id=user_id)
+    mode = payload.mode if payload.mode in {"training", "exam"} else "training"
+    return submit_test(db, test, payload.answers, user_id=user_id, mode=mode)
 

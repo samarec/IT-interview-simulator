@@ -1,11 +1,9 @@
-from typing import List
-
 from app.api.routes.deps import get_current_user, get_db
 from app.domain.models import User
 from app.domain.schemas import (
-    CompletedTestResponse,
     UserPasswordUpdate,
     UserProfileResponse,
+    UserTestsOverviewResponse,
     UserUpdateRequest,
 )
 from app.services.user_service import (
@@ -72,10 +70,10 @@ def change_password(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-@router.get("/me/tests", response_model=List[CompletedTestResponse])
+@router.get("/me/tests", response_model=UserTestsOverviewResponse)
 def read_user_tests(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Получить список пройденных тестов текущего пользователя."""
+    """Получить пройденные тесты, экзамены и сводную статистику."""
     return get_user_completed_tests(db, current_user.id)

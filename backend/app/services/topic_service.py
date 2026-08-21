@@ -154,8 +154,6 @@ def complete_topic_session(db: Session, user_id: int, topic_id: int):
     return counter
 
 def get_counters(db: Session) -> dict:
-
-def get_counters(db: Session) -> dict:
     questions_count = db.query(Card).count()
     topics_count = db.query(Topic).count()
     tests_count = db.query(Test).count()

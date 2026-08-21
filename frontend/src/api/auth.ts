@@ -39,6 +39,32 @@ export function fetchCurrentUser(token: string) {
     return apiRequest<User>('/api/auth/me', { token })
 }
 
+export interface CompletedAttempt {
+    id: number
+    test_id: number
+    test_name: string
+    test_code?: string | null
+    mode: 'training' | 'exam'
+    score: number | null
+    max_score: number | null
+    passed: boolean
+    cards_count: number
+    duration_minutes: number
+    tags: Array<{ id: number; name: string }>
+    completed_at?: string | null
+}
+
+export interface UserTestsOverview {
+    tests_completed: number
+    exams_passed: number
+    average_percent: number
+    items: CompletedAttempt[]
+}
+
+export function fetchUserTests(token: string) {
+    return apiRequest<UserTestsOverview>('/api/users/me/tests', { token })
+}
+
 export function updateCurrentUser(
     token: string,
     data: { username?: string; email?: string; password?: string },

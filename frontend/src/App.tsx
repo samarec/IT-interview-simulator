@@ -15,7 +15,7 @@ import { TestRunPage } from "./pages/TestRunPage";
 
 function AppLayout() {
     const location = useLocation()
-    const isTestSession = /^\/test\/.+/.test(location.pathname)
+    const isTestSession = /^\/test\/[^/]+\/[^/]+/.test(location.pathname)
 
     return (
         <AuthProvider>

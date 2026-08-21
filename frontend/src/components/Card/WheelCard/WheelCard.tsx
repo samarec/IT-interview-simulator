@@ -1,14 +1,16 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import './WheelCard.css'
 
 import type { Profession, ProfessionMatchResult } from '../../../api/professions'
 import { fetchTests, type TestInfo } from '../../../api/tests'
+import { getSkillIcon } from '../../../data/skillIcons'
 import { Button } from '../../Buttons/Button'
 
-const WHEEL_COLORS = ['#0F89FF', '#FF936B', '#45A4FF', '#FFCEBC', '#162B3B', '#ABD6FF']
-const SPIN_TURNS = 5
+const SEGMENT_COUNT = 8
+const SEGMENT_ANGLE = 360 / SEGMENT_COUNT
+const SPIN_TURNS = 6
 const SPIN_MS = 4200
 
 function shuffle<T>(items: T[]): T[] {
@@ -20,17 +22,25 @@ function shuffle<T>(items: T[]): T[] {
     return next
 }
 
-function shortName(name: string): string {
-    const first = name.split(/[\s-]+/)[0] || name
-    return first.length > 12 ? `${first.slice(0, 11)}…` : first
-}
-
 function buildWheelItems(match: ProfessionMatchResult): Profession[] {
-    return shuffle([match.correct_profession, ...match.wheel_professions])
+    const unique: Profession[] = []
+    const seen = new Set<number>()
+    for (const item of [match.correct_profession, ...match.wheel_professions]) {
+        if (!seen.has(item.id)) {
+            seen.add(item.id)
+            unique.push(item)
+        }
+    }
+
+    const items = shuffle(unique)
+    while (items.length < SEGMENT_COUNT && unique.length > 0) {
+        items.push(unique[items.length % unique.length])
+    }
+    return items.slice(0, SEGMENT_COUNT)
 }
 
 export function WheelCard(props: {
-    match: ProfessionMatchResult | null
+    match: ProfessionMatchResult
     playerName: string
 }) {
     const navigate = useNavigate()
@@ -41,14 +51,9 @@ export function WheelCard(props: {
     const [tests, setTests] = useState<TestInfo[]>([])
 
     useEffect(() => {
-        if (!props.match) {
-            return
-        }
-
         const nextItems = buildWheelItems(props.match)
-        const correctIndex = nextItems.findIndex((item) => item.id === props.match?.correct_profession.id)
-        const segmentAngle = 360 / nextItems.length
-        const target = SPIN_TURNS * 360 + (360 - (correctIndex * segmentAngle + segmentAngle / 2))
+        const correctIndex = nextItems.findIndex((item) => item.id === props.match.correct_profession.id)
+        const target = SPIN_TURNS * 360 + (360 - (correctIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2))
 
         setItems(nextItems)
         setShowResult(false)
@@ -58,11 +63,11 @@ export function WheelCard(props: {
         const start = window.setTimeout(() => {
             setIsSpinning(true)
             setRotation(target)
-        }, 80)
+        }, 280)
         const finish = window.setTimeout(() => {
             setIsSpinning(false)
             setShowResult(true)
-        }, SPIN_MS + 80)
+        }, SPIN_MS + 280)
 
         return () => {
             window.clearTimeout(start)
@@ -71,10 +76,6 @@ export function WheelCard(props: {
     }, [props.match])
 
     useEffect(() => {
-        if (!props.match) {
-            return
-        }
-
         let cancelled = false
         fetchTests()
             .then((list) => {
@@ -91,67 +92,54 @@ export function WheelCard(props: {
         return () => {
             cancelled = true
         }
-    }, [props.match])
+    }, [])
 
-    const conicGradient = useMemo(() => {
-        if (items.length === 0) {
-            return 'conic-gradient(#ABD6FF 0 50%, #FFCEBC 50% 100%)'
-        }
-
-        const segmentAngle = 360 / items.length
-        const stops = items.map((_, index) => {
-            const color = WHEEL_COLORS[index % WHEEL_COLORS.length]
-            const start = index * segmentAngle
-            const end = start + segmentAngle
-            return `${color} ${start}deg ${end}deg`
-        })
-        return `conic-gradient(${stops.join(', ')})`
-    }, [items])
-
-    const relatedTest = tests.find((test) => test.profession_id === props.match?.correct_profession.id)
-    const resultName = props.match?.correct_profession.name
-    const resultDescription = props.match?.correct_profession.description
+    const relatedTest = tests.find((test) => test.profession_id === props.match.correct_profession.id)
 
     return (
-        <section id="wheel-card">
-            <h2>Крути колесо — узнай свою профессию!</h2>
-            <p className="b2 wheel-card-lead">
-                {props.match
-                    ? 'Колесо уже знает ответ. Осталось дождаться остановки.'
-                    : 'Выбери интересы в анкете выше — и колесо подберёт направление.'}
-            </p>
+        <div className="wheel-embed">
+            <div className="wheel-half">
+                <img className="wheel-motion wheel-motion--left" src="/assets/Group5.svg" alt="" />
+                <img className="wheel-motion wheel-motion--right" src="/assets/Group5.svg" alt="" />
 
-            <div className="wheel-stage">
-                <div className="wheel-pointer" />
-                <div
-                    className={`wheel-disk${isSpinning ? ' wheel-disk--spinning' : ''}`}
-                    style={{
-                        background: conicGradient,
-                        transform: `rotate(${rotation}deg)`,
-                    }}
-                >
-                    {items.map((item, index) => {
-                        const angle = (360 / items.length) * index + 360 / items.length / 2
-                        return (
-                            <span
-                                key={item.id}
-                                className="wheel-label"
-                                style={{ transform: `rotate(${angle}deg) translateY(var(--wheel-label-offset, -148px))` }}
-                            >
-                                {shortName(item.name)}
-                            </span>
-                        )
-                    })}
+                <div className="wheel-pointer" aria-hidden="true" />
+
+                <div className="wheel-rotator-wrap">
+                    <div
+                        className={`wheel-rotator${isSpinning ? ' wheel-rotator--spinning' : ''}`}
+                        style={{ transform: `rotate(${rotation}deg)` }}
+                    >
+                        <img className="wheel-disk-img" src="/assets/wheel-disk.svg" alt="" />
+                        {items.map((item, index) => {
+                            const angle = index * SEGMENT_ANGLE + SEGMENT_ANGLE / 2
+                            const icon = getSkillIcon(item.tags ?? [], item.name)
+                            return (
+                                <div
+                                    key={`${item.id}-${index}`}
+                                    className="wheel-spoke"
+                                    style={{ transform: `rotate(${angle}deg)` }}
+                                >
+                                    <div className="wheel-item">
+                                        <span>{item.name}</span>
+                                        {icon && <img src={icon} alt="" />}
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
+                <div className="wheel-fade" aria-hidden="true" />
             </div>
 
-            {showResult && props.match && (
-                <div className="wheel-result gradient-wight-card-fill">
+            {showResult && (
+                <div className="wheel-result">
                     <p className="b3 wheel-result-label">
                         {props.playerName ? `${props.playerName}, тебе подходит` : 'Тебе подходит'}
                     </p>
-                    <h3>{resultName}</h3>
-                    {resultDescription && <p className="b2">{resultDescription}</p>}
+                    <h3>{props.match.correct_profession.name}</h3>
+                    {props.match.correct_profession.description && (
+                        <p className="b2">{props.match.correct_profession.description}</p>
+                    )}
                     <Button
                         text={relatedTest ? 'Пройти тест' : 'Смотреть тесты'}
                         onClick={() => navigate(relatedTest ? `/test/${relatedTest.code}` : '/test')}
@@ -159,6 +147,6 @@ export function WheelCard(props: {
                     />
                 </div>
             )}
-        </section>
+        </div>
     )
 }

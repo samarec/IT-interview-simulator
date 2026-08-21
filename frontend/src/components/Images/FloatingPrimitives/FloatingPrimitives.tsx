@@ -83,7 +83,7 @@ function placeColumn(
     return items
 }
 
-function useRootHeight() {
+function usePrimitivesHeight() {
     const [height, setHeight] = useState(() => (
         typeof window === 'undefined' ? 0 : window.innerHeight
     ))
@@ -94,26 +94,44 @@ function useRootHeight() {
             return
         }
 
-        const update = () => setHeight(root.offsetHeight)
+        const update = () => {
+            const footer = document.querySelector('.footer-wrap')
+            if (footer instanceof HTMLElement) {
+                const rootTop = root.getBoundingClientRect().top
+                const footerTop = footer.getBoundingClientRect().top
+                setHeight(Math.max(0, footerTop - rootTop))
+                return
+            }
+            setHeight(root.offsetHeight)
+        }
+
         update()
 
         const observer = new ResizeObserver(update)
         observer.observe(root)
-        return () => observer.disconnect()
+        const footer = document.querySelector('.footer-wrap')
+        if (footer instanceof HTMLElement) {
+            observer.observe(footer)
+        }
+        window.addEventListener('resize', update)
+        return () => {
+            observer.disconnect()
+            window.removeEventListener('resize', update)
+        }
     }, [])
 
     return height
 }
 
 export function FloatingPrimitives() {
-    const height = useRootHeight()
+    const height = usePrimitivesHeight()
     const primitives = [
         ...placeColumn(leftPattern, 'left', height, 32),
         ...placeColumn(rightPattern, 'right', height, 80),
     ]
 
     return (
-        <div className="floating-primitives" aria-hidden="true">
+        <div className="floating-primitives" aria-hidden="true" style={{ height }}>
             {primitives.map((primitive, index) => (
                 <div
                     key={`${primitive.kind}-${primitive.side}-${index}`}

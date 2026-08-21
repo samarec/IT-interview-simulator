@@ -8,7 +8,16 @@ export function HelloCard() {
             <h1>Твой личный тренажер<br/> IT-собеседований</h1>
             <p>Пошаговая подготовка к техническим интервью
                 в формате удобных билетов. Разбери свои слабые места до встречи с рекрутером.</p>
-            <Button text="Подобрать профессию" classes={["but1", "main-button"]}/>
+            <Button
+                text="Подобрать профессию"
+                classes={["but1", "main-button"]}
+                onClick={() => {
+                    document.getElementById('form-intro')?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start',
+                    })
+                }}
+            />
         </section>
 
     )

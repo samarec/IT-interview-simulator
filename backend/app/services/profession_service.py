@@ -3,7 +3,7 @@ from typing import List, Tuple
 from fastapi import HTTPException  # Добавлен импорт HTTPException
 
 from app.domain.models import Profession
-from app.domain.schemas import ProfessionMatchResponse, ProfessionResponse
+from app.domain.schemas import ProfessionMatchResponse, ProfessionResponse, TagResponse
 from sqlalchemy.orm import Session, selectinload
 
 
@@ -29,21 +29,19 @@ def match_profession(db: Session, tag_ids: List[int]) -> ProfessionMatchResponse
 
     other_professions = [p for p in professions if p.id != correct_profession.id]
 
-    if len(other_professions) >= 5:
-        wheel = random.sample(other_professions, 5)
-    else:
-        wheel = other_professions
-        random.shuffle(wheel)
+    needed = min(7, len(other_professions))
+    wheel = random.sample(other_professions, needed) if needed else []
+
+    def serialize(profession: Profession) -> ProfessionResponse:
+        return ProfessionResponse(
+            id=profession.id,
+            name=profession.name,
+            description=profession.description,
+            tags=[TagResponse(id=tag.id, name=tag.name) for tag in profession.tags],
+        )
 
     return ProfessionMatchResponse(
-        correct_profession=ProfessionResponse(
-            id=correct_profession.id,
-            name=correct_profession.name,
-            description=correct_profession.description,
-        ),
-        wheel_professions=[
-            ProfessionResponse(id=p.id, name=p.name, description=p.description)
-            for p in wheel
-        ],
+        correct_profession=serialize(correct_profession),
+        wheel_professions=[serialize(item) for item in wheel],
     )
 

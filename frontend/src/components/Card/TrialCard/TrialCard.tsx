@@ -8,7 +8,7 @@ export function TrialCard() {
                 <div>
                     <div id="trial-qr" className='gradient-wight-card-fill'>
                         <div>
-                            {/*qr-code*/}
+                            <img src="/assets/trial-qr.svg" alt="QR-код тренажёра" />
                         </div>
                         <p className="b2">Наведи камеру и ворвись в интерактив</p>
                     </div>

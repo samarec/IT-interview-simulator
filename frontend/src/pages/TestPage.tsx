@@ -5,10 +5,11 @@ import './TestPage.css'
 import { StatisticsTestCard } from '../components/Card/StatisticsTestCard/StatisticsTestCard'
 import { CategoriesTestCard } from '../components/Card/CaregoriesTestCard/CategoriesTestCard'
 import { AllTestCard } from '../components/Card/AllTestCard/AllTestCard'
-import { fetchTopics, uniqueTags, type TestSortMode, type TopicData } from './testData'
+import { fetchTests, type TestInfo } from '../api/tests'
+import { primaryTags, type TestSortMode } from './testData'
 
 export default function TestPage() {
-    const [topics, setTopics] = useState<TopicData[]>([])
+    const [tests, setTests] = useState<TestInfo[]>([])
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading')
     const [search, setSearch] = useState('')
     const [selectedTagId, setSelectedTagId] = useState<number | null>(null)
@@ -17,12 +18,12 @@ export default function TestPage() {
     useEffect(() => {
         let cancelled = false
 
-        fetchTopics()
+        fetchTests()
             .then((items) => {
                 if (cancelled) {
                     return
                 }
-                setTopics(items)
+                setTests(items.filter((test) => test.cards_count > 0))
                 setStatus('ready')
             })
             .catch(() => {
@@ -36,14 +37,17 @@ export default function TestPage() {
         }
     }, [])
 
-    const tags = useMemo(() => uniqueTags(topics), [topics])
+    const tags = useMemo(() => primaryTags(tests), [tests])
 
-    const filteredTopics = useMemo(() => {
+    const filteredTests = useMemo(() => {
         const query = search.trim().toLowerCase()
 
-        const list = topics.filter((topic) => {
-            const matchesSearch = !query || topic.name.toLowerCase().includes(query)
-            const matchesTag = selectedTagId == null || topic.tags.some((tag) => tag.id === selectedTagId)
+        const list = tests.filter((test) => {
+            const matchesSearch = !query
+                || test.name.toLowerCase().includes(query)
+                || (test.description ?? '').toLowerCase().includes(query)
+            const matchesTag = selectedTagId == null
+                || (test.tags ?? [])[0]?.id === selectedTagId
             return matchesSearch && matchesTag
         })
 
@@ -53,25 +57,25 @@ export default function TestPage() {
             }
             return b.id - a.id
         })
-    }, [topics, search, selectedTagId, sortMode])
+    }, [tests, search, selectedTagId, sortMode])
 
     return (
         <div id="test-page">
             <StatisticsTestCard
-                topics={topics}
+                tests={tests}
                 tagCount={tags.length}
                 search={search}
                 onSearchChange={setSearch}
+                sortMode={sortMode}
+                onSortChange={setSortMode}
             />
             <CategoriesTestCard
                 tags={tags}
                 selectedTagId={selectedTagId}
                 onSelectTag={setSelectedTagId}
-                sortMode={sortMode}
-                onSortChange={setSortMode}
             />
             {/* recommendation-test-card временно скрыт */}
-            <AllTestCard topics={filteredTopics} status={status} />
+            <AllTestCard tests={filteredTests} status={status} />
         </div>
     )
 }

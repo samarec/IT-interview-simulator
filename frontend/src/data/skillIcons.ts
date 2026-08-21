@@ -52,6 +52,8 @@ const aliases: Record<string, SkillId> = {
     'тестирование по': 'vscode',
     linux: 'code',
     линукс: 'code',
+    тензор: 'code',
+    tensor: 'code',
     code: 'code',
     git: 'git',
     гит: 'git',
@@ -84,9 +86,13 @@ const aliases: Record<string, SkillId> = {
 }
 
 const skillInText: Array<[RegExp, SkillId]> = [
+    [/fullstack/i, 'js'],
     [/frontend/i, 'js'],
     [/backend/i, 'go'],
     [/devops/i, 'docker'],
+    [/data\s*engineer|дата[\s-]*инженер/i, 'python'],
+    [/системн\w*\s+администратор|администратор/i, 'code'],
+    [/сетев|networks?/i, 'git'],
     [/javascript|джаваскрипт|\bjs\b/i, 'js'],
     [/node\.?js/i, 'nodejs'],
     [/\bjava\b|джава/i, 'java'],
@@ -95,8 +101,8 @@ const skillInText: Array<[RegExp, SkillId]> = [
     [/kotlin|котлин/i, 'kotlin'],
     [/\bc#|csharp/i, 'csharp'],
     [/visual studio code|vs\s*code|тестирование|\bqa\b/i, 'vscode'],
-    [/linux|линукс|\bcode\b/i, 'code'],
-    [/\bgit\b|гит|сет(и|ь)|networks?/i, 'git'],
+    [/linux|линукс|тензор|tensor|\bcode\b/i, 'code'],
+    [/\bgit\b|гит|сет(и|ь)/i, 'git'],
     [/sqlite|администрирование/i, 'sqlite'],
     [/\bsql\b/i, 'sql'],
     [/\bgolang\b|\bgo\b/i, 'go'],
